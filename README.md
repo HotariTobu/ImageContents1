@@ -2,5 +2,5 @@
 
 ## Members
 
-HotariTobu
-yu-getu
+- HotariTobu
+- yu-getu
