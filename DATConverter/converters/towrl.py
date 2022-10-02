@@ -19,7 +19,7 @@ TEMPLATE2 = """
 }
 """
 
-def convert(src_path, dst_path):
+def to_point_set(src_path, dst_path):
     with open(src_path, mode='r') as src_file, open(dst_path, mode='w') as dst_file:
         dst_file.write(TEMPLATE1)
 
