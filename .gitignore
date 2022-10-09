@@ -3,8 +3,8 @@
 
 ignored_*
 
-source_data
-destination_data
+source_data*
+destination_data*
 
 env
 
