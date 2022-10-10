@@ -29,17 +29,13 @@ int main(int argc, const char *argv[]) {
 
             std::ifstream ifs(srcPath);
             if (ifs.fail()) {
-                char message[256];
-                strerror_s(message, sizeof(message), errno);
-                std::cerr << "Source file error: " << message << std::endl;
+                std::cerr << "Source file error: " << std::strerror(errno) << std::endl;
                 continue;
             }
 
             std::ofstream ofs(dstPath);
             if (ofs.fail()) {
-                char message[256];
-                strerror_s(message, sizeof(message), errno);
-                std::cerr << "Destination file error: " << message << std::endl;
+                std::cerr << "Destination file error: " << std::strerror(errno) << std::endl;
                 continue;
             }
 
