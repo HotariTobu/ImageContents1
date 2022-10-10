@@ -1,4 +1,4 @@
-#include "color.hpp"
+#include "../include/color.hpp"
 
 Color::Color(double h, double s, double v) {
     h = h < 1 ? h : 0;

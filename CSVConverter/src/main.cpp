@@ -4,8 +4,8 @@
 
 namespace fs = std::filesystem;
 
-#include "converter.hpp"
-#include "datetime.hpp"
+#include "../include/converter.hpp"
+#include "../include/datetime.hpp"
 
 int main(int argc, const char *argv[]) {
     if (argc < 2) {

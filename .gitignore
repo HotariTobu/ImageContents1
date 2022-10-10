@@ -6,6 +6,7 @@ ignored_*
 source_data*
 destination_data*
 
+build
 env
 
 #################################################################
