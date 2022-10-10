@@ -1,6 +1,6 @@
-#include "converter.hpp"
-#include "stringExteniosn.hpp"
-#include "color.hpp"
+#include "../include/converter.hpp"
+#include "../include/stringExtension.hpp"
+#include "../include/color.hpp"
 
 void convert(std::ifstream& ifs, std::ofstream& ofs) {
     std::string line;

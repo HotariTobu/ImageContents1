@@ -1,4 +1,4 @@
-#include "stringExteniosn.hpp"
+#include "../include/stringExtension.hpp"
 
 std::vector<std::string> split(std::string string, std::string separator) {
     std::vector<std::string> result;
