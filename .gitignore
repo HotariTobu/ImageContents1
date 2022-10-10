@@ -1,6 +1,8 @@
 
 .vscode
 
+.DS_Store
+
 ignored_*
 
 source_data*
