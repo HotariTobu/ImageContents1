@@ -68,7 +68,7 @@
 
             context.Output.WriteLine(string.Join(',', minX, maxX, minY, maxY));
 
-            for (var y = minY; y <= maxY; y++)
+            for (var y = maxY; y >= minY; y--)
             {
                 var yRange = Enumerable.Range(minX, maxX - minX + 1);
                 var values = yRange.Select(x =>
