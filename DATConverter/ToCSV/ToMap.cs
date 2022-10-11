@@ -6,11 +6,11 @@
         {
             var data = new Dictionary<(int, int), double>();
 
-            var xMin = int.MaxValue;
-            var xMax = int.MinValue;
+            var minX = int.MaxValue;
+            var maxX = int.MinValue;
 
-            var yMin = int.MaxValue;
-            var yMax = int.MinValue;
+            var minY = int.MaxValue;
+            var maxY = int.MinValue;
 
             while (true)
             {
@@ -47,30 +47,30 @@
 
                 data.Add((x, y), z);
 
-                if (xMin > x)
+                if (minX > x)
                 {
-                    xMin = x;
+                    minX = x;
                 }
-                else if (xMax < x)
+                else if (maxX < x)
                 {
-                    xMax = x;
+                    maxX = x;
                 }
 
-                if (yMin > y)
+                if (minY > y)
                 {
-                    yMin = y;
+                    minY = y;
                 }
-                else if (yMax < y)
+                else if (maxY < y)
                 {
-                    yMax = y;
+                    maxY = y;
                 }
             }
 
-            context.Output.WriteLine(string.Join(',', xMin, xMax, yMin, yMax));
+            context.Output.WriteLine(string.Join(',', minX, maxX, minY, maxY));
 
-            for (var y = yMin; y <= yMax; y++)
+            for (var y = minY; y <= maxY; y++)
             {
-                var yRange = Enumerable.Range(xMin, xMax - xMin + 1);
+                var yRange = Enumerable.Range(minX, maxX - minX + 1);
                 var values = yRange.Select(x =>
                 {
                     var key = (x, y);
