@@ -22,7 +22,7 @@ void convert(std::ifstream& ifs, std::ofstream& ofs) {
     double minZ = std::numeric_limits<double>::max();
     double maxZ = std::numeric_limits<double>::min();
 
-    for (int y = 0; y < height; y++) {
+    for (int y = height - 1; y >= 0; y--) {
         std::getline(ifs, line);
         values = split(line, ",");
 
