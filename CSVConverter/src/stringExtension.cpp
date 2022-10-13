@@ -3,7 +3,7 @@
 std::vector<std::string> split(std::string string, std::string separator) {
     std::vector<std::string> result;
 
-    rsize_t offset = 0;
+    size_t offset = 0;
 
     size_t separatorLength = separator.length();
     while (true) {
