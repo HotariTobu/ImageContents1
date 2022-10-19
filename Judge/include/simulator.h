@@ -3,8 +3,8 @@
 #ifndef __SIMULATOR_H__
 #define __SIMULATOR_H__
 
-#include "edge.h"
+#include "neighbor.h"
 
-Edge simulate(Edge edge);
+Neighbor Simulate(Neighbor neighbor);
 
 #endif // __SIMULATOR_H__

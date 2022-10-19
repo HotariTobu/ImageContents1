@@ -3,13 +3,20 @@
 #ifndef __FACE_H__
 #define __FACE_H__
 
-#include "alias.h"
+#include "point_vector_set.h"
 
-struct Face {
-    Point3d origin;
-    Vector3d normal;
+class Face {
+private:
+    Point3d _origin;
+    Vector3d _normal;
 
-    PointSet points;
+    PointSet _points;
+
+public:
+    Face(PointVectorSet set);
+
+    void DeleteInsidePoints();
+    void ProjectPoints();
 };
 
 

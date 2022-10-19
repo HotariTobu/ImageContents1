@@ -2,7 +2,7 @@
 
 #include "../include/simulator.h"
 
-Edge simulate(Edge edge) {
+Neighbor Simulate(Neighbor neighbor) {
 #ifdef __UNIFORM
 // Uniform code is hear...
 

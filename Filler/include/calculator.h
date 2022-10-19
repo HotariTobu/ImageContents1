@@ -3,8 +3,8 @@
 #ifndef __CALCULATOR_H__
 #define __CALCULATOR_H__
 
-#include "edge.h"
+#include "neighbor.h"
 
-double calculate(Edge edge);
+double Calculate(Neighbor neighbor);
 
 #endif // __CALCULATOR_H__

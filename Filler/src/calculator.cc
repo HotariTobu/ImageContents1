@@ -2,7 +2,7 @@
 
 #include "../include/calculator.h"
 
-double calculate(Edge edge) {
+double Calculate(Neighbor neighbor) {
 #ifdef __MIN
 // Min code is hear...
 

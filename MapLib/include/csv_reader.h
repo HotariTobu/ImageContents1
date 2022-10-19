@@ -7,6 +7,6 @@
 
 #include "../include/height_map.h"
 
-HeightMap read_csv(std::string path);
+HeightMap ReadCSV(std::string path);
 
 #endif // __CSV_READER_H__
