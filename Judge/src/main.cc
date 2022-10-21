@@ -1,5 +1,11 @@
 // Created by 
 
+#include "../include/simulator.h"
+#include "../include/separator.h"
+
+extern double simulator_threshold;
+extern double separator_threshold;
+
 int main() {
 
 #ifdef __4_NEIGHBOR

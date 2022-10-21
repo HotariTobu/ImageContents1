@@ -5,9 +5,12 @@
 
 #include "neighbor.h"
 
+// double simulator_threshold;
+
 /*
 Simulate ease of stay.
 Deal out center value to surroundings.
+If a neighbor value is bigger than the center value and the difference between the center and the neighbor is bigger than `simulator_threshold`, ignore the neighbor.
 [params]
 - value: ease of stay in center
 - neighbor: surrounding heights

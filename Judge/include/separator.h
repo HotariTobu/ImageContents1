@@ -5,10 +5,13 @@
 
 #include <utility>
 
-#include "height_map.h"
+#include "map2d.h"
+
+// double separator_threshold;
 
 /*
 Separate map to ground map and building map.
+If ease of stay is bigger than `separator_threshold`, the point is on ground, and other else on building.
 [params]
 - map: map of heights
 - ease_of_stay: map of ease of stay values

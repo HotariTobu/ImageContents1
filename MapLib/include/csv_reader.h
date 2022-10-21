@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include "../include/height_map.h"
+#include "../include/map2d.h"
 
 /*
 Read data from .csv file.
