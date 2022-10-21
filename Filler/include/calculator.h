@@ -5,6 +5,14 @@
 
 #include "neighbor.h"
 
+/*
+Calculate center missing value from neighbors.
+Ignore nan in neighbors.
+[params]
+- neighbors: srrounding height values
+[return]
+Calculated center value.
+*/
 double Calculate(Neighbor neighbor);
 
 #endif // __CALCULATOR_H__
