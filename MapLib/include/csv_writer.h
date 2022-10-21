@@ -7,6 +7,6 @@
 
 #include "../include/height_map.h"
 
-void WriteCSV(std::string path, HeightMap map);
+void WriteCSV(std::string path, Map2d map);
 
 #endif // __CSV_WRITER_H__

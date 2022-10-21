@@ -2,6 +2,6 @@
 
 #include "../include/point_vector_set.h"
 
-PointVectorSet::PointVectorSet(HeightMap map) {
+PointVectorSet::PointVectorSet(Map2d map) {
     
 }

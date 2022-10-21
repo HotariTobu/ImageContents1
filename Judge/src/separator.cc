@@ -2,6 +2,6 @@
 
 #include "../include/separator.h"
 
-std::pair<HeightMap, HeightMap> Separate(HeightMap map, HeightMap ease_of_stay) {
+std::pair<Map2d, Map2d> Separate(Map2d map, Map2d ease_of_stay) {
     
 }

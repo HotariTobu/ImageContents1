@@ -16,6 +16,6 @@ Separate map to ground map and building map.
 - 1st value: ground map
 - 2nd value: building map
 */
-std::pair<HeightMap, HeightMap> Separate(HeightMap map, HeightMap ease_of_stay);
+std::pair<Map2d, Map2d> Separate(Map2d map, Map2d ease_of_stay);
 
 #endif // __SEPARATOR_H__

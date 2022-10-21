@@ -1,12 +1,12 @@
 // Created by 
 
-#ifndef __HEIGHT_MAP_H__
-#define __HEIGHT_MAP_H__
+#ifndef __MAP2D_H__
+#define __MAP2D_H__
 
 #include <vector>
 
 // Represent map data
-struct HeightMap {
+struct Map2d {
     // Horizontal point count.
     int width;
 
@@ -14,12 +14,12 @@ struct HeightMap {
     int height;
 
     /*
-    Z values of map.
+    Values of map.
     1st dimension: Y-axis direction
     2nd dimension: X-axis direction
-    Z = data[Y][X]
+    value = data[Y][X]
     */
     std::vector<std::vector<double>> data;
 };
 
-#endif // __HEIGHT_MAP_H__
+#endif // __MAP2D_H__

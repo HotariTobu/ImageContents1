@@ -2,6 +2,6 @@
 
 #include "../include/csv_writer.h"
 
-void WriteCSV(std::string path, HeightMap map) {
+void WriteCSV(std::string path, Map2d map) {
     
 }

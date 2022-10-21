@@ -2,7 +2,7 @@
 
 #include "../include/simulator.h"
 
-Neighbor Simulate(Neighbor neighbor) {
+Neighbor Simulate(double value, Neighbor neighbor) {
 #ifdef __UNIFORM
 // Uniform code is hear...
 
