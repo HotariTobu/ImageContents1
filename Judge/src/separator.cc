@@ -19,8 +19,8 @@ std::pair<Map2d, Map2d> Separate(Map2d map, Map2d ease_of_stay) {
     Map2d building_map;
     InitMap2d(map, ground_map);
 
-    for(size_t y = 0; y < ease_of_stay.height; y++){
-        for(size_t x = 0; x < ease_of_stay.width; x++){
+    for(int y = 0; y < ease_of_stay.height; y++){
+        for(int x = 0; x < ease_of_stay.width; x++){
             if(ease_of_stay.data[y][x] > separator_threshold){
                 ground_map.data[y][x]=map.data[y][x];
             }
