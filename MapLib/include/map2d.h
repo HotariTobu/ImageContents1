@@ -5,7 +5,10 @@
 
 #include <vector>
 
-// Represent map data. `T` is the type of values.
+/*
+Represent map data. `T` is the type of values.
+Outside values with 1 width are nan and actual heights surrounded by them so the size of `Map2d::data` is (`Map2d::height` + 2) * (`Map2d::width` + 2).
+*/
 template<class T>
 struct Map2d {
     // Horizontal point count.
