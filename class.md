@@ -54,6 +54,7 @@ classDiagram
         +GetNormalVectorIn(Neighbor neighbor):Vector3d
         +SearchPointGroups(Map2d[(double, Vector3d)]& map): vector[PointVectorSet]
     }
+    GeometryLib <.. Reducer
     MapLib <.. Reducer
     class Face {
         -Point3d _origin
