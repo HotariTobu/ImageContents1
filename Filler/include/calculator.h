@@ -9,7 +9,7 @@
 Calculate center missing value from neighbors.
 Ignore nan in neighbors.
 [params]
-- neighbors: srrounding height values
+- neighbors: surrounding height values
 [return]
 Calculated center value.
 */

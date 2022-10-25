@@ -9,11 +9,12 @@
 
 /*
 Write data to .csv file.
-If value is nan of double, write "Nan".
+If value is nan of double, write "NaN".
+Outside values with 1 width are nan and actual heights surrounded by them so the size of `Map2d::data` is (`Map2d::height` + 1) * (`Map2d::width` + 1).
 [params]
 - path: path to output .csv file
 - map: height values to output
 */
-void WriteCSV(std::string path, Map2d map);
+void WriteCSV(std::string path, const Map2d<double>& map);
 
 #endif // __CSV_WRITER_H__

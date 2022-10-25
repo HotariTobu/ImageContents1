@@ -5,7 +5,8 @@
 
 #include <vector>
 
-// Represent map data
+// Represent map data. `T` is the type of values.
+template<class T>
 struct Map2d {
     // Horizontal point count.
     int width;
@@ -19,7 +20,7 @@ struct Map2d {
     2nd dimension: X-axis direction
     value = data[Y][X]
     */
-    std::vector<std::vector<double>> data;
+    std::vector<std::vector<T>> data;
 };
 
 #endif // __MAP2D_H__

@@ -2,6 +2,6 @@
 
 #include "../include/csv_reader.h"
 
-Map2d ReadCSV(std::string path) {
+Map2d<double> ReadCSV(std::string path) {
     
 }

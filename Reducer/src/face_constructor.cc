@@ -2,6 +2,6 @@
 
 #include "../include/face.h"
 
-Face::Face(PointVectorSet set) {
+Face::Face(const PointVectorSet& set) {
     
 }

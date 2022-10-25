@@ -12,7 +12,7 @@ void InitMap2d(const Map2d& origin, Map2d& init_to_map){
     init_to_map.data = std::vector<std::vector<double>>(init_to_map.height, std::vector<double>(init_to_map.width, std::nan("")));
 }
 
-std::pair<Map2d, Map2d> Separate(Map2d map, Map2d ease_of_stay) {
+std::pair<Map2d<double>, Map2d<double>> Separate(const Map2d<std::pair<double, double>>& map) {
     Map2d ground_map;
     InitMap2d(map, ground_map);
 

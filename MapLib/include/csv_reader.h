@@ -13,8 +13,9 @@ Read data from .csv file.
 - path: path to input .csv file
 [return]
 Height values from .csv file.
-If value is "Nan", assign nan of double.
+If value is "NaN", assign nan of double.
+Outside values with 1 width are nan and actual heights surrounded by them so the size of `Map2d::data` is (`Map2d::height` + 1) * (`Map2d::width` + 1).
 */
-Map2d ReadCSV(std::string path);
+Map2d<double> ReadCSV(std::string path);
 
 #endif // __CSV_READER_H__
