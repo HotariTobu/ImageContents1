@@ -65,12 +65,12 @@ classDiagram
         +DeleteInsidePoints()
         +ProjectPoints()
     }
+    Reducer o-- Face
     class alias {
         +PointSet
         +PointVectorSet
     }
-    Reducer o-- alias
-    Reducer o-- Face
+    GeometryLib o-- alias
     class DelaunayLib {
 
     }

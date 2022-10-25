@@ -1,8 +1,10 @@
 // Created by 
 
-#ifndef ___H__
-#define ___H__
+#ifndef __FLIPPER_H__
+#define __FLIPPER_H__
 
+#include "triangle.h"
 
+Triangle Flip(Triangle triangle);
 
-#endif // ___H__
+#endif // __FLIPPER_H__

@@ -23,6 +23,10 @@ struct Triangle {
 
     // Neighbor triangles outside the triangle.
     Triangle* neighbors[3] = {nullptr, nullptr, nullptr};
+
+    bool Contains(Point3d point) const;
+
+    void Divide(Point3d point);
 };
 
 #endif // __TRIANGLE_H__

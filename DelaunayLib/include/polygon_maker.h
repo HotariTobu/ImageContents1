@@ -6,6 +6,7 @@
 #include <utility>
 #include <vector>
 
+#include "alias.h"
 #include "point3d.h"
 
 /*
@@ -15,6 +16,6 @@ Make a polygon from point set.
 [return]
 Point indices of triangle based on `points`.
 */
-std::vector<std::tuple<int, int, int>> MakePolygon(const std::vector<Point3d>& points);
+std::vector<std::tuple<int, int, int>> MakePolygon(const PointSet& points);
 
 #endif // __POLYGON_MAKER_H__
