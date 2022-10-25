@@ -19,8 +19,8 @@ std::pair<Map2d<double>, Map2d<double>> Separate(const Map2d<std::pair<double, d
     Map2d<double> building_map;
     InitMap2d(map, building_map);
 
-    for(int y = 0; y < map.height; y++){
-        for(int x = 0; x < map.width; x++){
+    for(int y = 1; y <= map.height; y++){
+        for(int x = 1; x <= map.width; x++){
             if(map.data[y][x].second > separator_threshold){
                 ground_map.data[y][x] = map.data[y][x].first;
             }
