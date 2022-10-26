@@ -2,6 +2,8 @@
 
 #include "../include/searcher.h"
 
+#include <cmath>
+
 #include <queue>
 
 double searcher_threshold;
@@ -28,24 +30,30 @@ void FloodFill(const Map2d<std::pair<double, Vector3d>>& map, std::vector<std::v
         q.pop();
 
         for(int i = 0; i < 8; i++){
-            if (IsSafe(node_x + row[i], node_y + col[i], map.width, map.height))
-            {
-                if(CalculateSimilarity(map.data[node_y][node_x].second, map.data[node_y + col[i]][node_x + row[i]].second) > searcher_threshold){
-                    group_map[node_y + col[i]][node_x + row[i]] = group_map[node_y][node_x];
-                    q.push({node_x + row[i], node_y + col[i]});
-                }
+            if (!IsSafe(node_x + row[i], node_y + col[i], map.width, map.height)){
+                continue;
             }
+            if(group_map[node_y + col[i]][node_x + row[i]] != std::nan("")){
+                continue;
+            }
+            if(CalculateSimilarity(map.data[node_y][node_x].second, map.data[node_y + col[i]][node_x + row[i]].second) < searcher_threshold){
+                continue;            
+            }
+            group_map[node_y + col[i]][node_x + row[i]] = group_map[node_y][node_x];
+            q.push({node_x + row[i], node_y + col[i]});
         }
     }
 }
 
 std::vector<PointVectorSet> SearchPointGroups(const Map2d<std::pair<double, Vector3d>>& map) {
     int group_count = 0;
-    std::vector<std::vector<int>> group_map(map.height + 2, std::vector<int>(map.width + 2, -1));
+    std::vector<std::vector<int>> group_map(map.height + 2, std::vector<int>(map.width + 2, std::nan("")));
 
     for(int y = 1; y <= map.height; y++){
         for(int x = 1; x <= map.width; x++){
-            if(group_map[y][x] != -1) continue;
+            if(group_map[y][x] != std::nan("")){
+                continue;
+            }
             group_map[y][x] = group_count;
             FloodFill(map, group_map, x, y);
             group_count++;
