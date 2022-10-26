@@ -3,6 +3,7 @@ classDiagram
     class GeometryLib {
 
     }
+
     class Point3d {
         +double x
         +double y
@@ -13,6 +14,7 @@ classDiagram
         +operator/()
     }
     GeometryLib o-- Point3d
+
     class Vector3d {
         +double x
         +double y
@@ -27,35 +29,45 @@ classDiagram
         +operator/()
     }
     GeometryLib o-- Vector3d
+
 	class MapLib {
 		+ReadCSV(string path): Map2d[double]
 		+WriteCSV(string path, Map2d[double] map)
 	}
+
     class Map2d {
         +int width
         +int height
         +vector[vector[T]] data
     }
     MapLib o-- Map2d
+
     class Neighbor {
         +double[3][3] data
     }
     MapLib o-- Neighbor
+
     class Filter {
         +Calculate(Neighbor neighbor): double
     }
     MapLib <.. Filter
+
     class Judge{
+        +double simulator_threshold;
+        +double separator_threshold;
         +Separate(Map2d[(double, double)] map): (Map2d[double], Map2d[double])
         +Simulate(double value, Neighbor neighbor): Neighbor
     }
     MapLib <.. Judge
+
     class Reducer{
+        +double searcher_threshold;
         +GetNormalVectorIn(Neighbor neighbor):Vector3d
         +SearchPointGroups(Map2d[(double, Vector3d)]& map): vector[PointVectorSet]
     }
     GeometryLib <.. Reducer
     MapLib <.. Reducer
+
     class Face {
         -Point3d _origin
         -Vector3d _normal
@@ -66,11 +78,13 @@ classDiagram
         +ProjectPoints()
     }
     Reducer o-- Face
+
     class alias {
         +PointSet
         +PointVectorSet
     }
     GeometryLib o-- alias
+
     class DelaunayLib {
 
     }

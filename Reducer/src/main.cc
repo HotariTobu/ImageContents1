@@ -1,5 +1,7 @@
 // Created by 
 
+extern double searcher_threshold;
+
 int main() {
 
 #ifdef __4_EDGE

@@ -38,6 +38,7 @@ public:
 
     /*
     Project points in `_points` to the face that is defined by `_origin` and `_normal`.
+    Change only Z value.
     Overwrite `_points`.
     */
     void ProjectPoints();
