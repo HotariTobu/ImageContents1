@@ -24,9 +24,28 @@ struct Triangle {
     // Neighbor triangles outside the triangle.
     Triangle* neighbors[3] = {nullptr, nullptr, nullptr};
 
+
+    /*
+    Determine whether a point is inside the triangle.
+    [params]
+    - point: a point to determine if the triangle contains it
+    [return]
+    If the triangle contains the point, return true, other else false.
+    */
     bool Contains(Point3d point) const;
 
+    /*
+    Divide the triangle into 2 or 3 triangles.
+    Find the deepest triangle containing the point and add new triangles as children.
+    [params]
+    - point: the new vertex
+    */
     void Divide(Point3d point);
+
+    /*
+    
+    */
+    void Flip();
 };
 
 #endif // __TRIANGLE_H__
