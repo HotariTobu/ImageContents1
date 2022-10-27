@@ -11,6 +11,12 @@ Outside values with 1 width are nan and actual heights surrounded by them so the
 */
 template<class T>
 struct Map2d {
+    // Min X value.
+    int x;
+
+    // Min Y value.
+    int y;
+
     // Horizontal point count.
     int width;
 
