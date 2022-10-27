@@ -36,6 +36,8 @@ classDiagram
 	}
 
     class Map2d {
+        +int x
+        +int y
         +int width
         +int height
         +vector[vector[T]] data
