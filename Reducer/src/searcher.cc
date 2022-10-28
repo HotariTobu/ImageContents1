@@ -2,11 +2,11 @@
 
 #include "../include/searcher.h"
 
-#include <cmath>
-
 #include <queue>
 
 double searcher_threshold;
+
+constexpr int kgroup_nan = -1;
 
 bool IsSafe(const int x, const int y, const int width, const int height)
 {
@@ -33,7 +33,7 @@ void FloodFill(const Map2d<std::pair<double, Vector3d>>& map, std::vector<std::v
             if (!IsSafe(node_x + row[i], node_y + col[i], map.width, map.height)){
                 continue;
             }
-            if(group_map[node_y + col[i]][node_x + row[i]] != std::nan("")){
+            if(group_map[node_y + col[i]][node_x + row[i]] != kgroup_nan){
                 continue;
             }
             if(CalculateSimilarity(map.data[node_y][node_x].second, map.data[node_y + col[i]][node_x + row[i]].second) < searcher_threshold){
@@ -47,11 +47,11 @@ void FloodFill(const Map2d<std::pair<double, Vector3d>>& map, std::vector<std::v
 
 std::vector<PointVectorSet> SearchPointGroups(const Map2d<std::pair<double, Vector3d>>& map) {
     int group_count = 0;
-    std::vector<std::vector<int>> group_map(map.height + 2, std::vector<int>(map.width + 2, std::nan("")));
+    std::vector<std::vector<int>> group_map(map.height + 2, std::vector<int>(map.width + 2, kgroup_nan));
 
     for(int y = 1; y <= map.height; y++){
         for(int x = 1; x <= map.width; x++){
-            if(group_map[y][x] != std::nan("")){
+            if(group_map[y][x] != kgroup_nan){
                 continue;
             }
             group_map[y][x] = group_count;
