@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <limits>
 
 std::vector<std::string> split(std::string &input, char delimiter)
 {
@@ -26,29 +27,33 @@ Map2d<double> ReadCSV(std::string path)
     if (ifs)
     {
         std::string line;
-
-        // 一行目がラベルの場合
-        // getline(ifs, line);
-        // std::vector<std::string> strvec = split(line, ',');
-
-        while (getline(ifs, line))
-        {
-            std::vector<int> datvec;
-            std::vector<std::string> strvec = split(line, ',');
-            for (auto &&s : strvec)
-                datvec.push_back(std::stoi(s)); // セルの文字列を数値に変換
-            data.push_back(datvec);
-        }
-        
-        /*
-        map.x;
-        x_max;
-        map.y;
-        y_max;
+        getline(ifs, line);
+        std::vector<std::string> strvec = split(line, ',');
+        map.x = std::stoi(strvec[0]);
+        x_max = std::stoi(strvec[1]);
+        map.y = std::stoi(strvec[2]);
+        y_max = std::stoi(strvec[3]);
         map.width = x_max - map.x;
         map.height = y_max - map.y;
-
-        std::vector<double> v;
-        map.data.insert(map.data.begin(), v);
-        */
+        while (getline(ifs, line))
+        {
+            std::vector<double> datvec;
+            std::vector<std::string> strvec = split(line, ',');
+            for (auto &&s : strvec)
+                if (s == "NaN")
+                {
+                    datvec.push_back(std::numeric_limits<double>::quiet_NaN());
+                }
+                else
+                {
+                    datvec.push_back(std::stod(s));
+                }
+            datvec.push_back(std::numeric_limits<double>::quiet_NaN());
+            datvec.insert(datvec.begin(), std::numeric_limits<double>::quiet_NaN());
+            map.data.insert(map.data.begin(), datvec);
+        }
+        int size = strvec.size();
+        std::vector<double> nanvec = (strvec.size() + 2, std::numeric_limits<double>::quiet_NaN());
+        map.data.insert(map.data.begin(), nanvec); 
+        map.data.push_back(map.data.begin(), nanvec);
     }
