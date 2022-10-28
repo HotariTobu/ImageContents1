@@ -26,7 +26,8 @@ struct Triangle {
 
 
     /*
-    Determine whether a point is inside the triangle.
+    Determine whether a point is contained the triangle.
+    When project the point and the point is inside the triangle on the face, the triangle contains the point.
     [params]
     - point: a point to determine if the triangle contains it
     [return]
@@ -35,8 +36,15 @@ struct Triangle {
     bool Contains(Point3d point) const;
 
     /*
-    Divide the triangle into 2 or 3 triangles.
     Find the deepest triangle containing the point and add new triangles as children.
+    [params]
+    - point: point that the triangle contains
+    */
+    Triangle FindDeepest(Point3d point) const;
+
+    /*
+    Divide the triangle into 2 or 3 triangles.
+    Update `children`.
     [params]
     - point: the new vertex
     */

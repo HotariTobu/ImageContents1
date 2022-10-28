@@ -2,3 +2,6 @@
 
 #include "../include/triangle.h"
 
+void Flip() {
+    
+}

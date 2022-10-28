@@ -10,7 +10,7 @@
 #include "point3d.h"
 
 /*
-Make a polygon from point set.
+Make a polygon of points with delaunay triangulation.
 [params]
 - points: set of points
 [return]
