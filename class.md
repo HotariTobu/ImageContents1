@@ -115,7 +115,7 @@ classDiagram
 
     class Converter {
         +MakeGroundPoints(Map2d[double] map): Map2d[double]
-        +WriteWRL(string path, PointSet points, vector[(int, int, int)] indexSet)
+        +WriteWRL(string path, PointSet points, vector[(int, int, int)] indices)
     }
     MapLib <.. Converter
     DelaunayLiv <.. Converter
