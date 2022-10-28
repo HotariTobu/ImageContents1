@@ -9,6 +9,8 @@ classDiagram
         +double y
         +double z
 
+        +ToVector(): Vector3d
+
         +operator+()
         +operator-()
         +operator*()
@@ -22,6 +24,7 @@ classDiagram
         +double z
 
         +Normalize()
+        
         Length(): double
         Inner(Vector3d vector): double
         Cross(Vector3d vector): Vector3d
