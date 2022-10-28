@@ -33,6 +33,12 @@ classDiagram
     }
     GeometryLib o-- Vector3d
 
+    class alias {
+        +PointSet
+        +PointVectorSet
+    }
+    GeometryLib o-- alias
+
 	class MapLib {
 		+ReadCSV(string path): Map2d[double]
 		+WriteCSV(string path, Map2d[double] map)
@@ -58,8 +64,8 @@ classDiagram
     MapLib <.. Filter
 
     class Judge{
-        +double simulator_threshold;
-        +double separator_threshold;
+        +double simulator_threshold
+        +double separator_threshold
 
         +Separate(Map2d[(double, double)] map): (Map2d[double], Map2d[double])
         +Simulate(double value, Neighbor neighbor): Neighbor
@@ -67,10 +73,10 @@ classDiagram
     MapLib <.. Judge
 
     class Reducer{
-        +double searcher_threshold;
+        +double searcher_threshold
         
-        +GetNormalVectorIn(Neighbor neighbor):Vector3d
-        +SearchPointGroups(Map2d[(double, Vector3d)]& map): vector[PointVectorSet]
+        +GetNormalVectorIn(Neighbor neighbor): Vector3d
+        +SearchPointGroups(Map2d[(double, Vector3d)] map): vector[PointVectorSet]
     }
     GeometryLib <.. Reducer
     MapLib <.. Reducer
@@ -81,17 +87,11 @@ classDiagram
         -PointSet _points
 
         +points(): PointSet
-        +Face(PointVectorSet& set)
+        +Face(PointVectorSet set)
         +DeleteInsidePoints()
         +ProjectPoints()
     }
     Reducer o-- Face
-
-    class alias {
-        +PointSet
-        +PointVectorSet
-    }
-    GeometryLib o-- alias
 
     class DelaunayLib {
         +MakePolygon(PointSet points): vector[(int, int, int)]
@@ -112,4 +112,11 @@ classDiagram
         +Flip()
     }
     DelaunayLib o-- Triangle
+
+    class Converter {
+        +MakeGroundPoints(Map2d[double] map): Map2d[double]
+        +WriteWRL(string path, PointSet points, vector[(int, int, int)] indexSet)
+    }
+    MapLib <.. Converter
+    DelaunayLiv <.. Converter
 ```
