@@ -24,7 +24,7 @@ classDiagram
         +double z
 
         +Normalize()
-        
+
         Length(): double
         Inner(Vector3d vector): double
         Cross(Vector3d vector): Vector3d
@@ -121,5 +121,5 @@ classDiagram
         +WriteWRL(string path, PointSet points, vector[(int, int, int)] indices)
     }
     MapLib <.. Converter
-    DelaunayLiv <.. Converter
+    DelaunayLib <.. Converter
 ```
