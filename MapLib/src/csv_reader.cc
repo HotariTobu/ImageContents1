@@ -53,7 +53,8 @@ Map2d<double> ReadCSV(std::string path)
             map.data.insert(map.data.begin(), datvec);
         }
         int size = strvec.size();
-        std::vector<double> nanvec = (strvec.size() + 2, std::numeric_limits<double>::quiet_NaN());
+        std::vector<double> nanvec(strvec.size() + 2, std::numeric_limits<double>::quiet_NaN());
         map.data.insert(map.data.begin(), nanvec); 
-        map.data.push_back(map.data.begin(), nanvec);
+        map.data.push_back(nanvec);
     }
+}
