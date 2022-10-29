@@ -20,8 +20,6 @@ std::vector<std::string> split(std::string &input, char delimiter)
 Map2d<double> ReadCSV(std::string path)
 {
     Map2d<double> map;
-    int x_max;
-    int y_max;
     std::ifstream ifs(path);
 
     if (ifs)
@@ -30,9 +28,9 @@ Map2d<double> ReadCSV(std::string path)
         getline(ifs, line);
         std::vector<std::string> strvec = split(line, ',');
         map.x = std::stoi(strvec[0]);
-        x_max = std::stoi(strvec[1]);
+        int x_max = std::stoi(strvec[1]);
         map.y = std::stoi(strvec[2]);
-        y_max = std::stoi(strvec[3]);
+        int y_max = std::stoi(strvec[3]);
         map.width = x_max - map.x;
         map.height = y_max - map.y;
         while (getline(ifs, line))
@@ -54,7 +52,7 @@ Map2d<double> ReadCSV(std::string path)
         }
         int size = strvec.size();
         std::vector<double> nanvec(strvec.size() + 2, std::numeric_limits<double>::quiet_NaN());
-        map.data.insert(map.data.begin(), nanvec); 
+        map.data.insert(map.data.begin(), nanvec);
         map.data.push_back(nanvec);
     }
 }
