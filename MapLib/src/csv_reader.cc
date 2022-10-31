@@ -7,8 +7,7 @@
 #include <iostream>
 #include <limits>
 
-std::vector<std::string> split(std::string &input, char delimiter)
-{
+std::vector<std::string> split(std::string &input, char delimiter) {
     std::istringstream stream(input);
     std::string field;
     std::vector<std::string> result;
@@ -17,13 +16,11 @@ std::vector<std::string> split(std::string &input, char delimiter)
     return result;
 }
 
-Map2d<double> ReadCSV(std::string path)
-{
+Map2d<double> ReadCSV(std::string path) {
     Map2d<double> map;
     std::ifstream ifs(path);
 
-    if (ifs)
-    {
+    if (ifs) {
         std::string line;
         getline(ifs, line);
         std::vector<std::string> strvec = split(line, ',');
@@ -33,17 +30,14 @@ Map2d<double> ReadCSV(std::string path)
         int y_max = std::stoi(strvec[3]);
         map.width = x_max - map.x;
         map.height = y_max - map.y;
-        while (getline(ifs, line))
-        {
+        while (getline(ifs, line)) {
             std::vector<double> datvec;
             std::vector<std::string> strvec = split(line, ',');
             for (auto &&s : strvec)
-                if (s == "NaN")
-                {
+                if (s == "NaN") {
                     datvec.push_back(std::numeric_limits<double>::quiet_NaN());
                 }
-                else
-                {
+                else {
                     datvec.push_back(std::stod(s));
                 }
             datvec.push_back(std::numeric_limits<double>::quiet_NaN());
