@@ -1,0 +1,76 @@
+// Created by 
+
+#ifndef __TRIANGLE_H__
+#define __TRIANGLE_H__
+
+#include <vector>
+
+#include "point3d.h"
+
+/*
+Represent a triangle.
+Edge `points[0]` - `points[1]` is between `children[0]` and `neighbors[0]`.
+Edge `points[1]` - `points[2]` is between `children[1]` and `neighbors[1]`.
+Edge `points[2]` - `points[0]` is between `children[2]` and `neighbors[2]`.
+*/
+struct Triangle {
+    Point3d* points[3];
+
+    // Child triangles inside the triangle.
+    Triangle* children[3];
+
+    // Neighbor triangles outside the triangle.
+    Triangle* neighbors[3];
+
+    /*
+    Initialize all members.
+    Assign `children` and `neighbors` nullptr.
+    */
+    Triangle(Point3d* n0, Point3d* n1, Point3d* n2);
+
+    /*
+    Delete `children`.
+    */
+    ~Triangle();
+
+    /*
+    Determine whether a point is contained the triangle.
+    When project the point and the point is inside the triangle on the XY plane, the triangle contains the point.
+    In short, focus only X and Y values.
+    [params]
+    - point: a point to determine if the triangle contains it
+    [return]
+    If the triangle contains the point, return true, other else false.
+    */
+    bool Contains(Point3d* point) const;
+
+    /*
+    Find the deepest triangle containing the point.
+    [params]
+    - point: point that the triangle contains
+    [return]
+    The deepest triangle.
+    */
+    Triangle FindDeepest(Point3d* point) const;
+
+    /*
+    Divide the triangle into 2 or 3 triangles and add new triangles as children.
+    Update `children`.
+    [params]
+    - point: the new vertex
+    */
+    void Divide(Point3d* point);
+
+    /*
+    Reconnect a edge if it is illegal.
+    Check `points[1]` - `points[2]`.
+    Define a point that is not in `points` and is in `points` of `neighbors[1]` as D.
+    If a circumscribed circle of the triangle contains D, make new children.
+    One child is consisted of `points[0]`, `points[1]`, and D.
+    Another is consisted of `points[0]`, `points[2]`, and D.
+    Children are assigned into both the triangle and `neighbors[1]`.
+    */
+    void Flip();
+};
+
+#endif // __TRIANGLE_H__

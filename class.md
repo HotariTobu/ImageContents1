@@ -96,30 +96,28 @@ classDiagram
     }
     Reducer o-- Face
 
-    class DelaunayLib {
-        +MakePolygon(PointSet points): vector[(int, int, int)]
-        +MakeBigTriangle(PointSet points)
-        +Randomize(PointSet points): PointSet
+    class Converter {
+        +CombineMaps(vector[Map2d[double]] maps): Map2d[double]
+        +MakeBigTriangle(PointSet points): (Point3d, Point3d, Point3d)
+        +Randomize(PointSet points)
+        +AddGroundPoints(PointSet points, vector[IndexSet] indices)
+        +WriteWRL(string path, PointSet points, vector[IndexSet] indices)
     }
-    GeometryLib <.. DelaunayLib
+    MapLib <.. Converter
+    GeometryLib <.. Converter
 
     class Triangle {
-        +vector[Point3d]* points
-        +int[3] point_indices
+        +Point3d*[3] points
         +Triangle*[3] children
         +Triangle*[3] neighbors
 
-        +Contains(Point3d point): bool
-        +FindDeepest(Point3d point): Triangle
-        +Divide(Point3d point)
+        +Triangle(Point3d* n0, Point3d* n1, Point3d* n2)
+        ~Triangle()
+
+        +Contains(Point3d* point): bool
+        +FindDeepest(Point3d* point): Triangle
+        +Divide(Point3d* point)
         +Flip()
     }
-    DelaunayLib o-- Triangle
-
-    class Converter {
-        +MakeGroundPoints(Map2d[double] map): Map2d[double]
-        +WriteWRL(string path, PointSet points, vector[(int, int, int)] indices)
-    }
-    MapLib <.. Converter
-    DelaunayLib <.. Converter
+    Converter o-- Triangle
 ```
