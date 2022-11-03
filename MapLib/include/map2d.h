@@ -27,7 +27,8 @@ struct Map2d {
     Values of map.
     1st dimension: Y-axis direction
     2nd dimension: X-axis direction
-    value = data[Y][X]
+    To access the value in (X, Y), use the below.
+    value = data[Y - y + 1][X - x + 1]
     */
     std::vector<std::vector<T>> data;
 };
@@ -35,6 +36,6 @@ struct Map2d {
 template<class T>
 bool operator==(const Map2d<T>& map1, const Map2d<T>& map2);
 template<class T>
-bool operator!=(const Map2d<T>& map1, const Map2d<T>& map2) { return !(map1 == map2); }
+bool operator!=(const Map2d<T>& map1, const Map2d<T>& map2);
 
 #endif // __MAP2D_H__
