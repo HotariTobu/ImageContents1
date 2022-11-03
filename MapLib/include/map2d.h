@@ -32,4 +32,9 @@ struct Map2d {
     std::vector<std::vector<T>> data;
 };
 
+template<class T>
+bool operator==(const Map2d<T>& map1, const Map2d<T>& map2);
+template<class T>
+bool operator!=(const Map2d<T>& map1, const Map2d<T>& map2) { return !(map1 == map2); }
+
 #endif // __MAP2D_H__
