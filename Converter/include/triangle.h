@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "point3d.h"
+#include "circle.h"
 
 /*
 Represent a triangle.
@@ -26,12 +27,18 @@ struct Triangle {
     Initialize all members.
     Assign `children` and `neighbors` nullptr.
     */
-    Triangle(Point3d* n0, Point3d* n1, Point3d* n2);
+    Triangle(Point3d* p0, Point3d* p1, Point3d* p2);
 
     /*
     Delete `children`.
     */
     ~Triangle();
+
+    // Return the incircle.
+    Circle GetIncircle();
+
+    // Return the circumcircle.
+    Circle GetCircumcircle();
 
     /*
     Determine whether a point is contained the triangle.
