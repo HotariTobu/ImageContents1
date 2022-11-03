@@ -14,4 +14,7 @@ struct Neighbor {
     double data[3][3];
 };
 
+bool operator==(const Neighbor neighbor1, const Neighbor neighbor2);
+bool operator!=(const Neighbor neighbor1, const Neighbor neighbor2);
+
 #endif // __NEIGHBOR_H__
