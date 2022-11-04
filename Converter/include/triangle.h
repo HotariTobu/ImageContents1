@@ -58,7 +58,7 @@ struct Triangle {
     [return]
     The deepest triangle.
     */
-    Triangle FindDeepest(Point3d* point) const;
+    Triangle* FindDeepest(Point3d* point) const;
 
     /*
     Divide the triangle into 2 or 3 triangles and add new triangles as children.
