@@ -23,8 +23,11 @@ struct Vector3d {
     Vector3d Cross(const Vector3d vector) const;
 };
 
-Vector3d operator+(const Vector3d v1, const Vector3d v2);
-Vector3d operator-(const Vector3d v1, const Vector3d v2);
+bool operator==(const Vector3d vector1, const Vector3d vector2);
+bool operator!=(const Vector3d vector1, const Vector3d vector2);
+
+Vector3d operator+(const Vector3d vector1, const Vector3d vector2);
+Vector3d operator-(const Vector3d vector1, const Vector3d vector2);
 Vector3d operator*(const Vector3d vector, double value);
 Vector3d operator/(const Vector3d vector, double value);
 
