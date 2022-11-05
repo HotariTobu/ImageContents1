@@ -10,24 +10,24 @@ int main() {
 
     assert(
         Calculate({
-            {1, 2, 3},
-            {4, 5, 6},
-            {7, 8, 9},
+            {1,   2, 3},
+            {4, nan, 6},
+            {7,   8, 9},
         }) == 1
     )
 
     assert(
         Calculate({
-            {  1, 2, nan},
-            {nan, 5, nan},
-            {nan, 8,   9},
+            {  1,   2, nan},
+            {nan, nan, nan},
+            {nan,   8,   9},
         }) == 1
     )
 
     assert(
         Calculate({
             {nan,   2,   3},
-            {  4,   5,   6},
+            {  4, nan,   6},
             {  7, nan, nan},
         }) == 2
     )
@@ -37,24 +37,24 @@ int main() {
 
     assert(
         Calculate({
-            {1, 2, 3},
-            {4, 5, 6},
-            {7, 8, 9},
+            {1,   2, 3},
+            {4, nan, 6},
+            {7,   8, 9},
         }) == 9
     )
 
     assert(
         Calculate({
-            {  1, 2, nan},
-            {nan, 5, nan},
-            {nan, 8,   9},
+            {  1,   2, nan},
+            {nan, nan, nan},
+            {nan,   8,   9},
         }) == 9
     )
 
     assert(
         Calculate({
             {nan,   2,   3},
-            {  4,   5,   6},
+            {  4, nan,   6},
             {  7, nan, nan},
         }) == 7
     )
@@ -64,26 +64,26 @@ int main() {
 
     assert(
         Calculate({
-            {1, 2, 3},
-            {4, 5, 6},
-            {7, 8, 9},
+            {1,   2, 3},
+            {4, nan, 6},
+            {7,   8, 9},
         }) == 5
     )
 
     assert(
         Calculate({
-            {  1, 2, nan},
-            {nan, 5, nan},
-            {nan, 8,   9},
+            {  1,   2, nan},
+            {nan, nan, nan},
+            {nan,   8,   9},
         }) == 5
     )
 
     assert(
         Calculate({
             {nan,   2,   3},
-            {  4,   5,   6},
+            {  4, nan,   6},
             {  7, nan, nan},
-        }) == 4.5
+        }) == 4.4
     )
 
 #elif __MEDIAN
@@ -91,26 +91,26 @@ int main() {
 
     assert(
         Calculate({
-            {1, 2, 3},
-            {4, 5, 6},
-            {7, 8, 9},
+            {1,   2, 3},
+            {4, nan, 6},
+            {7,   8, 9},
         }) == 5
     )
 
     assert(
         Calculate({
-            {  1, 2, nan},
-            {nan, 5, nan},
-            {nan, 8,   9},
+            {  1,   2, nan},
+            {nan, nan, nan},
+            {nan,   8,   9},
         }) == 5
     )
 
     assert(
         Calculate({
             {nan,   2,   3},
-            {  4,   5,   6},
+            {  4, nan,   6},
             {  7, nan, nan},
-        }) == 4.5
+        }) == 4
     )
 
 #endif
