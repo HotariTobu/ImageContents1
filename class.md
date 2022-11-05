@@ -11,10 +11,13 @@ classDiagram
 
         +ToVector(): Vector3d
 
-        +operator+()
-        +operator-()
-        +operator*()
-        +operator/()
+        operator==(Point3d point1, Point3d point2)$: bool
+        operator!=(Point3d point1, Point3d point2)$: bool
+
+        +operator+(Point3d point1, Point3d point2)$: Vector3d
+        +operator-(Point3d point1, Point3d point2)$: Vector3d
+        +operator*(Point3d point, double value)$: Point3d
+        +operator/(Point3d point, double value)$: Point3d
     }
     GeometryLib o-- Point3d
 
@@ -29,10 +32,13 @@ classDiagram
         Inner(Vector3d vector): double
         Cross(Vector3d vector): Vector3d
 
-        +operator+()
-        +operator-()
-        +operator*()
-        +operator/()
+        operator==(Vector3d vector1, Vector3d vector2)$: bool
+        operator!=(Vector3d vector1, Vector3d vector2)$: bool
+
+        +operator+(Vector3d vector1, Vector3d vector2)$: Vector3d
+        +operator-(Vector3d vector1, Vector3d vector2)$: Vector3d
+        +operator*(Vector3d vector, double value)$: Vector3d
+        +operator/(Vector3d vector, double value)$: Vector3d
     }
     GeometryLib o-- Vector3d
 
@@ -53,11 +59,17 @@ classDiagram
         +int width
         +int height
         +vector[vector[T]] data
+
+        operator==(Map2d map1, Map2d map2)$: bool
+        operator!=(Map2d map1, Map2d map2)$: bool
     }
     MapLib o-- Map2d
 
     class Neighbor {
         +double[3][3] data
+
+        operator==(Neighbor neighbor1, Neighbor neighbor2)$: bool
+        operator!=(Neighbor neighbor1, Neighbor neighbor2)$: bool
     }
     MapLib o-- Neighbor
 
@@ -120,4 +132,10 @@ classDiagram
         +Flip()
     }
     Converter o-- Triangle
+
+    class Circle {
+        +Point3d center
+        +double radius
+    }
+    Converter o-- Circle
 ```
