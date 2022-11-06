@@ -5,6 +5,8 @@
 #include "../include/map2d.h"
 
 int main() {
+    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
+    
     Map2d<double> map1;
     map1.x = 1;
     map1.y = -5;
