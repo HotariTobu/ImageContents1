@@ -11,6 +11,8 @@ destination_data*
 build
 env
 
+*_export.h
+
 #################################################################
 
 ## Ignore Visual Studio temporary files, build results, and
