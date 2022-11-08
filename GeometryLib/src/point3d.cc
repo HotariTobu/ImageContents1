@@ -6,6 +6,22 @@ Vector3d Point3d::ToVector() const {
 
 }
 
+Point3d& Point3d::operator+=(const Point3d point) {
+
+}
+
+Point3d& Point3d::operator-=(const Point3d point) {
+
+}
+
+Point3d& Point3d::operator*=(const Point3d point) {
+
+}
+
+Point3d& Point3d::operator/=(const Point3d point) {
+
+}
+
 bool operator==(const Point3d point1, const Point3d point2) {
     return
         point1.x == point2.x &&
