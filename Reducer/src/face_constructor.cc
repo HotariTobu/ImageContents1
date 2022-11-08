@@ -4,18 +4,13 @@
 
 Face::Face(const PointVectorSet& set) {
 
-    _points = set.first;
-    f_size = set.first.size();
-    s_size = set.second.size();
-    f_sum = 0;
-    s_sum = 0;
-    for (int i = 0; i < f_size; ++i) {
-        f_sum += i;
+    for (auto& e : set) {
+        _points.push_back(e.first);
+        _origin += e.first;
+        _normal += e.second;
     }
-    for (int i = 0; i < s_size; ++i) {
-        s_sum += i;
-    }
-    _origin = f_sum / f_size;
-    _normal = s_sum / s_size;
-
+    _origin /= set.size();
+    _normal /= set.size();
+    +Normalize(_normal);
+    
 }
