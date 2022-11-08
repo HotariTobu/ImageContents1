@@ -11,6 +11,6 @@ Face::Face(const PointVectorSet& set) {
     }
     _origin /= set.size();
     _normal /= set.size();
-    +Normalize(_normal);
+    _normal.Normalize();
     
 }
