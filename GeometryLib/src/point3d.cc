@@ -6,6 +6,34 @@ Vector3d Point3d::ToVector() const {
 
 }
 
+Point3d& Point3d::operator+=(const Point3d point) {
+    x += point.x;
+    y += point.y;
+    z += point.z;
+    return *this;
+}
+
+Point3d& Point3d::operator-=(const Point3d point) {
+    x -= point.x;
+    y -= point.y;
+    z -= point.z;
+    return *this;
+}
+
+Point3d& Point3d::operator*=(const Point3d point) {
+    x *= point.x;
+    y *= point.y;
+    z *= point.z;
+    return *this;
+}
+
+Point3d& Point3d::operator/=(const Point3d point) {
+    x /= point.x;
+    y /= point.y;
+    z /= point.z;
+    return *this;
+}
+
 bool operator==(const Point3d point1, const Point3d point2) {
     return
         point1.x == point2.x &&
@@ -18,18 +46,34 @@ bool operator!=(const Point3d point1, const Point3d point2) {
 }
 
 Vector3d operator+(const Point3d point1, const Point3d point2) {
-
+    return {
+        point1.x + point2.x ,
+        point1.y + point2.y ,
+        point1.z + point2.z 
+    };
 }
 
 Vector3d operator-(const Point3d point1, const Point3d point2) {
-
+    return {
+        point1.x - point2.x ,
+        point1.y - point2.y ,
+        point1.z - point2.z 
+    };
 }
 
 Point3d operator*(const Point3d point, double value) {
-
+    return {
+        point.x * value ,
+        point.y * value ,
+        point.z * value 
+    };
 }
 
 Point3d operator/(const Point3d point, double value) {
-
+    return {
+        point.x / value ,
+        point.y / value ,
+        point.z / value
+    };
 }
 
