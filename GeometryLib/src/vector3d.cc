@@ -26,23 +26,31 @@ Vector3d Vector3d::Cross(const Vector3d vector) const {
 }
 
 Vector3d& Vector3d::operator+=(const Vector3d vector) {
-    return {
-        x + vector.x,
-        y + vector.y,
-        z + vector.z
-    };
+    x += vector.x;
+    y += vector.y;
+    z += vector.z;
+    return *this;
 }
 
 Vector3d& Vector3d::operator-=(const Vector3d vector) {
-
+    x -= vector.x;
+    y -= vector.y;
+    z -= vector.z;
+    return *this;
 }
 
 Vector3d& Vector3d::operator*=(const Vector3d vector) {
-
+    x *= vector.x;
+    y *= vector.y;
+    z *= vector.z;
+    return *this;
 }
 
 Vector3d& Vector3d::operator/=(const Vector3d vector) {
-
+    x /= vector.x;
+    y /= vector.y;
+    z /= vector.z;
+    return *this;
 }
 
 
