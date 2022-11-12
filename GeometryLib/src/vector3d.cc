@@ -46,10 +46,24 @@ Vector3d& Vector3d::operator*=(const Vector3d vector) {
     return *this;
 }
 
+Vector3d& Vector3d::operator*=(const double value) {
+    x *= value;
+    y *= value;
+    z *= value;
+    return *this;
+}
+
 Vector3d& Vector3d::operator/=(const Vector3d vector) {
     x /= vector.x;
     y /= vector.y;
     z /= vector.z;
+    return *this;
+}
+
+Vector3d& Vector3d::operator/=(const double value) {
+    x /= value;
+    y /= value;
+    z /= value;
     return *this;
 }
 

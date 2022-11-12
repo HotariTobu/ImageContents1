@@ -3,7 +3,7 @@
 #include "../include/point3d.h"
 
 Vector3d Point3d::ToVector() const {
-
+    return Vector3d{x, y, z};
 }
 
 Point3d& Point3d::operator+=(const Point3d point) {
@@ -27,10 +27,24 @@ Point3d& Point3d::operator*=(const Point3d point) {
     return *this;
 }
 
+Point3d& Point3d::operator*=(const double value) {
+    x *= value;
+    y *= value;
+    z *= value;
+    return *this;
+}
+
 Point3d& Point3d::operator/=(const Point3d point) {
     x /= point.x;
     y /= point.y;
     z /= point.z;
+    return *this;
+}
+
+Point3d& Point3d::operator/=(const double value) {
+    x /= value;
+    y /= value;
+    z /= value;
     return *this;
 }
 
