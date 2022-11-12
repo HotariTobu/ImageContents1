@@ -2,8 +2,10 @@
 
 #include "../include/calculator.h"
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
+#include <vector>
 
 double Calculate(Neighbor neighbor) {
 #ifdef __MIN
