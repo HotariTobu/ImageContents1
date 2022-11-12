@@ -1,4 +1,4 @@
-// Created by 
+// Created by guinpen98
 
 #include "../include/face.h"
 

@@ -1,4 +1,4 @@
-// Created by 
+// Created by D0000000000N
 
 #include "../include/maps_combiner.h"
 
