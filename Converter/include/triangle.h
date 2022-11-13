@@ -34,6 +34,13 @@ struct Triangle {
     */
     ~Triangle();
 
+    /*
+    Return if the triangle has any children.
+    [return]
+    Return false if all children is nullptr other else true.
+    */
+    bool HasChild() const;
+
     // Return the incircle.
     Circle GetIncircle();
 
@@ -58,7 +65,7 @@ struct Triangle {
     [return]
     The deepest triangle.
     */
-    Triangle* FindDeepest(Point3d* point) const;
+    const Triangle* FindDeepest(Point3d* point) const;
 
     /*
     Divide the triangle into 2 or 3 triangles and add new triangles as children.

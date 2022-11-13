@@ -23,6 +23,16 @@ Triangle::~Triangle() {
     }
 }
 
+bool Triangle::HasChild() const {
+    for (int i = 0; i < 3; ++i) {
+        if (children[i] != nullptr) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
 bool operator==(Triangle triangle1, Triangle triangle2) {
     if (
         triangle1.points[0] != triangle2.points[0] ||
