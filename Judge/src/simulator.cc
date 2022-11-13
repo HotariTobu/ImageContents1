@@ -1,4 +1,4 @@
-// Created by 
+// Created by yu-getu
 
 #include "../include/simulator.h"
 

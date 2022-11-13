@@ -4,11 +4,11 @@ extern double searcher_threshold;
 
 int main() {
 
-#ifdef __4_EDGE
-// 4-edge code is hear...
+#ifdef __4_NEIGHBOR
+// 4-neighbor code is hear...
 
-#elif __8_EDGE
-// 8-edge code is hear...
+#elif __8_NEIGHBOR
+// 8-neighbor code is hear...
 
 #endif
 

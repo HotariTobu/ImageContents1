@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include "../include/map2d.h"
+#include "map2d.h"
 
 /*
 Write data to .csv file.

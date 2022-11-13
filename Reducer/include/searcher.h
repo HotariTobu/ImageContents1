@@ -10,6 +10,8 @@
 #include "alias.h"
 #include "vector3d.h"
 
+// double searcher_threshold;
+
 /*
 Create groups of points that are similar to each other for their normal vectors.
 [params]
