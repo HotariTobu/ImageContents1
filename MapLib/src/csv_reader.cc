@@ -11,8 +11,9 @@ std::vector<std::string> split(std::string &input, char delimiter) {
     std::istringstream stream(input);
     std::string field;
     std::vector<std::string> result;
-    while (getline(stream, field, delimiter))
+    while (getline(stream, field, delimiter)) {
         result.push_back(field);
+    }
     return result;
 }
 
@@ -44,9 +45,10 @@ Map2d<double> ReadCSV(std::string path) {
             datvec.insert(datvec.begin(), std::numeric_limits<double>::quiet_NaN());
             map.data.insert(map.data.begin(), datvec);
         }
-        int size = strvec.size();
         std::vector<double> nanvec(strvec.size() + 2, std::numeric_limits<double>::quiet_NaN());
         map.data.insert(map.data.begin(), nanvec);
         map.data.push_back(nanvec);
     }
+
+    return map;
 }
