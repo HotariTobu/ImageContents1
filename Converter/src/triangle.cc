@@ -7,11 +7,20 @@
 #include "near.h"
 
 Triangle::Triangle(Point3d* p0, Point3d* p1, Point3d* p2) {
+    points[0] = p0;
+    points[1] = p1;
+    points[2] = p2;
 
+    for (int i = 0; i < 3; ++i) {
+        children[i] = nullptr;
+        neighbors[i] = nullptr;
+    }
 }
 
 Triangle::~Triangle() {
-
+    for (int i = 0; i < 3; ++i) {
+        delete children[i];
+    }
 }
 
 bool operator==(Triangle triangle1, Triangle triangle2) {
@@ -23,7 +32,7 @@ bool operator==(Triangle triangle1, Triangle triangle2) {
         return false;
     }
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; ++i) {
         if (
             !((triangle1.children[i] == nullptr ^ triangle2.children[i] == nullptr) || *(triangle1.children[i]) == *(triangle2.children[i])) ||
             !((triangle1.neighbors[i] == nullptr ^ triangle2.neighbors[i] == nullptr) || *(triangle1.neighbors[i]) == *(triangle2.neighbors[i]))
@@ -40,7 +49,7 @@ bool Near(Triangle triangle1, Triangle triangle2) {
         return false;
     }
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; ++i) {
         if (
             !((triangle1.children[i] == nullptr ^ triangle2.children[i] == nullptr) || Near(*(triangle1.children[i]), *(triangle2.children[i]))) ||
             !((triangle1.neighbors[i] == nullptr ^ triangle2.neighbors[i] == nullptr) || Near(*(triangle1.neighbors[i]), *(triangle2.neighbors[i])))
