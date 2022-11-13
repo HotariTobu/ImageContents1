@@ -26,9 +26,13 @@ struct Vector3d {
 bool operator==(const Vector3d vector1, const Vector3d vector2);
 bool operator!=(const Vector3d vector1, const Vector3d vector2);
 
+bool operator<(const Vector3d vector1, const Vector3d vector2);
+
 Vector3d operator+(const Vector3d vector1, const Vector3d vector2);
 Vector3d operator-(const Vector3d vector1, const Vector3d vector2);
 Vector3d operator*(const Vector3d vector, double value);
 Vector3d operator/(const Vector3d vector, double value);
+
+bool Near(Vector3d vector1, Vector3d vector2);
 
 #endif // __VECTOR3D_H__

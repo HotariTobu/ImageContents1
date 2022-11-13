@@ -12,6 +12,7 @@ enable_testing()
 
 include(Helper.cmake)
 
+add_subdirectory(OperatorLib)
 add_subdirectory(GeometryLib)
 add_subdirectory(MapLib)
 

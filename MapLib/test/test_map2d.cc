@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "../include/map2d.h"
+#include "map2d.h"
 
 int main() {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
@@ -35,7 +35,7 @@ int main() {
 
     assert(map1 == map2);
 
-    Map2d<double> map3 = {
+    const Map2d<double> map3 = {
             1, -5, 3, 3,
             {
                 {nan, nan, nan, nan, nan},
@@ -47,4 +47,17 @@ int main() {
         };
 
     assert(map1 == map3);
+
+    const Map2d<double> map4 = {
+            1, -5, 3, 3,
+            {
+                {nan, nan, nan, nan, nan},
+                {nan,  -9,   4, -31, nan},
+                {nan, 6.6, nan,  54, nan},
+                {nan, nan,   1,  -5, nan},
+                {nan, nan, nan, nan, nan},
+            }
+        };
+
+    assert(map3 != map4);
 }

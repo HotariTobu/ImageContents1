@@ -1,0 +1,32 @@
+// Created by 
+
+#include "../include/map2d.h"
+
+#include "equals.h"
+
+template<class T>
+bool operator==(const Map2d<T>& map1, const Map2d<T>& map2) {
+    if (
+        map1.x != map2.x ||
+        map1.y != map2.y ||
+        map1.width != map2.width ||
+        map1.height != map2.height
+    ) {
+        return false;
+    }
+
+    for (int y = 1; y <= map1.height; ++y) {
+        for (int x = 1; x <= map1.width; ++x) {
+            if (!Equals(map1.data[y][x], map2.data[y][x])) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}
+
+template<class T>
+bool operator!=(const Map2d<T>& map1, const Map2d<T>& map2) {
+    return !(map1 == map2);
+}

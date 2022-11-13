@@ -6,6 +6,10 @@
 
 extern double separator_threshold;
 
+std::pair<Map2d<double>, Map2d<double>> pack(Map2d<double> map1, Map2d<double> map2) {
+    return std::make_pair(map1, map2);
+}
+
 int main() {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
@@ -21,7 +25,7 @@ int main() {
                 {{nan, nan}, {2.7, 0.6}, { 30,   3}, {100,   1}, {nan, nan}},
                 {{nan, nan}, {nan, nan}, {nan, nan}, {nan, nan}, {nan, nan}},
             }
-        }) == std::pair<Map2d<double>, Map2d<double>>({
+        }) == pack(
             {
                 0, 0, 3, 3,
                 {
@@ -42,6 +46,6 @@ int main() {
                     {nan, nan, nan, nan, nan},
                 }
             }
-        })
+        )
     );
 }

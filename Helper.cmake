@@ -13,6 +13,13 @@ function(add_target)
         set(IS_LIB FALSE)
     endif()
 
+    if (SHARED IN_LIST ARGN)
+        set(IS_SHARED TRUE)
+        list(REMOVE_ITEM ARGN SHARED)
+    else()
+        set(IS_SHARED FALSE)
+    endif()
+
 
     set(TARGET_FLAGS ${ARGN})
     get_filename_component(TARGET_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
@@ -23,13 +30,17 @@ function(add_target)
     
     if(${IS_LIB})
         message("lib: ${TARGET_NAME}")
-
-        add_library(${TARGET_NAME} SHARED ${SOURCE_FILES})
-        generate_export_header(${TARGET_NAME})
-
         set(TARGET_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+        if(${IS_SHARED})
+            add_library(${TARGET_NAME} SHARED ${SOURCE_FILES})
+            generate_export_header(${TARGET_NAME})
+            file(COPY ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}_export.h DESTINATION ${TARGET_INCLUDE_PATH})
+        else()    
+            add_library(${TARGET_NAME} STATIC ${SOURCE_FILES})
+        endif()
+        
         target_include_directories(${TARGET_NAME} INTERFACE ${TARGET_INCLUDE_PATH})
-        file(COPY ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}_export.h DESTINATION ${TARGET_INCLUDE_PATH})
     else()
         message("exe: ${TARGET_NAME}")
 

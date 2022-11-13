@@ -1,11 +1,14 @@
 // Created by 
 
 #include <cassert>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
 
 #include "../include/wrl_writer.h"
 
 bool CanPass(PointSet points, std::vector<IndexSet> indices, Map2d<PointType> point_types, const char* answer) {
-    constexpr char* filename = "test.wrl";
+    const char* filename = "test.wrl";
 
     WriteWRL(filename, points, indices, point_types);
 

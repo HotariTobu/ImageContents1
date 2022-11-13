@@ -38,4 +38,6 @@ bool operator==(const Map2d<T>& map1, const Map2d<T>& map2);
 template<class T>
 bool operator!=(const Map2d<T>& map1, const Map2d<T>& map2);
 
+#include "../src/map2d.in"
+
 #endif // __MAP2D_H__

@@ -6,7 +6,7 @@
 #include <limits>
 #include <sstream>
 
-#include "../include/csv_writer.h"
+#include "csv_writer.h"
 
 bool CanPass(Map2d<double> map, const char* answer) {
     constexpr char* filename = "test.csv";

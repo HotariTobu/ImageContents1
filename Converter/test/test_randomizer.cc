@@ -1,6 +1,7 @@
 // Created by 
 
 #include <cassert>
+#include <ctime>
 
 #include "../include/randomizer.h"
 
@@ -15,7 +16,7 @@ bool CanPass() {
         points.push_back(point);
     }
     
-    Point3d clone = std::copy(points);
+    PointSet clone = points;
 
     Randomize(clone);
 
@@ -23,7 +24,7 @@ bool CanPass() {
 }
 
 int main() {
-    srand(time(NULL));
+    srand(std::time(NULL));
 
     assert(CanPass());
     assert(CanPass());

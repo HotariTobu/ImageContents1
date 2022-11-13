@@ -1,8 +1,14 @@
 ```mermaid
 classDiagram
+    class OperatorLib {
+        +Equals(double a, double b): bool
+        +Near(double a, double b): bool
+    }
+
     class GeometryLib {
 
     }
+    OperatorLib <.. GeometryLib
 
     class Point3d {
         +double x
@@ -52,6 +58,7 @@ classDiagram
 		+ReadCSV(string path): Map2d[double]
 		+WriteCSV(string path, Map2d[double] map)
 	}
+    OperatorLib <.. MapLib
 
     class Map2d {
         +int x
