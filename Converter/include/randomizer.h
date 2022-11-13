@@ -9,9 +9,7 @@
 Randomize the order of point set.
 [params]
 - points: set of points
-[return]
-Randomized points set.
 */
-PointSet Randomize(const PointSet& points);
+void Randomize(PointSet& points);
 
 #endif // __RANDOMIZER_H__

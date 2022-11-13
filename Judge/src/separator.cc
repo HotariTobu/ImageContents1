@@ -9,6 +9,8 @@ double separator_threshold;
 void InitMap2d(const Map2d<std::pair<double, double>>& origin, Map2d<double>& init_to_map){
     init_to_map.width = origin.width;
     init_to_map.height = origin.height;
+    init_to_map.x = origin.x;
+    init_to_map.y = origin.y;
     init_to_map.data = std::vector<std::vector<double>>(init_to_map.height + 2, std::vector<double>(init_to_map.width + 2, std::nan("")));
 }
 

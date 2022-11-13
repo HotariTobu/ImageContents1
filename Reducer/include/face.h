@@ -21,6 +21,13 @@ private:
     PointSet _points;
 
 public:
+    // Getter for `_origin`.
+    Point3d origin();
+
+    // Getter for `_normal`.
+    Vector3d normal();
+    
+
     // Getter for `_points`.
     PointSet points();
 
