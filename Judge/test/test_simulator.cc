@@ -7,6 +7,10 @@
 
 extern double simulator_threshold;
 
+bool CanPass(double value, Neighbor neighbor, Neighbor answer) {
+    return Simulate(value, neighbor) == answer;
+}
+
 int main() {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
@@ -23,38 +27,36 @@ int main() {
 #ifdef __4_NEIGHBOR
 // Uniform 4-neighbor code is hear...
 
-    assert(
-        Simulate(
-            3,
-            {
-                {    0, 4, -3.14},
-                { 6.66, 5,    54},
-                {0.001, 1,  -5.8},
-            }
-        ) == Neighbor({
-            {0, 1, 0},
-            {1, 0, 0},
-            {0, 1, 0},
-        })
-    );
+    assert(CanPass(
+        3,
+        {
+                0, 4, -3.14,
+             6.66, 5,    54,
+            0.001, 1,  -5.8,
+        },
+        {
+            0, 1, 0,
+            1, 0, 0,
+            0, 1, 0,
+        }
+    ));
 
 #elif __8_NEIGHBOR
 // Uniform 8-neighbor code is hear...
 
-    assert(
-        Simulate(
-            7,
-            {
-                {    0, 4, -3.14},
-                { 6.66, 5,    54},
-                {0.001, 1,  -5.8},
-            }
-        ) == Neighbor({
-            {1, 1, 1},
-            {1, 0, 0},
-            {1, 1, 1},
-        })
-    );
+    assert(CanPass(
+        7,
+        {
+                0, 4, -3.14,
+             6.66, 5,    54,
+            0.001, 1,  -5.8,
+        },
+        {
+            1, 1, 1,
+            1, 0, 0,
+            1, 1, 1,
+        }
+    ));
 
 #endif
 
