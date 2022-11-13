@@ -1,4 +1,4 @@
-Created by HotariTobu
+// Created by HotariTobu
 
 #include "../include/triangle.h"
 
