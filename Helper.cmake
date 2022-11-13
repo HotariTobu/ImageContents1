@@ -1,10 +1,5 @@
 include(GenerateExportHeader)
 
-function(concat)
-    
-endfunction()
-
-
 function(add_target)
     if (LIB IN_LIST ARGN)
         set(IS_LIB TRUE)
@@ -67,6 +62,10 @@ function(add_target)
         string(JOIN "_" TEST_TARGET_NAME TEST_${FILENAME_WE} ${TARGET_FLAGS})
 
         add_executable(${TEST_TARGET_NAME} ${TEST_FILE_PATH})
+
+        if(TARGET_FLAGS)
+            target_compile_definitions(${TEST_TARGET_NAME} PRIVATE ${TARGET_FLAGS})
+        endif()
 
         if(${IS_LIB})
             target_link_libraries(${TEST_TARGET_NAME} ${TARGET_NAME})
