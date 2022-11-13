@@ -9,7 +9,7 @@
 
 /*
 Combine multiple maps into a map.
-Use a value of the first map if there are multiple values in a point.
+Use a value of the last map if there are multiple values in a point.
 [params]
 - maps: set of map
 [return]

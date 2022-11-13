@@ -21,6 +21,13 @@ struct Vector3d {
 
     // Calculate cross product with `vector`.
     Vector3d Cross(const Vector3d vector) const;
+
+    Vector3d& operator+=(const Vector3d vector);
+    Vector3d& operator-=(const Vector3d vector);
+    Vector3d& operator*=(const Vector3d vector);
+    Vector3d& operator*=(const double value);
+    Vector3d& operator/=(const Vector3d vector);
+    Vector3d& operator/=(const double value);
 };
 
 bool operator==(const Vector3d vector1, const Vector3d vector2);
