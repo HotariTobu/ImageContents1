@@ -51,36 +51,31 @@ void Triangle::Divide(Point3d* point) {
             child2->Flip();
 
             Triangle* neighbor = deepest->neighbors[i0];
-            if (neighbor != nullptr) {
-                int j0 = 0;
-                while (neighbor->neighbors[j0] != deepest) {
-                    j0++;
-                }
+            
+            int j0 = deepest->GetNeighborPointIndex(i0);
+            int j1 = (j0 + 1) % 3;
+            int j2 = (j0 + 2) % 3;
 
-                int j1 = (j0 + 1) % 3;
-                int j2 = (j0 + 2) % 3;
+            Point3d* point4 = neighbor->points[j2];
 
-                Point3d* point4 = neighbor->points[j2];
+            Triangle* neighbor1 = new Triangle(point, point0, point4);
+            Triangle* neighbor2 = new Triangle(point, point4, point1);
 
-                Triangle* neighbor1 = new Triangle(point, point0, point4);
-                Triangle* neighbor2 = new Triangle(point, point4, point1);
+            neighbor->children[j1] = neighbor1;
+            neighbor->children[j2] = neighbor2;
 
-                neighbor->children[j1] = neighbor1;
-                neighbor->children[j2] = neighbor2;
+            child1->neighbors[0] = neighbor2;
+            child2->neighbors[2] = neighbor1;
 
-                child1->neighbors[0] = neighbor2;
-                child2->neighbors[2] = neighbor1;
+            neighbor1->neighbors[0] = child2;
+            neighbor1->neighbors[1] = neighbor->neighbors[j1];
+            neighbor1->neighbors[2] = neighbor2;
+            neighbor2->neighbors[0] = neighbor1;
+            neighbor2->neighbors[1] = neighbor->neighbors[j2];
+            neighbor2->neighbors[2] = child1;
 
-                neighbor1->neighbors[0] = child2;
-                neighbor1->neighbors[1] = neighbor->neighbors[j1];
-                neighbor1->neighbors[2] = neighbor2;
-                neighbor2->neighbors[0] = neighbor1;
-                neighbor2->neighbors[1] = neighbor->neighbors[j2];
-                neighbor2->neighbors[2] = child1;
-
-                neighbor1->Flip();
-                neighbor2->Flip();
-            }
+            neighbor1->Flip();
+            neighbor2->Flip();
 
             return;
         }
