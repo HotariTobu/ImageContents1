@@ -1,4 +1,4 @@
-// Created by 
+// Created by yu-getu
 
 #include "../include/simulator.h"
 
@@ -52,16 +52,19 @@ Neighbor Simulate(double value, Neighbor neighbor) {
         }   
 
 #ifdef __UNIFORM
+// Uniform code is hear...
         for (int i = 0; i < distribute_point.size(); i++){
             point_number = 0;
             for(int j = 0; j < 3 ; j++){
                 for(int k = 0; k < 3 ; k++){
                     point_number += 1;
 #ifdef __8_NEIGHBOR
+// Uniform 8-neighbor code is hear...
                     if(distribute_point[i] == point_number){
                         neighbor.data[j][k] += value/double(distribute_point.size()); 
 
 #elif __4_NEIGHBOR
+// Uniform 4-neighbor code is hear...
                         if (point_number % 2 == 0){
                             neighbor.data[j][k] += value/double(distribute_point_4); 
                         }
@@ -73,16 +76,19 @@ Neighbor Simulate(double value, Neighbor neighbor) {
 #endif
 
 #elif __FLEXIBLE
+// Flexible code is hear...
         for (int i = 0; i < distribute_point.size(); i++){
             point_number = 0;
             for(int j = 0; j < 3 ; j++){
                 for(int k = 0; k < 3 ; k++){
                     point_number += 1;
 #ifdef __8_NEIGHBOR
+// Flexible 8-neighbor code is hear...
                     if(distribute_point[i] == point_number){
                         neighbor.data[j][k] += (value * neighbor.data[j][k])/sum_distribute_difference_8; 
 
 #elif __4_NEIGHBOR
+// Flexible 4-neighbor code is hear...
                         if (point_number % 2 == 0){
                             neighbor.data[j][k] += (value * neighbor.data[j][k])/sum_distribute_difference_4; 
                         }
@@ -94,9 +100,9 @@ Neighbor Simulate(double value, Neighbor neighbor) {
 #endif
 
     neighbor.data[1][1] = 0;
-    return neighbor
+    return neighbor;
     }else{
-        return neighbor
+        return neighbor;
     }
 
 #endif
