@@ -16,11 +16,6 @@ int main() {
 
     simulator_threshold = 2;
 
-    double value = 12;
-
-    Neighbor n1, n2;
-    assert(n1 == n2);
-
 #ifdef __UNIFORM
 // Uniform code is hear...
 
@@ -66,8 +61,36 @@ int main() {
 #ifdef __4_NEIGHBOR
 // Flexible 4-neighbor code is hear...
 
+    assert(CanPass(
+        4,
+        {
+             76,  11,   9,
+             11,  10,  74,
+              2,  10,  13,
+        },
+        {
+              0,   1,   0,
+              1,   0,   0,
+              0,   2,   0,
+        }
+    ));
+
 #elif __8_NEIGHBOR
 // Flexible 8-neighbor code is hear...
+
+    assert(CanPass(
+        44,
+        {
+             76,  11,   9,
+             11,  10,  74,
+              2,  10,  13,
+        },
+        {
+              0,  10,  10,
+             10,   0,   0,
+              3,  11,   0,
+        }
+    ));
 
 #endif
 
