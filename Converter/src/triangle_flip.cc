@@ -2,15 +2,8 @@
 
 #include "../include//triangle.h"
 
-int GetOutsidePoint(Triangle* triangle, int neighbor_index) {
-    Triangle* neighbor = triangle->neighbors[neighbor_index];
-    int j = 0;
-    for (; neighbor->neighbors[j] != triangle; ++j);
-    return j;
-}
-
 void Triangle::Flip() {
-    int j0 = GetOutsidePoint(this, 1);
+    int j0 = GetNeighborPointIndex(1);
     int j2 = (j0 + 2) % 3;
 
     Triangle* neighbor = neighbors[1];
