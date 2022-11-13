@@ -10,6 +10,7 @@
 
 /*
 Represent a triangle.
+Points are order by counter-clockwise.
 Edge `points[0]` - `points[1]` is between `children[0]` and `neighbors[0]`.
 Edge `points[1]` - `points[2]` is between `children[1]` and `neighbors[1]`.
 Edge `points[2]` - `points[0]` is between `children[2]` and `neighbors[2]`.
@@ -65,7 +66,7 @@ struct Triangle {
     [return]
     The deepest triangle.
     */
-    const Triangle* FindDeepest(Point3d* point) const;
+    Triangle* FindDeepest(Point3d* point) const;
 
     /*
     Divide the triangle into 2 or 3 triangles and add new triangles as children.
