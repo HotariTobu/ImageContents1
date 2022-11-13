@@ -8,12 +8,12 @@
 Vector3d GetNormalVectorIn(Neighbor neighbor) {
     Vector3d normal_vector{0.0, 0.0, 0.0};
 
-#ifdef __4_EDGE
-    // 4-edge code is hear...
+#ifdef __4_NEIGHBOR
+    // 4-neighbor code is hear...
     std::vector<std::pair<int, int>> points{{0, 1}, {1, 0}, {2, 1}, {1, 2}};
     const int edge_num = 4;
-#elif __8_EDGE
-    // 8-edge code is hear...
+#elif __8_NEIGHBOR
+    // 8-neighbor code is hear...
     std::vector<std::pair<int, int>> points{{0, 0}, {1, 0}, {2, 0}, {2, 1}, {2, 2}, {1, 2}, {0, 2}, {0, 1}};
     const int edge_num = 8;
 
