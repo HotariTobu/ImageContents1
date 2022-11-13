@@ -80,4 +80,8 @@ struct Triangle {
     void Flip();
 };
 
+bool operator==(Triangle triangle1, Triangle triangle2);
+
+bool Near(Triangle triangle1, Triangle triangle2);
+
 #endif // __TRIANGLE_H__

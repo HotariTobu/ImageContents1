@@ -7,7 +7,7 @@
 
 extern double ground_point_threshold;
 
-bool CanPass(PointSet points, std::vector<IndexSet> indices, std::set<std::set<Point3d, Point3d, Point3d>> triangles) {
+bool CanPass(PointSet points, std::vector<IndexSet> indices, std::set<std::set<Point3d>> triangles) {
     int mm0 = indices.size();
 
     AddGroundPoints(points, indices);
@@ -15,7 +15,7 @@ bool CanPass(PointSet points, std::vector<IndexSet> indices, std::set<std::set<P
     int mm = indices.size();
     for (int i = mm0; i < mm; i++) {
         IndexSet index_set = indices[i];
-        std::set<Point3d, Point3d, Point3d> triangle {
+        std::set<Point3d> triangle = {
             points[index_set[0]],
             points[index_set[1]],
             points[index_set[2]],

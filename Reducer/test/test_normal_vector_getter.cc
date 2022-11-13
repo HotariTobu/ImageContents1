@@ -1,6 +1,7 @@
 // Created by 
 
 #include <cassert>
+#include <limits>
 
 #include "../include/normal_vector_getter.h"
 
