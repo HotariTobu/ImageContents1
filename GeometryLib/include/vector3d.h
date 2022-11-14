@@ -3,6 +3,8 @@
 #ifndef __VECTOR3D_H__
 #define __VECTOR3D_H__
 
+struct Point3d;
+
 // Represent 3D vector.
 struct Vector3d {
     double x;
@@ -23,7 +25,7 @@ struct Vector3d {
     Vector3d Cross(const Vector3d vector) const;
     
     // Return the vector as a point.
-    Point3d Vector3d::ToPoint() const;
+    Point3d ToPoint() const;
 
     Vector3d& operator+=(const Vector3d vector);
     Vector3d& operator-=(const Vector3d vector);
