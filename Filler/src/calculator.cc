@@ -61,9 +61,9 @@ double Calculate(Neighbor neighbor) {
     double median;
     std::sort(v.begin(), v.end());
     if (v.size() % 2 == 1){
-        median = v[(v.size() / 2) + 1];
+        median = v[v.size() / 2];
     }else{
-        median = (v[v.size() / 2] + v[(v.size() / 2) + 1]) / 2;
+        median = (v[((v.size()) / 2) - 1] + v[v.size() / 2]) / 2;
     }
     return median;
 #endif
