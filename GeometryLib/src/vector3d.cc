@@ -2,10 +2,11 @@
 
 #include "../include/vector3d.h"
 
-#include<cmath>
+#include <cmath>
 
 #include "equals.h"
 #include "near.h"
+#include "../include/point3d.h"
 
 void Vector3d::Normalize() {
     double length = Length();
@@ -28,6 +29,10 @@ Vector3d Vector3d::Cross(const Vector3d vector) const {
         (z * vector.x) - (x * vector.z) ,
         (x * vector.y) - (y * vector.x)
     };
+}
+
+Point3d Vector3d::ToPoint() const {
+    return Point3d{x, y, z};
 }
 
 Vector3d& Vector3d::operator+=(const Vector3d vector) {
