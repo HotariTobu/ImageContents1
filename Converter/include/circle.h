@@ -9,6 +9,15 @@ struct Circle {
     Point3d center;
     double radius;
 
+    /*
+    Determine whether a point is contained the circle.
+    When project the point and the point is inside the circle on the XY plane, the circle contains the point.
+    In short, focus only X and Y values.
+    [params]
+    - point: a point to determine if the circle contains it
+    [return]
+    If the circle contains the point, return true, other else false.
+    */
     bool Contains(Point3d point) const;
 };
 
