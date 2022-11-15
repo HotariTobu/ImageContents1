@@ -24,7 +24,7 @@ std::map<std::string, std::string> ReadOption(const std::string path) {
     std::map<std::string, std::string> option;
 
     std::ifstream ifs(path);
-    if (!ifs) {
+    if (ifs.fail()) {
         return option;
     }
 
