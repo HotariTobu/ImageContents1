@@ -1,91 +1,39 @@
 // Created by HotariTobu
 
-#include <cctype>
 #include <cmath>
-#include <filesystem>
 #include <iostream>
 #include <limits>
 #include <string>
 
 #include "csv_reader.h"
 #include "csv_writer.h"
-#include "option_reader_and_writer.h"
+#include "main_helper.h"
 #include "../include/calculator.h"
 
-namespace fs = std::filesystem;
+#ifdef __4_NEIGHBOR
+    #define FILENAME_SUFFIX_1 "__4_NEIGHBOR"
+#elif __8_NEIGHBOR
+    #define FILENAME_SUFFIX_1 "__8_NEIGHBOR"
+#endif
 
-std::string tolower(const std::string string) {
-    std::string result;
-    for (char c : string) {
-        result.push_back(std::tolower(c));
-    }
-    return result;
-}
+#ifdef __MIN
+    #define FILENAME_SUFFIX_2 "__MIN"
+#elif __MAX
+    #define FILENAME_SUFFIX_2 "__MAX"
+#elif __MEAN
+    #define FILENAME_SUFFIX_2 "__MEAN"
+#elif __MEDIAN
+    #define FILENAME_SUFFIX_2 "__MEDIAN"
+#endif
 
 int main() {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
-    auto option = ReadAndWriteOption("FillerOption.txt", {
+    HelpMain("FillerOption.txt", {
         {"source_directory_path", "intermediation_data_DATConverter"},
         {"destination_directory_path", "intermediation_data_Filler"},
-    });
-
-    std::string source_directory_path = option.at("source_directory_path");
-    std::string destination_directory_path = option.at("destination_directory_path");
-
-    if (!fs::exists(source_directory_path)) {
-        std::cout << "Not exist: " << source_directory_path << std::endl;
-        return 0;
-    }
-
-    fs::create_directories(destination_directory_path);
-
-    for (const auto& file : fs::directory_iterator(source_directory_path)) {
-        fs::path source_file_path = file.path();
-
-        if (tolower(source_file_path.extension()) != ".csv") {
-            continue;
-        }
-
-        fs::path basename = source_file_path.stem();
-        fs::path destination_file_path = fs::path(destination_directory_path) / basename;
-
-#ifdef __4_NEIGHBOR
-// 4-neighbor code is hear...
-
-        destination_file_path += "__4_NEIGHBOR";
-
-#elif __8_NEIGHBOR
-// 8-neighbor code is hear...
-
-        destination_file_path += "__8_NEIGHBOR";
-
-#endif
-
-#ifdef __MIN
-    // Min code is hear...
-    
-        destination_file_path += "__MIN";
-
-#elif __MAX
-    // Max code is hear...
-    
-        destination_file_path += "__MAX";
-
-#elif __MEAN
-    // Mean code is hear...
-    
-        destination_file_path += "__MEAN";
-
-#elif __MEDIAN
-    // Median code is hear...
-    
-        destination_file_path += "__MEDIAN";
-
-#endif
-
-        destination_file_path += ".csv";
-
+    }, [](auto option) {}, [](const std::string source_file_path, const std::string destination_base_path) {
+        std::string destination_file_path = destination_base_path + FILENAME_SUFFIX_1 + FILENAME_SUFFIX_2 + ".csv";
         std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
         Map2d<double> map = ReadCSV(source_file_path);
@@ -121,5 +69,5 @@ int main() {
         }
 
         WriteCSV(destination_file_path, map);
-    }
+    });
 }
