@@ -29,8 +29,8 @@ Map2d<double> ReadCSV(std::string path) {
         int x_max = std::stoi(strvec[1]);
         map.y = std::stoi(strvec[2]);
         int y_max = std::stoi(strvec[3]);
-        map.width = x_max - map.x;
-        map.height = y_max - map.y;
+        map.width = x_max - map.x + 1;
+        map.height = y_max - map.y + 1;
         while (getline(ifs, line)) {
             std::vector<double> datvec;
             std::vector<std::string> strvec = split(line, ',');
