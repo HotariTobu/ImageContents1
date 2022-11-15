@@ -47,12 +47,13 @@ Neighbor Simulate(double value, Neighbor neighbor) {
 // Flexible code is hear...
     double sum_difference = 0;
     for (int i = 0; i < edge_num; ++i){
-        double difference = std::fabs(neighbor.data[points[i].second][points[i].first] - neighbor.data[1][1]);
+        double difference = neighbor.data[points[i].second][points[i].first] - neighbor.data[1][1];
         if (difference > simulator_threshold){
             simulated_neighbor.data[points[i].second][points[i].first] = std::nan("");
         }else {
-            simulated_neighbor.data[points[i].second][points[i].first] = difference;
-            sum_difference += difference;
+            double unsigned_difference = std::fabs(difference);
+            simulated_neighbor.data[points[i].second][points[i].first] = unsigned_difference;
+            sum_difference += unsigned_difference;
         }
     }
     double sum_easy_of_stay = 0;
