@@ -5,9 +5,19 @@
 
 #include "point3d.h"
 
+/*
+Represent a circle on the XY plane.
+*/
 struct Circle {
+    /*
+    The center point of the circle.
+    The Z value should be ignored.
+    */
     Point3d center;
+
+    // The radius of the circle.
     double radius;
+
 
     /*
     Determine whether a point is contained the circle.
