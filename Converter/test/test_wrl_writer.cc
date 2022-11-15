@@ -54,9 +54,9 @@ Shape {
         colorPerVertex TRUE
         color Color {
             color [
-                0 255 0,
-                255 0 0,
-                0 255 0,
+                0 1 0,
+                1 0 0,
+                0 1 0,
             ]
         }
         coord Coordinate {
