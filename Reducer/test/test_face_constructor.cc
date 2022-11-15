@@ -5,7 +5,7 @@
 #include "../include/face.h"
 
 bool CanPass(PointVectorSet set, Point3d origin, Vector3d normal) {
-    PointSet points(set.size());
+    PointSet points;
     for (std::pair<Point3d, Vector3d> pv : set) {
         points.push_back(pv.first);
     }

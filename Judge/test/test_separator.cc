@@ -1,10 +1,10 @@
 // Created by 
 
 #include <cassert>
+#include <limits>
 
 #include "../include/separator.h"
 
-#include <cmath>
 
 extern double separator_threshold;
 
