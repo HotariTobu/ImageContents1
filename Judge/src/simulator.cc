@@ -1,110 +1,77 @@
-// Created by yu-getu
+// Created by guinpen98
 
 #include "../include/simulator.h"
 
-#include <math.h>
 #include <vector>
+#include <cmath>
 
-int point_number = 0;
-int distribute_point_4 = 0;
-double sum_difference_4 = 0;
-double sum_difference_8 = 0;
-double sum_distribute_difference_4 = 0;
-double sum_distribute_difference_8 = 0; 
-std::vector<int> distribute_point ;
-std::vector<std::vector<double>> distribute_difference;
 double simulator_threshold;
 
 Neighbor Simulate(double value, Neighbor neighbor) {
-    if (value != 0){
-        for(int i; i < 3 ; i++){
-            for(int j; j < 3 ; j++){
-                point_number += 1;
-                if(point_number != 5){
-                    if(neighbor.data[i][j] < value || fabs(value - neighbor.data[i][j]) < simulator_threshold){
-                        distribute_point.push_back(point_number); //分配する点番号を記憶
-                        sum_difference_8 += fabs(value - neighbor.data[i][j]);
-                        if (point_number % 2 == 0){
-                            distribute_point_4 += 1;
-                            sum_difference_4 += fabs(value - neighbor.data[i][j]);
-                        }
-                        
-                    }
-                }
-            }
-        }
+    Neighbor simulated_neighbor;
+    simulated_neighbor.data[1][1] = 0;
 
-        for (int i = 0; i < distribute_point.size(); i++){
-            point_number = 0;
-            for (int j = 0; j < 3; j++){
-                for (int k = 0; k < 3; k++){
-                    point_number += 1;
-                    if(point_number == distribute_point[k]){
-                        distribute_difference[j][k] = fabs(value - neighbor.data[j][k]) - sum_difference_8;
-                        sum_distribute_difference_8 += distribute_difference[j][k];
-                        if (point_number % 2 == 0){
-                            distribute_difference[j][k] = fabs(value - neighbor.data[j][k]) - sum_difference_4;
-                            sum_distribute_difference_4 += distribute_difference[j][k];
-                        }
-                    }
-                }
-            }
-        }   
+#ifdef __4_NEIGHBOR
+// Uniform 4-neighbor code is hear...
+    std::vector<std::pair<int, int>> points{{1, 2}, {2, 1}, {1, 0}, {0, 1}};
+    const int edge_num = 4;
+    simulated_neighbor.data[0][0] = 0;
+    simulated_neighbor.data[2][0] = 0;
+    simulated_neighbor.data[0][2] = 0;
+    simulated_neighbor.data[2][2] = 0;
+
+#elif __8_NEIGHBOR
+// Uniform 8-neighbor code is hear...
+    std::vector<std::pair<int, int>> points{{0, 1}, {0, 2}, {1, 2}, {2, 2}, {2, 1}, {2, 0}, {1, 0}, {0, 0}};
+    const int edge_num = 8;
+    
+#endif
 
 #ifdef __UNIFORM
 // Uniform code is hear...
-        for (int i = 0; i < distribute_point.size(); i++){
-            point_number = 0;
-            for(int j = 0; j < 3 ; j++){
-                for(int k = 0; k < 3 ; k++){
-                    point_number += 1;
-#ifdef __8_NEIGHBOR
-// Uniform 8-neighbor code is hear...
-                    if(distribute_point[i] == point_number){
-                        neighbor.data[j][k] += value/double(distribute_point.size()); 
-
-#elif __4_NEIGHBOR
-// Uniform 4-neighbor code is hear...
-                        if (point_number % 2 == 0){
-                            neighbor.data[j][k] += value/double(distribute_point_4); 
-                        }
-                    }
-                }
-            }
+    int cnt = 0;
+    for (int i = 0; i < edge_num; ++i){
+        if (neighbor.data[points[i].second][points[i].first] - neighbor.data[1][1] > simulator_threshold){
+            simulated_neighbor.data[points[i].second][points[i].first] = 0;
+        }else {
+            simulated_neighbor.data[points[i].second][points[i].first] = value;
+            cnt++;
         }
+    }
 
-#endif
+    for (int i = 0; i < edge_num; ++i){
+        simulated_neighbor.data[points[i].second][points[i].first] /= cnt;
+    }
 
 #elif __FLEXIBLE
 // Flexible code is hear...
-        for (int i = 0; i < distribute_point.size(); i++){
-            point_number = 0;
-            for(int j = 0; j < 3 ; j++){
-                for(int k = 0; k < 3 ; k++){
-                    point_number += 1;
-#ifdef __8_NEIGHBOR
-// Flexible 8-neighbor code is hear...
-                    if(distribute_point[i] == point_number){
-                        neighbor.data[j][k] += (value * neighbor.data[j][k])/sum_distribute_difference_8; 
-
-#elif __4_NEIGHBOR
-// Flexible 4-neighbor code is hear...
-                        if (point_number % 2 == 0){
-                            neighbor.data[j][k] += (value * neighbor.data[j][k])/sum_distribute_difference_4; 
-                        }
-                    }
-                }
-            }
+    double sum_difference = 0;
+    for (int i = 0; i < edge_num; ++i){
+        double difference = std::fabs(neighbor.data[points[i].second][points[i].first] - neighbor.data[1][1]);
+        if (difference > simulator_threshold){
+            simulated_neighbor.data[points[i].second][points[i].first] = std::nan("");
+        }else {
+            simulated_neighbor.data[points[i].second][points[i].first] = difference;
+            sum_difference += difference;
         }
-
-#endif
-
-    neighbor.data[1][1] = 0;
-    return neighbor;
-    }else{
-        return neighbor;
+    }
+    double sum_easy_of_stay = 0;
+    for (int i = 0; i < edge_num; ++i){
+        if (std::isnan(simulated_neighbor.data[points[i].second][points[i].first])){
+            continue;
+        }
+        double easy_of_stay = sum_difference - simulated_neighbor.data[points[i].second][points[i].first];;
+        simulated_neighbor.data[points[i].second][points[i].first] = easy_of_stay;
+        sum_easy_of_stay += easy_of_stay;
+    }
+    for (int i = 0; i < edge_num; ++i){
+        if (std::isnan(simulated_neighbor.data[points[i].second][points[i].first])){
+            simulated_neighbor.data[points[i].second][points[i].first] = 0;
+        }
+        simulated_neighbor.data[points[i].second][points[i].first] /= sum_easy_of_stay;
+        simulated_neighbor.data[points[i].second][points[i].first] *= value;
     }
 
 #endif
-
+    return simulated_neighbor;
 }
