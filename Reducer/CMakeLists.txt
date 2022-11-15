@@ -4,6 +4,7 @@ foreach(FLAG1 IN LISTS FLAG1S)
     add_target(${FLAG1})
     target_link_libraries(Reducer_${FLAG1} GeometryLib)
     target_link_libraries(Reducer_${FLAG1} MapLib)
+    target_link_libraries(Reducer_${FLAG1} MainLib)
 endforeach()
 
 set(DEPEND_ON_GEOMEYRYLIB face_constructor;face_delete_inside_points;face_project_points;normal_vector_getter;searcher)
