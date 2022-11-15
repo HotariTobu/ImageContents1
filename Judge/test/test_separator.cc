@@ -5,7 +5,6 @@
 
 #include "../include/separator.h"
 
-
 extern double separator_threshold;
 
 std::pair<Map2d<double>, Map2d<double>> pack(Map2d<double> map1, Map2d<double> map2) {
