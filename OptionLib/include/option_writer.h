@@ -7,7 +7,7 @@
 #include <string>
 
 /*
-Write option file.
+Write an option file.
 [params]
 - path: path to the option file
 - option: option map to be written
