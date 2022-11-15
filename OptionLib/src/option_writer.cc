@@ -8,7 +8,7 @@ void WriteOption(const std::string path, const std::map<std::string, std::string
     std::ofstream ofs(path);
 
     for (auto [key, value] : option) {
-        ofs << key << " : " << value << std::endl;
+        ofs << key << " = " << value << std::endl;
     }
 
     ofs.close();
