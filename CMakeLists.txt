@@ -15,6 +15,7 @@ include(Helper.cmake)
 add_subdirectory(OperatorLib)
 add_subdirectory(GeometryLib)
 add_subdirectory(MapLib)
+add_subdirectory(OptionLib)
 
 add_subdirectory(Converter)
 add_subdirectory(Filler)
