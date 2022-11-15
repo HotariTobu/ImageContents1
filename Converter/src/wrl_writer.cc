@@ -49,7 +49,7 @@ Shape {
 )";
 
     for (auto e : indices) {
-        ofs << e[0] << ' ' << e[1] << ' ' << e[2] << ',' << "-1" << std::endl;
+        ofs << e[0] << ' ' << e[1] << ' ' << e[2] << ',' << " -1" << std::endl;
     }
 
     ofs << R"(        ]
