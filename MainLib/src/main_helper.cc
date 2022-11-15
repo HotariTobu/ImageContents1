@@ -11,7 +11,7 @@
 
 namespace fs = std::filesystem;
 
-std::string tolower(const std::string string) {
+std::string ToLower(const std::string string) {
     std::string result;
     for (char c : string) {
         result.push_back(std::tolower(c));
@@ -41,7 +41,7 @@ void HelpMain(const std::string option_file_path, const std::map<std::string, st
     for (const auto& file : fs::directory_iterator(source_directory_path)) {
         fs::path source_file_path = file.path();
 
-        if (tolower(source_file_path.extension()) != ".csv") {
+        if (ToLower(source_file_path.extension()) != ".csv") {
             continue;
         }
 
