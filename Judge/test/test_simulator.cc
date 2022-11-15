@@ -79,7 +79,7 @@ int main() {
 // Flexible 8-neighbor code is hear...
 
     assert(CanPass(
-        45,
+        44,
         {
              76,  11,   9,
              11,  10,  74,
@@ -88,7 +88,7 @@ int main() {
         {
               0,  10,  10,
              10,   0,   0,
-              0,  15,   0,
+              3,  11,   0,
         }
     ));
 

@@ -41,14 +41,14 @@ void HelpMain(const std::string option_file_path, const std::map<std::string, st
     for (const auto& file : fs::directory_iterator(source_directory_path)) {
         fs::path source_file_path = file.path();
 
-        if (ToLower(source_file_path.extension()) != ".csv") {
+        if (ToLower(source_file_path.extension().string()) != ".csv") {
             continue;
         }
 
         fs::path basename = source_file_path.stem();
         fs::path destination_base_path = fs::path(destination_directory_path) / basename;
 
-        process_file(source_file_path, destination_base_path);
+        process_file(source_file_path.string(), destination_base_path.string());
     }
 
     WriteOption(option_file_path, option);
