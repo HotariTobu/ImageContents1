@@ -15,6 +15,7 @@ bool CanPass(PointSet points, std::vector<IndexSet> indices, Map2d<PointType> po
     std::ifstream ifs(filename);
     std::stringstream buffer;
     buffer << ifs.rdbuf();
+    ifs.close();
 
     std::string result = buffer.str();
 

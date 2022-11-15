@@ -16,6 +16,7 @@ bool CanPass(Map2d<double> map, const char* answer) {
     std::ifstream ifs(filename);
     std::stringstream buffer;
     buffer << ifs.rdbuf();
+    ifs.close();
 
     std::string result = buffer.str();
 
