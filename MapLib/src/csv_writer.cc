@@ -10,16 +10,19 @@ void WriteCSV(std::string path, const Map2d<double> &map)
 {
     std::ofstream ofs(path);
     if (ofs){
-        ofs << map.x << "," << (map.width+map.x) << "," << map.y << "," << (map.height+map.y) << ",";
+        ofs << map.x << "," << (map.width+map.x) << "," << map.y << "," << (map.height+map.y) << "\n";
         for (int i = 1; i < map.height+1; i++){
             for (int j = 1; j < map.width+1; j++){
                 if (!std::isnan(map.data[i][j])){
-                    ofs << map.data[i][j] << ",";
+                    ofs << map.data[i][j];
                 }else{
                     ofs << "NaN";
                 }
-            ofs << std::endl;
+                if(j != map.width){
+                    ofs << ",";
+                }
             }
+            ofs << std::endl;
         }
     }
 }
