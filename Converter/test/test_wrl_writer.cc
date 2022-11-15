@@ -54,20 +54,20 @@ Shape {
         colorPerVertex TRUE
         color Color {
             color [
-                0 1 0,
-                1 0 0,
-                0 1 0,
+0 1 0,
+1 0 0,
+0 1 0,
             ]
         }
         coord Coordinate {
             point [
-                0 1 3,
-                1 0 6,
-                2 2 9,
+0 1 3,
+1 0 6,
+2 2 9,
             ]
         }
         coordIndex [
-            0, 1, 2, -1
+0, 1, 2, -1
         ]
     }
 })"

@@ -20,7 +20,7 @@ Shape {
 
     for (auto e : points) {
         std::string color;
-        switch (point_types.data[e.y][e.x]) {
+        switch (point_types.data[e.y + 1][e.x + 1]) {
         case PointType::GROUND:
             color = "0 1 0";
             break;
