@@ -1,13 +1,19 @@
 // Created by 
 
 #include <cassert>
+#include <set>
 
 #include "../include/face.h"
 
 bool CanPass(PointVectorSet set, PointSet answer) {
     Face face(set);
     face.DeleteInsidePoints();
-    return face.points() == answer;
+    PointSet result = face.points();
+
+    std::set<Point3d> result2(result.begin(), result.end());
+    std::set<Point3d> answer2(answer.begin(), answer.end());
+
+    return result2 == answer2;
 }
 
 int main() {
