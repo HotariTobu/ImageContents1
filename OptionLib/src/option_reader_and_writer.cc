@@ -12,5 +12,7 @@ std::map<std::string, std::string> ReadAndWriteOption(const std::string path, co
         option.insert(pair);
     }
 
+    WriteOption(path, option);
+
     return option;
 }
