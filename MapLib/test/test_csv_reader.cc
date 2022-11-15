@@ -8,7 +8,7 @@
 #include "csv_reader.h"
 
 bool CanPass(const char* data, Map2d<double> answer) {
-    constexpr char* filename = "test.csv";
+    const char* filename = "test.csv";
     
     std::ofstream ofs(filename, std::ios::trunc);
     ofs << data;
