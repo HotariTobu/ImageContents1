@@ -1,6 +1,7 @@
 // Created by 
 
 #include <cassert>
+#include <limits>
 
 #include "../include/maps_combiner.h"
 
@@ -39,7 +40,7 @@ int main() {
             {
                 {nan, nan, nan, nan, nan},
                 {nan,   1,   2,   3, nan},
-                {nan,   4,   5,   6, nan},
+                {nan,  10,   5,   6, nan},
                 {nan,   7,   8,   9, nan},
                 {nan, nan, nan, nan, nan},
             }
