@@ -45,10 +45,10 @@ struct Triangle {
     */
     bool HasChild() const;
 
-    // Return the incircle.
+    // Return the incircle on XY plane.
     Circle GetIncircle();
 
-    // Return the circumcircle.
+    // Return the circumcircle on XY plane.
     Circle GetCircumcircle();
 
     /*
