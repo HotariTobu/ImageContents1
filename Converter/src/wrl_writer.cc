@@ -20,7 +20,7 @@ Shape {
 
     for (auto e : points) {
         std::string color;
-        switch (point_types.data[e.y + 1][e.x + 1]) {
+        switch (point_types.data[e.y + 1 - point_types.y][e.x + 1 - point_types.x]) {
         case PointType::GROUND:
             color = "0 1 0";
             break;
@@ -28,7 +28,7 @@ Shape {
             color = "1 0 0";
             break;
         default:
-            color = "0 0 0";
+            color = "1 1 1";
         }
         ofs << color << ',' << std::endl;
     }
@@ -40,7 +40,7 @@ Shape {
 )";
 
     for (auto e : points) {
-        ofs << e.x << ' ' << e.y << ' ' << e.z << ',' << std::endl;
+        ofs << e.x << ' ' << e.z << ' ' << -e.y << ',' << std::endl;
     }
 
     ofs << R"(            ]
