@@ -111,7 +111,11 @@ int main() {
         }
 
         auto [p0, p1, p2] = MakeBigTriangle(points);
+        
         Triangle root_triangle(&p0, &p1, &p2);
+        root_triangle.neighbors[0] = &root_triangle;
+        root_triangle.neighbors[1] = &root_triangle;
+        root_triangle.neighbors[2] = &root_triangle;
 
         Randomize(points);
 
