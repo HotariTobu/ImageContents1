@@ -14,7 +14,7 @@
 /*
 Write data to .wrl file.
 Make a `IndexedFaceSet` in VRML from points and indices.
-Ground point's color is #00FF00 and building point's is #FF0000.
+Ground point's color is #00FF00, building point's is #FF0000, and other's is #FFFFFF.
 [params]
 - path: path to output .wrl file
 - points: set of points that consists of a polygon

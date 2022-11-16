@@ -5,7 +5,7 @@ target_link_libraries(Converter MapLib)
 target_link_libraries(Converter MainLib)
 
 set(DEPEND_ON_GEOMEYRYLIB big_triangle_maker;ground_points_adder;randomizer;triangle;wrl_writer)
-set(DEPEND_ON_MAPLIB maps_combiner;wrl_writer)
+set(DEPEND_ON_MAPLIB ground_points_adder;maps_combiner;wrl_writer)
 
 foreach(TEST_FILENAME IN LISTS DEPEND_ON_GEOMEYRYLIB)
     target_link_libraries(TEST_${TEST_FILENAME} GeometryLib)
@@ -17,6 +17,9 @@ endforeach()
 
 target_sources(TEST_big_triangle_maker PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle.cc)
 target_sources(TEST_big_triangle_maker PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_circle.cc)
+
+target_sources(TEST_ground_points_adder PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle.cc)
+target_sources(TEST_ground_points_adder PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/wrl_writer.cc)
 
 target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/circle.cc)
 target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle.cc)

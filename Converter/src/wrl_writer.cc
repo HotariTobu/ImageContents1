@@ -4,9 +4,7 @@
 
 #include <fstream>
 
-void WriteWRL(std::string path, const PointSet &points, const std::vector<IndexSet> &indices, const Map2d<PointType> &point_types)
-{
-
+void WriteWRL(std::string path, const PointSet &points, const std::vector<IndexSet> &indices, const Map2d<PointType> &point_types) {
     std::ofstream ofs(path);
 
     ofs << R"(#VRML V2.0 utf8
@@ -28,7 +26,7 @@ Shape {
             color = "1 0 0";
             break;
         default:
-            color = "0 0 0";
+            color = "1 1 1";
         }
         ofs << color << ',' << std::endl;
     }
@@ -40,7 +38,7 @@ Shape {
 )";
 
     for (auto e : points) {
-        ofs << e.x << ' ' << e.y << ' ' << e.z << ',' << std::endl;
+        ofs << e.x << ' ' << e.z << ' ' << -e.y << ',' << std::endl;
     }
 
     ofs << R"(            ]
@@ -56,4 +54,5 @@ Shape {
     }
 })";
 
+    ofs.close();
 }
