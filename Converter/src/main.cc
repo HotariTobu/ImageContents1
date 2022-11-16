@@ -62,7 +62,7 @@ int main() {
         std::string source_file_path_ground = source_base_path + "_ground.csv";
         std::string source_file_path_building = source_base_path + "_building.csv";
 
-        std::string destination_file_path = destination_base_path + FILENAME_SUFFIX + ".wrl";
+        std::string destination_file_path = destination_base_path + ".wrl";
         std::cout << "Converting: " << source_file_path_ground << ", " << source_file_path_building << " > " << destination_file_path << std::endl;
 
         Map2d<double> map_ground = ReadCSV(source_file_path_ground);
@@ -77,7 +77,7 @@ int main() {
         points.reserve(map.width * map.height / 2);
 
         Map2d<PointType> point_types;
-        point_types.data = std::vector<std::vector<PointType>>(heigh + 2, std::vector<PointType>(width + 2, PointType::NONE));
+        point_types.data = std::vector<std::vector<PointType>>(height + 2, std::vector<PointType>(width + 2, PointType::NONE));
 
         for (int y = 1; y <= height; ++y) {
             for (int x = 1; x <= width; ++x) {
@@ -86,14 +86,14 @@ int main() {
                     continue;
                 }
 
-                Point3d point{x , y, z};
+                Point3d point{(double)x, (double)y, z};
                 points.push_back(point);
 
                 if (!std::isnan(map_ground.data[y][x])) {
-                    point_types[y][x] = PointType::GROUND;
+                    point_types.data[y][x] = PointType::GROUND;
                 }
                 else if (!std::isnan(map_building.data[y][x])) {
-                    point_types[y][x] = PointType::BUILDING;
+                    point_types.data[y][x] = PointType::BUILDING;
                 }
             }
         }
@@ -112,20 +112,18 @@ int main() {
         }
 
         auto leaves = root_triangle.GetAllLeaves();
-        int leaves_count = leaves.size();
-        std::vector<IndexSet> triangle_indices(leaves_count);
+        std::vector<IndexSet> triangle_indices;
+        triangle_indices.reserve(leaves.size());
 
         Point3d* points_head = points.data();
-        for (int i = 0; i < leaves_count; ++i) {
-            Triangle* leaf = leaves[i];
-
+        for (auto leaf : leaves) {
             IndexSet index_set = {
-                leaf.points[0] - points_head,
-                leaf.points[1] - points_head,
-                leaf.points[2] - points_head,
+                (int)(leaf->points[0] - points_head),
+                (int)(leaf->points[1] - points_head),
+                (int)(leaf->points[2] - points_head),
             };
 
-            triangle_indices[i] = index_set;
+            triangle_indices.push_back(index_set);
         }
 
         AddGroundPoints(points, triangle_indices);
