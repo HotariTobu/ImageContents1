@@ -11,7 +11,8 @@ std::set<Triangle*> Triangle::GetAllLeaves() const {
     triangle_stack.push((Triangle*)this);
 
     while (!triangle_stack.empty()) {
-        Triangle* triangle = triangle_stack.pop();
+        Triangle* triangle = triangle_stack.top();
+        triangle_stack.pop();
 
         if (!triangle->HasChild()) {
             leaves.insert(triangle);
