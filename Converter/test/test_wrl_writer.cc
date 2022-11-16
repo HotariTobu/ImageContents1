@@ -30,15 +30,17 @@ int main() {
     assert(
         CanPass(
             {
-            {0, 1, 3},
-            {1, 0, 6},
-            {2, 2, 9},
+                {0, 1, 3},
+                {1, 0, 6},
+                {2, 2, 9},
+                {1, 2, 7},
             },
             {
                 {0, 1, 2},
+                {0, 1, 3},
             },
             {
-                0, 0, 3, 3,
+                -2, 7, 3, 3,
                 {
                     {PointType::NONE,   PointType::NONE,     PointType::NONE,   PointType::NONE, PointType::NONE},
                     {PointType::NONE,   PointType::NONE, PointType::BUILDING,   PointType::NONE, PointType::NONE},
@@ -57,17 +59,20 @@ Shape {
 0 1 0,
 1 0 0,
 0 1 0,
+1 1 1,
             ]
         }
         coord Coordinate {
             point [
-0 1 3,
-1 0 6,
-2 2 9,
+0 3 -1,
+1 6 -0,
+2 9 -2,
+1 7 -2,
             ]
         }
         coordIndex [
 0, 1, 2, -1
+0, 1, 3, -1
         ]
     }
 })"
