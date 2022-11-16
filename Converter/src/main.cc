@@ -40,7 +40,10 @@ std::string TrimEnd(std::string string, std::string suffix) {
     return string.substr(0, difference);
 }
 
+double ground_point_threshold;
+
 void init(std::map<std::string, std::string> option) {
+    ground_point_threshold = std::stod(option.at("ground_point_threshold"));
 }
 
 /*
@@ -54,6 +57,7 @@ int main() {
     HelpMain("ConverterOption.txt", {
         {"source_directory_path", "intermediation_data_Reducer"},
         {"destination_directory_path", "destination_data"},
+        {"ground_point_threshold", "0.5"},
     }, init, [nan, &source_base_paths](const std::string source_file_path, const std::string destination_base_path) {
         std::string source_base_path = TrimEnd(source_file_path, "_ground.csv");
         source_base_path = TrimEnd(source_file_path, "_building.csv");
