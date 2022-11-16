@@ -20,6 +20,7 @@ target_sources(TEST_big_triangle_maker PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/t
 
 target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/circle.cc)
 target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle.cc)
+target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_all_leaves_getter.cc)
 target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_circle.cc)
 target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_contains.cc)
 target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_divide.cc)
