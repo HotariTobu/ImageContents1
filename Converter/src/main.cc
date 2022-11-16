@@ -14,6 +14,14 @@
 #include "../include/triangle.h"
 #include "../include/wrl_writer.h"
 
+/*
+Trim a string with a suffix.
+[params]
+- string: string being trimmed
+- suffix: string to be removed
+[return]
+Return the trimmed string if the end matches the suffix other else the original string.
+*/
 std::string TrimEnd(std::string string, std::string suffix) {
     int string_length = string.size();
     int suffix_length = suffix.size();
