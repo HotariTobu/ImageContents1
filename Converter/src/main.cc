@@ -6,7 +6,6 @@
 #include <string>
 
 #include "csv_reader.h"
-#include "csv_writer.h"
 #include "main_helper.h"
 #include "../include/big_triangle_maker.h"
 #include "../include/ground_points_adder.h"
@@ -63,7 +62,7 @@ int main() {
         std::string source_file_path_ground = source_base_path + "_ground.csv";
         std::string source_file_path_building = source_base_path + "_building.csv";
 
-        std::string destination_file_path = destination_base_path + FILENAME_SUFFIX + ".csv";
+        std::string destination_file_path = destination_base_path + FILENAME_SUFFIX + ".wrl";
         std::cout << "Converting: " << source_file_path_ground << ", " << source_file_path_building << " > " << destination_file_path << std::endl;
 
         Map2d<double> map_ground = ReadCSV(source_file_path_ground);
@@ -74,7 +73,8 @@ int main() {
         int width = map.width;
         int height = map.height;
 
-        PointSet points(map.width * map.height / 2);
+        PointSet points;
+        points.reserve(map.width * map.height / 2);
 
         Map2d<PointType> point_types;
         point_types.data = std::vector<std::vector<PointType>>(heigh + 2, std::vector<PointType>(width + 2, PointType::NONE));
@@ -98,8 +98,38 @@ int main() {
             }
         }
 
+        if (points.size() == 0) {
+            return;
+        }
+
         auto [p0, p1, p2] = MakeBigTriangle(points);
+        Triangle root_triangle(&p0, &p1, &p2);
 
+        Randomize(points);
 
+        for (auto point : points) {
+            root_triangle.Divide(&point);
+        }
+
+        auto leaves = root_triangle.GetAllLeaves();
+        int leaves_count = leaves.size();
+        std::vector<IndexSet> triangle_indices(leaves_count);
+
+        Point3d* points_head = points.data();
+        for (int i = 0; i < leaves_count; ++i) {
+            Triangle* leaf = leaves[i];
+
+            IndexSet index_set = {
+                leaf.points[0] - points_head,
+                leaf.points[1] - points_head,
+                leaf.points[2] - points_head,
+            };
+
+            triangle_indices[i] = index_set;
+        }
+
+        AddGroundPoints(points, triangle_indices);
+
+        WriteWRL(destination_file_path, points, triangle_indices, point_types);
     });
 }
