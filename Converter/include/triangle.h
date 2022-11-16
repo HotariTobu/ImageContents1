@@ -3,7 +3,7 @@
 #ifndef __TRIANGLE_H__
 #define __TRIANGLE_H__
 
-#include <vector>
+#include <set>
 
 #include "point3d.h"
 #include "circle.h"
@@ -99,6 +99,14 @@ struct Triangle {
     Children are assigned into both the triangle and `neighbors[1]`.
     */
     void Flip();
+
+    /*
+    Get all leaves.
+    The leaf is a triangle that has no child.
+    [return]
+    Return list of leaves.
+    */
+    std::set<Triangle*> GetAllLeaves() const;
 };
 
 bool operator==(Triangle triangle1, Triangle triangle2);
