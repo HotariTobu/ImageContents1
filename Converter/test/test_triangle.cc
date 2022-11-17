@@ -71,9 +71,11 @@ int main() {
         r1.neighbors[1] = &n1;
         n1.neighbors[1] = &r1;
 
-        Triangle c0(&p3, &p0, &p1);
-        Triangle c1(&p3, &p1, &p2);
-        Triangle c2(&p3, &p2, &p0);
+        Point3d p6 = {0.6, 0.6, Rand()};
+
+        Triangle c0(&p6, &p0, &p1);
+        Triangle c1(&p6, &p1, &p2);
+        Triangle c2(&p6, &p2, &p0);
 
         r1.children[0] = &c0;
         r1.children[1] = &c1;
