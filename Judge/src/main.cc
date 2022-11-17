@@ -36,8 +36,8 @@ int main() {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
     HelpMain("JudgeOption.txt", {
-        {"source_directory_path", "intermediation_data_Filler"},
-        {"destination_directory_path", "intermediation_data_Judge"},
+        {"source_directory_path", "intermediate_data_Filler"},
+        {"destination_directory_path", "intermediate_data_Judge"},
         {"simulator_threshold", "2"},
         {"separator_threshold", "2"},
         {"trials_number", "10"},

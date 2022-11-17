@@ -55,7 +55,7 @@ int main() {
     std::vector<std::string> source_base_paths;
 
     HelpMain("ConverterOption.txt", {
-        {"source_directory_path", "intermediation_data_Reducer"},
+        {"source_directory_path", "intermediate_data_Reducer"},
         {"destination_directory_path", "destination_data"},
         {"ground_point_threshold", "0.5"},
     }, init, [nan, &source_base_paths](const std::string source_file_path, const std::string destination_base_path) {

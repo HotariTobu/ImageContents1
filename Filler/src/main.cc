@@ -30,8 +30,8 @@ int main() {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
     HelpMain("FillerOption.txt", {
-        {"source_directory_path", "intermediation_data_DATConverter"},
-        {"destination_directory_path", "intermediation_data_Filler"},
+        {"source_directory_path", "intermediate_data_DATConverter"},
+        {"destination_directory_path", "intermediate_data_Filler"},
     }, [](auto option) {}, [](const std::string source_file_path, const std::string destination_base_path) {
         std::string destination_file_path = destination_base_path + FILENAME_SUFFIX_1 + FILENAME_SUFFIX_2 + ".csv";
         std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;

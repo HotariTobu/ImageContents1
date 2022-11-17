@@ -29,8 +29,8 @@ int main() {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
     HelpMain("ReducerOption.txt", {
-        {"source_directory_path", "intermediation_data_Judge"},
-        {"destination_directory_path", "intermediation_data_Reducer"},
+        {"source_directory_path", "intermediate_data_Judge"},
+        {"destination_directory_path", "intermediate_data_Reducer"},
         {"searcher_threshold", "0.5"},
     }, init, [nan](const std::string source_file_path, const std::string destination_base_path) {
         std::string destination_file_path = destination_base_path + FILENAME_SUFFIX + ".csv";
