@@ -60,7 +60,7 @@ int main() {
         {"ground_point_threshold", "0.5"},
     }, init, [nan, &source_base_paths](const std::string source_file_path, const std::string destination_base_path) {
         std::string source_base_path = TrimEnd(source_file_path, "_ground.csv");
-        source_base_path = TrimEnd(source_file_path, "_building.csv");
+        source_base_path = TrimEnd(source_base_path, "_building.csv");
 
         auto source_base_paths_end = source_base_paths.end();
         auto source_base_path_iterator = std::find(source_base_paths.begin(), source_base_paths_end, source_base_path);
