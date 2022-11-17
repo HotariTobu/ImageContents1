@@ -2,11 +2,11 @@
 
 #include "../include//triangle.h"
 
-Triangle* Triangle::FindDeepest(Point3d* point) const {
-    Triangle* triangle = (Triangle*)this;
+std::weak_ptr<Triangle> Triangle::FindDeepest(Point3d* point) const {
+    auto triangle = std::const_pointer_cast<Triangle>(shared_from_this());
 
     for (int i = 0; i < 3; ++i) {
-        Triangle* child = triangle->children[i];
+        auto child = triangle->children[i];
         if (child != nullptr && child->Contains(point)) {
             triangle = child;
             i = 0;

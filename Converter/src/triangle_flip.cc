@@ -3,10 +3,9 @@
 #include "../include//triangle.h"
 
 void Triangle::Flip() {
-    int j0 = GetNeighborPointIndex(1);
-    int j2 = (j0 + 2) % 3;
+    int j2 = GetNeighborPointIndex(1);
 
-    Triangle* neighbor = neighbors[1];
+    auto neighbor = neighbors[1].lock();
 
     Point3d* point4 = neighbor->points[j2];
 
@@ -16,13 +15,13 @@ void Triangle::Flip() {
         Point3d* point1 = points[1];
         Point3d* point2 = points[2];
 
-        Triangle* child0 = new Triangle(point0, point1, point4);
-        Triangle* child2 = new Triangle(point0, point4, point2);
+        auto child0 = std::make_shared<Triangle>(point0, point1, point4);
+        auto child2 = std::make_shared<Triangle>(point0, point4, point2);
 
         children[0] = child0;
         children[2] = child2;
 
-        int j1 = (j0 + 1) % 3;
+        int j1 = (j2 + 2) % 3;
 
         neighbor->children[j2] = child2;
         neighbor->children[j1] = child0;
