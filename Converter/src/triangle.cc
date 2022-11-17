@@ -8,24 +8,7 @@ Triangle::Triangle(Point3d* p0, Point3d* p1, Point3d* p2) {
     points[2] = p2;
 }
 
-Triangle::Triangle(const Triangle& triangle) {
-    for (int i = 0; i < 3; ++i) {
-        points[i] = triangle.points[i];
-        children[i] = triangle.children[i];
-        neighbors[i] = triangle.neighbors[i];
-    }
-}
-
 Triangle::~Triangle() {
-}
-
-Triangle& Triangle::operator=(const Triangle& triangle) {
-    for (int i = 0; i < 3; ++i) {
-        points[i] = triangle.points[i];
-        children[i] = triangle.children[i];
-        neighbors[i] = triangle.neighbors[i];
-    }
-    return *this;
 }
 
 bool Triangle::HasChild() const {

@@ -34,8 +34,6 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     */
     Triangle(Point3d* p0, Point3d* p1, Point3d* p2);
 
-    Triangle(const Triangle& triangle);
-
     /*
     Delete `children`.
     */
@@ -110,8 +108,6 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     Return list of leaves.
     */
     std::vector<std::weak_ptr<Triangle>> GetAllLeaves() const;
-
-    Triangle& operator=(const Triangle& triangle);
 };
 
 bool operator==(const Triangle& triangle1, const Triangle& triangle2);
