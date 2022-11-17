@@ -1,6 +1,7 @@
 // Created by 
 
 #include <cassert>
+#include <limits>
 
 #include "map2d.h"
 

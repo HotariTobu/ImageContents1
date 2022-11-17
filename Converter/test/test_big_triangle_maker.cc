@@ -12,18 +12,18 @@ bool CanPass() {
     PointSet points(points_count);
 
     for (int i = 0; i < points_count; i++) {
-        points[i] = {
-            rand(),
-            rand(),
-            rand(),
-        };
+        Point3d point;
+        point.x = rand();
+        point.y = rand();
+        point.z = rand();
+        points.push_back(point);
     }
 
     auto [p0, p1, p2] = MakeBigTriangle(points);
     Triangle triangle(&p0, &p1, &p2);
 
     for (Point3d point : points) {
-        if (!triangle->Contains(point)) {
+        if (!triangle.Contains(&point)) {
             return false;
         }
     }
