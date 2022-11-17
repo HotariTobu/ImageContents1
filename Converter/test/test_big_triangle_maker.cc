@@ -17,7 +17,7 @@ bool CanPass() {
         point.x = rand();
         point.y = rand();
         point.z = rand();
-        points.push_back(point);
+        points[i] = point;
     }
 
     auto [p0, p1, p2] = MakeBigTriangle(points);
