@@ -3,7 +3,8 @@
 #ifndef __TRIANGLE_H__
 #define __TRIANGLE_H__
 
-#include <set>
+#include <memory>
+#include <vector>
 
 #include "point3d.h"
 #include "circle.h"
@@ -18,20 +19,22 @@ Edge `points[2]` - `points[0]` is between `children[2]` and `neighbors[2]`.
 
 `neighbors` must be assigned a pointer that is not nullptr in the end of initialization.
 */
-struct Triangle {
+struct Triangle: public std::enable_shared_from_this<Triangle> {
     Point3d* points[3];
 
     // Child triangles inside the triangle.
-    Triangle* children[3];
+    std::shared_ptr<Triangle> children[3];
 
     // Neighbor triangles outside the triangle.
-    Triangle* neighbors[3];
+    std::weak_ptr<Triangle> neighbors[3];
 
     /*
     Initialize all members.
     Assign `children` and `neighbors` nullptr.
     */
     Triangle(Point3d* p0, Point3d* p1, Point3d* p2);
+
+    Triangle(const Triangle& triangle);
 
     /*
     Delete `children`.
@@ -69,7 +72,7 @@ struct Triangle {
     [return]
     The deepest triangle.
     */
-    Triangle* FindDeepest(Point3d* point) const;
+    std::weak_ptr<Triangle> FindDeepest(Point3d* point) const;
 
     /*
     Get index of point that consist the Triangle and a neighbor.
@@ -106,11 +109,12 @@ struct Triangle {
     [return]
     Return list of leaves.
     */
-    std::set<Triangle*> GetAllLeaves() const;
+    std::vector<std::weak_ptr<Triangle>> GetAllLeaves() const;
+
+    Triangle& operator=(const Triangle& triangle);
 };
 
-bool operator==(Triangle triangle1, Triangle triangle2);
-
-bool Near(Triangle triangle1, Triangle triangle2);
+bool operator==(const Triangle& triangle1, const Triangle& triangle2);
+bool operator!=(const Triangle& triangle1, const Triangle& triangle2);
 
 #endif // __TRIANGLE_H__

@@ -4,7 +4,7 @@
 
 int Triangle::GetNeighborPointIndex(int neighbor_index) {
     Point3d* point = points[neighbor_index];
-    Triangle* neighbor = neighbors[neighbor_index];
+    auto neighbor = neighbors[neighbor_index].lock();
 
     int j0 = 0;
     for (; neighbor->points[j0] != point; ++j0);

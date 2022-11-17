@@ -24,7 +24,7 @@ bool IsBetween(Point3d point1, Point3d point2, Point3d point) {
 }
 
 void Triangle::Divide(Point3d* point) {
-    Triangle* deepest = FindDeepest(point);
+    auto deepest = FindDeepest(point).lock();
 
     for (int i0 = 0; i0 < 3; ++i0) {
         int i1 = (i0 + 1) % 3;
@@ -36,8 +36,8 @@ void Triangle::Divide(Point3d* point) {
         if (IsBetween(*(point0), *(point1), *point)) {
             Point3d* point2 = deepest->points[i2];
 
-            Triangle* child1 = new Triangle(point, point1, point2);
-            Triangle* child2 = new Triangle(point, point2, point0);
+            auto child1 = std::make_shared<Triangle>(point, point1, point2);
+            auto child2 = std::make_shared<Triangle>(point, point2, point0);
 
             deepest->children[i1] = child1;
             deepest->children[i2] = child2;
@@ -50,16 +50,16 @@ void Triangle::Divide(Point3d* point) {
             child1->Flip();
             child2->Flip();
 
-            Triangle* neighbor = deepest->neighbors[i0];
+            auto neighbor = deepest->neighbors[i0].lock();
             
-            int j0 = deepest->GetNeighborPointIndex(i0);
-            int j1 = (j0 + 1) % 3;
-            int j2 = (j0 + 2) % 3;
+            int j2 = deepest->GetNeighborPointIndex(i0);
+            int j0 = (j2 + 1) % 3;
+            int j1 = (j2 + 2) % 3;
 
             Point3d* point4 = neighbor->points[j2];
 
-            Triangle* neighbor1 = new Triangle(point, point0, point4);
-            Triangle* neighbor2 = new Triangle(point, point4, point1);
+            auto neighbor1 = std::make_shared<Triangle>(point, point0, point4);
+            auto neighbor2 = std::make_shared<Triangle>(point, point4, point1);
 
             neighbor->children[j1] = neighbor1;
             neighbor->children[j2] = neighbor2;
@@ -88,7 +88,7 @@ void Triangle::Divide(Point3d* point) {
             Point3d* point0 = deepest->points[i0];
             Point3d* point1 = deepest->points[i1];
 
-            Triangle* child = new Triangle(point, point0, point1);
+            auto child = std::make_shared<Triangle>(point, point0, point1);
 
             deepest->children[i0] = child;
         }
@@ -97,11 +97,11 @@ void Triangle::Divide(Point3d* point) {
             int i1 = (i0 + 1) % 3;
             int i2 = (i0 + 2) % 3;
             
-            Triangle* child = deepest->children[i0];
+            auto child = deepest->children[i0];
 
-            child->neighbors[i0] = deepest->children[i2];
-            child->neighbors[i1] = deepest->neighbors[i0];
-            child->neighbors[i2] = deepest->children[i1];
+            child->neighbors[0] = deepest->children[i2];
+            child->neighbors[1] = deepest->neighbors[i0];
+            child->neighbors[2] = deepest->children[i1];
 
             child->Flip();
         }

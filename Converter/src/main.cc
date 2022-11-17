@@ -40,7 +40,7 @@ std::string TrimEnd(std::string string, std::string suffix) {
     return string.substr(0, difference);
 }
 
-double ground_point_threshold;
+extern double ground_point_threshold;
 
 void init(std::map<std::string, std::string> option) {
     ground_point_threshold = std::stod(option.at("ground_point_threshold"));
@@ -116,27 +116,28 @@ int main() {
 
         auto [p0, p1, p2] = MakeBigTriangle(points);
         
-        Triangle root_triangle(&p0, &p1, &p2);
-        root_triangle.neighbors[0] = &root_triangle;
-        root_triangle.neighbors[1] = &root_triangle;
-        root_triangle.neighbors[2] = &root_triangle;
+        auto root_triangle = std::make_shared<Triangle>(&p0, &p1, &p2);
+        root_triangle->neighbors[0] = root_triangle;
+        root_triangle->neighbors[1] = root_triangle;
+        root_triangle->neighbors[2] = root_triangle;
 
         Randomize(points);
 
         for (auto point : points) {
-            root_triangle.Divide(&point);
+            root_triangle->Divide(&point);
         }
 
-        auto leaves = root_triangle.GetAllLeaves();
+        auto leaves = root_triangle->GetAllLeaves();
         std::vector<IndexSet> triangle_indices;
         triangle_indices.reserve(leaves.size());
 
         Point3d* points_head = points.data();
         for (auto leaf : leaves) {
+            auto accessible_leaf = leaf.lock();
             IndexSet index_set = {
-                (int)(leaf->points[0] - points_head),
-                (int)(leaf->points[1] - points_head),
-                (int)(leaf->points[2] - points_head),
+                (int)(accessible_leaf->points[0] - points_head),
+                (int)(accessible_leaf->points[1] - points_head),
+                (int)(accessible_leaf->points[2] - points_head),
             };
 
             triangle_indices.push_back(index_set);
