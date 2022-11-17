@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __EQUALS_H__
 #define __EQUALS_H__

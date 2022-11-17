@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __SIMULATOR_H__
 #define __SIMULATOR_H__

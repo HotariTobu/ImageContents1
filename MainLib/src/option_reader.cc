@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #include "../include/option_reader.h"
 

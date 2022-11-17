@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __INDEX_SET_H__
 #define __INDEX_SET_H__

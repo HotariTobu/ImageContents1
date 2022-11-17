@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __MAIN_HELPER_H__
 #define __MAIN_HELPER_H__

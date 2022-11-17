@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __MAP2D_H__
 #define __MAP2D_H__

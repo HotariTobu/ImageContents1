@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __NEIGHBOR_H__
 #define __NEIGHBOR_H__

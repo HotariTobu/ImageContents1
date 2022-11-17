@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __SEARCHER_H__
 #define __SEARCHER_H__

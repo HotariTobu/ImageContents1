@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __BIG_TRIANGLE_MAKER_H__
 #define __BIG_TRIANGLE_MAKER_H__

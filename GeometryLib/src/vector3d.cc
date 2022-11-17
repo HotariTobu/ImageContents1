@@ -1,4 +1,4 @@
-// Created by 
+// Created by baconcategg
 
 #include "../include/vector3d.h"
 

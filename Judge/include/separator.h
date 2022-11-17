@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __SEPARATOR_H__
 #define __SEPARATOR_H__

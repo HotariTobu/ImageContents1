@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __RANDOMIZER_H__
 #define __RANDOMIZER_H__

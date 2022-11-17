@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __POINT_TYPE_H__
 #define __POINT_TYPE_H__

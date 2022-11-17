@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __CIRCLE_H__
 #define __CIRCLE_H__

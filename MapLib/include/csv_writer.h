@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __CSV_WRITER_H__
 #define __CSV_WRITER_H__

@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __NEAR_H__
 #define __NEAR_H__

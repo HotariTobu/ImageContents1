@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __MAPS_COMBINER_H__
 #define __MAPS_COMBINER_H__

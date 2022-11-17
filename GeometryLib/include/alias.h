@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __ALIAS_H__
 #define __ALIAS_H__

@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __NORMAL_VECTOR_GETTER_H__
 #define __NORMAL_VECTOR_GETTER_H__

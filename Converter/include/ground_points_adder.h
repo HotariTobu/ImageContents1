@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __GROUND_POINTS_ADDER_H__
 #define __GROUND_POINTS_ADDER_H__

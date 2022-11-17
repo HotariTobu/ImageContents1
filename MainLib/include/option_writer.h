@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __OPTION_WRITER_H__
 #define __OPTION_WRITER_H__

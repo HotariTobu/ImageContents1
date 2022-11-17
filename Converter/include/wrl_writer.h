@@ -1,4 +1,4 @@
-// Created by 
+// Created by HotariTobu
 
 #ifndef __WRL_WRITER_H__
 #define __WRL_WRITER_H__
