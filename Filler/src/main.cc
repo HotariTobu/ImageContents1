@@ -11,19 +11,19 @@
 #include "../include/calculator.h"
 
 #ifdef __4_NEIGHBOR
-    #define FILENAME_SUFFIX_1 "__4_NEIGHBOR"
+    #define FILENAME_SUFFIX_1 "_F_4N"
 #elif __8_NEIGHBOR
-    #define FILENAME_SUFFIX_1 "__8_NEIGHBOR"
+    #define FILENAME_SUFFIX_1 "_F_8N"
 #endif
 
 #ifdef __MIN
-    #define FILENAME_SUFFIX_2 "__MIN"
+    #define FILENAME_SUFFIX_2 "_MIN"
 #elif __MAX
-    #define FILENAME_SUFFIX_2 "__MAX"
+    #define FILENAME_SUFFIX_2 "_MAX"
 #elif __MEAN
-    #define FILENAME_SUFFIX_2 "__MEAN"
+    #define FILENAME_SUFFIX_2 "_MEAN"
 #elif __MEDIAN
-    #define FILENAME_SUFFIX_2 "__MEDIAN"
+    #define FILENAME_SUFFIX_2 "_MEDIAN"
 #endif
 
 int main() {

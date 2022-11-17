@@ -12,9 +12,9 @@
 #include "../include/separator.h"
 
 #ifdef __4_NEIGHBOR
-    #define FILENAME_SUFFIX "__4_NEIGHBOR"
+    #define FILENAME_SUFFIX "_J_4N"
 #elif __8_NEIGHBOR
-    #define FILENAME_SUFFIX "__8_NEIGHBOR"
+    #define FILENAME_SUFFIX "_J_8N"
 #endif
 
 extern double simulator_threshold;

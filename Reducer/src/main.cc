@@ -14,9 +14,9 @@
 #include "../include/searcher.h"
 
 #ifdef __4_NEIGHBOR
-    #define FILENAME_SUFFIX "__4_NEIGHBOR"
+    #define FILENAME_SUFFIX "_R_4N"
 #elif __8_NEIGHBOR
-    #define FILENAME_SUFFIX "__8_NEIGHBOR"
+    #define FILENAME_SUFFIX "_R_8N"
 #endif
 
 extern double searcher_threshold;
