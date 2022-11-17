@@ -38,6 +38,15 @@ bool Triangle::HasChild() const {
     return false;
 }
 
+bool HasSamePoints(const Triangle& triangle1, const Triangle& triangle2) {
+    for (int i = 0; i < 3; ++i) {
+        if (triangle1.points[i] != triangle2.points[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool operator==(const Triangle& triangle1, const Triangle& triangle2) {
     for (int i = 0; i < 3; ++i) {
         if (triangle1.points[i] != triangle2.points[i]) {
@@ -64,7 +73,7 @@ bool operator==(const Triangle& triangle1, const Triangle& triangle2) {
         if (neighbor1_not_null ^ neighbor2_not_null) {
             return false;
         }
-        if (neighbor1_not_null && neighbor2_not_null && *neighbor1 != *neighbor2) {
+        if (neighbor1_not_null && neighbor2_not_null && !HasSamePoints(*neighbor1, *neighbor2)) {
             return false;
         }
     }
