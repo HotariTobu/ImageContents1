@@ -9,7 +9,7 @@ std::weak_ptr<Triangle> Triangle::FindDeepest(Point3d* point) const {
         auto child = triangle->children[i];
         if (child != nullptr && child->Contains(point)) {
             triangle = child;
-            i = 0;
+            i = -1;
         }
     }
 
