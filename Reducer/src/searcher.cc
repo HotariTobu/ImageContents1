@@ -13,6 +13,12 @@ double CalculateSimilarity(const Vector3d& vec1, const Vector3d& vec2){
     return vec1.Inner(vec2);
 }
 
+
+bool IsSafe(const int x, const int y, const int width, const int height)
+{
+    return (x >= 0 && x <= width + 2) && (y >= 0 && y <= height + 2);
+}
+
 void FloodFill(const Map2d<std::pair<double, Vector3d>>& map, std::vector<std::vector<int>>& group_map, const int x, const int y){
     std::queue<std::pair<int, int>> q;
     q.push({x, y});
@@ -24,6 +30,9 @@ void FloodFill(const Map2d<std::pair<double, Vector3d>>& map, std::vector<std::v
         q.pop();
 
         for(int i = 0; i < 4; i++){
+            if (!IsSafe(node_x + points[i].first, node_y + points[i].second, map.width, map.height)){
+                continue;
+            }
             if (std::isnan(map.data[node_y + points[i].first][node_x + points[i].second].first)){
                 continue;
             }
