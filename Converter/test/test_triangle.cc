@@ -102,12 +102,12 @@ int main() {
 
         for (double y = -0.1; y <= 3.1; y += 0.1) {
             Point3d p = {-0.1, y, Rand()};
-            assert(r1->Contains(&p));
+            assert(!r1->Contains(&p));
         }
 
         for (double x = -0.1, y = 3.1; x <= 3.1 && y >= -0.1; x += 0.1, y -= 0.1) {
             Point3d p = {x, y, Rand()};
-            assert(r1->Contains(&p));
+            assert(!r1->Contains(&p));
         }
     }
 
