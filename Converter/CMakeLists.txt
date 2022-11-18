@@ -30,3 +30,7 @@ target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_di
 target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_find_deepest.cc)
 target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_flip.cc)
 target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_get_neighbor_point_index.cc)
+target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_make_root.cc)
+target_sources(TEST_triangle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle_update_neighbor.cc)
+
+add_subdirectory(DelaunayDemo)
