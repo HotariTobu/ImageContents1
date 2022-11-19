@@ -4,6 +4,7 @@
 #include <fstream>
 #include <list>
 #include <random>
+#include <set>
 
 #include "../../include/triangle.h"
 
@@ -24,7 +25,7 @@ public:
     }
 };
 
-void WriteSVG(const std::string& path, std::list<std::pair<Point2d*, Point2d*>> edges) {
+void WriteSVG(const std::string& path, std::set<std::pair<Point2d*, Point2d*>> edges) {
     std::ofstream ofs(path);
 
     ofs << R"(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -70 100 70"><path d=")";
@@ -56,10 +57,12 @@ int main() {
 
     auto [r, d] = MakeRoot(&b0, &b1, &b2);
     std::list<Point2d> points;
-    std::list<std::pair<Point2d*, Point2d*>> edges = {
+    
+    std::set<std::pair<Point2d*, Point2d*>> edges;
+    std::set<std::pair<Point2d*, Point2d*>> flipped_edges = {
         {&b0, &b1},
+        {&b0, &b2},
         {&b1, &b2},
-        {&b2, &b0},
     };
 
     for (int i = 0; i < 100; i++) {
@@ -71,9 +74,12 @@ int main() {
         points.push_back(p);
         Point2d* point = &points.back();
 
+
         auto deepest = r->FindDeepest(point).lock();
 
         r->Divide(point);
+
+        std::set<std::pair<Point2d*, Point2d*>> additional_edges;
 
         int i1 = -1;
         for (int j = 0; j < 3; j++) {
@@ -89,14 +95,18 @@ int main() {
 
             auto neighbor = deepest->neighbors[i1].lock();
 
-            edges.push_back(std::make_pair(point, deepest->points[i0]));
-            edges.push_back(std::make_pair(point, neighbor->points[j1]));
+            additional_edges.insert({point, deepest->points[i0]});
+            additional_edges.insert({point, neighbor->points[j1]});
         }
         else {
             for (int j = 0; j < 3; j++) {
-                edges.push_back(std::make_pair(point, deepest->points[j]));
+                additional_edges.insert({point, deepest->points[j]});
             }
         }
+
+
+        edges = flipped_edges;
+        edges.merge(additional_edges);
 
         char filename[64];
 
@@ -104,8 +114,9 @@ int main() {
         WriteSVG(filename, edges);
 
 
+        flipped_edges.clear();
+
         auto leaves = r->GetAllLeaves();
-        std::list<std::pair<Point2d*, Point2d*>> temp_edges;
 
         for (auto&& leaf : leaves) {
             auto accessible_leaf = leaf.lock();
@@ -115,17 +126,15 @@ int main() {
                 Point2d* p1 = accessible_leaf->points[(j + 1) % 3];
 
                 if (*p0 < *p1) {
-                    temp_edges.push_back({p0, p1});
+                    flipped_edges.insert({p0, p1});
                 }
                 else {
-                    temp_edges.push_back({p1, p0});
+                    flipped_edges.insert({p1, p0});
                 }
             }
         }
 
-        temp_edges.unique();
-
         sprintf(filename, "%s/l%04d.svg", directory_name, i);
-        WriteSVG(filename, temp_edges);
+        WriteSVG(filename, flipped_edges);
     }
 }
