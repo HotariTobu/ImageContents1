@@ -22,7 +22,15 @@ bool CanPass(std::vector<Point3d> points, std::vector<IndexSet> indices, Map2d<P
     }
 
     Map2d<std::pair<double, PointType>> map;
-    map.data = std::vector<std::vector<std::pair<double, PointType>>>(point_types.height, std::vector<std::pair<double, PointType>>(point_types.width, {0, PointType::NONE}));
+    double width = point_types.width;
+    double height = point_types.height;
+    map.data = std::vector<std::vector<std::pair<double, PointType>>>(height + 2, std::vector<std::pair<double, PointType>>(width + 2, {0, PointType::NONE}));
+    for (int y = 1; y <= height; y++) {
+        for (int x = 1; x <= width; x++) {
+            map.data[y][x].second = point_types.data[y][x];
+        }
+    }
+    
 
     WriteWRL(filename, points_2d, z_values, indices, map);
 
