@@ -6,5 +6,6 @@
 #include "../include/triangle.h"
 
 int main() {
+    Random random(0, 1);
 
 }

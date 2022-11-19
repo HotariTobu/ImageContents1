@@ -16,9 +16,46 @@ int main() {
             Point3d point;
             point.x = x;
             point.y = y;
+            assert(!triangle->Contains(&point));
+        }
+        
+        for (int y = 101; y <= 300; y++) {
+            Point3d point;
+            point.x = x;
+            point.y = y;
+            assert(!triangle->Contains(&point));
+        }
+    }
+
+    for (int y = 0; y < 100; y++) {
+        for (int x = -200; x < 0; x++) {
+            Point3d point;
+            point.x = x;
+            point.y = y;
+            assert(!triangle->Contains(&point));
+        }
+
+        for (int x = 101; x <= 300; x++) {
+            Point3d point;
+            point.x = x;
+            point.y = y;
+            assert(!triangle->Contains(&point));
+        }
+    }
+
+    for (int x = 0; x <= 100; x++) {
+        for (int y = 0; y <= 100 - x; y++) {
+            Point3d point;
+            point.x = x;
+            point.y = y;
             assert(triangle->Contains(&point));
         }
         
+        for (int y = 100 - x + 1; y <= 100; y++) {
+            Point3d point;
+            point.x = x;
+            point.y = y;
+            assert(!triangle->Contains(&point));
+        }
     }
-
 }
