@@ -4,14 +4,23 @@
 
 #include <cmath>
 
-Map2d<double> CombineMaps(const std::vector<Map2d<double>>& maps) {
-    Map2d<double> combine_maps = maps[0];
+Map2d<std::pair<double, PointType>> CombineMaps(const std::list<std::pair<Map2d<double>, PointType>>& maps) {
+    auto&& first_map = maps.front().first;
 
-    for (int e = 1; e < maps.size(); ++e) {
-        for (int y = 1; y <= maps[e].height; ++y) {
-            for (int x = 1; x <= maps[e].width; ++x) {
-                if (!std::isnan(maps[e].data[y][x])) {
-                    combine_maps.data[y][x] = maps[e].data[y][x];
+    int width = first_map.width;
+    int height = first_map.height;
+
+    Map2d<std::pair<double, PointType>> combine_maps;
+    combine_maps.x = first_map.x;
+    combine_maps.y = first_map.y;
+    combine_maps.width = width;
+    combine_maps.height = height;
+
+    for (auto ite = ++maps.begin(); ite != maps.end(); ++ite) {
+        for (int y = 1; y <= height; ++y) {
+            for (int x = 1; x <= width; ++x) {
+                if (!std::isnan(ite->first.data[y][x])) {
+                    combine_maps.data[y][x] = {ite->first.data[y][x], ite->second};
                 }
             }
         }
