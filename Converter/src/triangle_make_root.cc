@@ -6,10 +6,10 @@
 #include <array>
 #include <cmath>
 
-std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(Point3d* p0, Point3d* p1, Point3d* p2) {
-    std::array<Point3d*, 3> points = {p0, p1, p2};
+std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(Point2d* p0, Point2d* p1, Point2d* p2) {
+    std::array<Point2d*, 3> points = {p0, p1, p2};
 
-    Point3d origin;
+    Point2d origin;
     for (int i = 0; i < 3; i++) {
         origin += *points[i];
     }
@@ -21,8 +21,8 @@ std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(Point3d
     for (int i = 0; i < 3; i++) {
         indices[i] = i;
 
-        Point3d point = *points[i];
-        Vector3d vector = point - origin;
+        Point2d point = *points[i];
+        Vector2d vector = point - origin;
         angles[i] = std::atan2(point.y, point.x);
     }
 

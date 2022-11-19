@@ -40,8 +40,8 @@ void Triangle::Divide(Point2d* point) {
             int j0 = (j2 + 1) % 3;
             int j1 = (j2 + 2) % 3;
 
-            Point3d* point2 = deepest->points[i2];
-            Point3d* point4 = neighbor->points[j2];
+            Point2d* point2 = deepest->points[i2];
+            Point2d* point4 = neighbor->points[j2];
 
             auto child1 = std::make_shared<Triangle>(point, point1, point2);
             auto child2 = std::make_shared<Triangle>(point, point2, point0);

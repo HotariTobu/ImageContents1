@@ -24,14 +24,14 @@ public:
     }
 };
 
-void WriteSVG(const std::string& path, std::list<std::pair<Point3d*, Point3d*>> edges) {
+void WriteSVG(const std::string& path, std::list<std::pair<Point2d*, Point2d*>> edges) {
     std::ofstream ofs(path);
 
     ofs << R"(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d=")";
 
     for (auto edge : edges) {
-        Point3d point1 = *edge.first;
-        Point3d point2 = *edge.second;
+        Point2d point1 = *edge.first;
+        Point2d point2 = *edge.second;
 
         ofs << 'M' << point1.x << ',' << point1.y;
         ofs << 'L' << point2.x << ',' << point2.y;
@@ -50,26 +50,26 @@ int main() {
         std::filesystem::create_directory(directory_name);
     }
 
-    Point3d b0 = {0, 0, random()};
-    Point3d b1 = {100, 0, random()};
-    Point3d b2 = {0, 100, random()};
+    Point2d b0 = {0, 0};
+    Point2d b1 = {100, 0};
+    Point2d b2 = {0, 100};
 
     auto [r, d] = MakeRoot(&b0, &b1, &b2);
-    std::list<Point3d> points;
-    std::list<std::pair<Point3d*, Point3d*>> edges = {
+    std::list<Point2d> points;
+    std::list<std::pair<Point2d*, Point2d*>> edges = {
         {&b0, &b1},
         {&b1, &b2},
         {&b2, &b0},
     };
 
-    for (int i = 0; i < 3; i++) {
-        Point3d p; 
+    for (int i = 0; i < 10; i++) {
+        Point2d p; 
         do {
-            p = {random(), random(), random()};
+            p = {random(), random()};
         } while (!r->Contains(&p));
         
         points.push_back(p);
-        Point3d* point = &points.back();
+        Point2d* point = &points.back();
 
         auto deepest = r->FindDeepest(point).lock();
 
@@ -94,7 +94,7 @@ int main() {
         }
         else {
             for (int j = 0; j < 3; j++) {
-                edges.push_back(std::make_pair(point, deepest->points[1]));
+                edges.push_back(std::make_pair(point, deepest->points[j]));
             }
         }
 

@@ -43,7 +43,7 @@ std::string Describe(Triangle& triangle) {
     std::stringstream stream;
 
     for (int i = 0; i < 3; i++) {
-        Point3d point = *(triangle.points[i]);
+        Point2d point = *(triangle.points[i]);
         stream << '(' << (int)point.x << ", " << (int)point.y << "), ";
     }
 
@@ -216,10 +216,10 @@ int main() {
     {
         auto [r2, d0] = MakeRoot(&p0, &p1, &p2);
 
-        Point3d p7 = {1, 0.5, Rand()};
-        Point3d p8 = {2, 0.5, Rand()};
-        Point3d p9 = {0.5, 1, Rand()};
-        Point3d p10 = {0.5, 1.5, Rand()};
+        Point2d p7 = {1, 0.5};
+        Point2d p8 = {2, 0.5};
+        Point2d p9 = {0.5, 1};
+        Point2d p10 = {0.5, 1.5};
 
         r2->Divide(&p3);
         r2->Divide(&p5);
