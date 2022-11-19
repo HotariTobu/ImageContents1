@@ -22,8 +22,8 @@ void Triangle::Flip() {
 
         children[0] = child0;
         children[2] = child2;
-        neighbor->children[j2] = child2;
         neighbor->children[j1] = child0;
+        neighbor->children[j2] = child2;
 
         child0->neighbors[0] = neighbors[0];
         child0->neighbors[1] = neighbor->neighbors[j1];
