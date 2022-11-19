@@ -33,17 +33,17 @@ void WriteSVG(const std::string& path, std::list<std::pair<Point2d*, Point2d*>> 
         Point2d point1 = *edge.first;
         Point2d point2 = *edge.second;
 
-        ofs << 'M' << point1.x << ',' << point1.y;
-        ofs << 'L' << point2.x << ',' << point2.y;
+        ofs << 'M' << point1.x << ',' << -point1.y;
+        ofs << 'L' << point2.x << ',' << -point2.y;
     }
 
-    ofs << R"(" stroke="gray" width="0.1"/></svg>)";
+    ofs << R"(" stroke="gray" stroke-width="0.1"/></svg>)";
 
     ofs.close();
 }
 
 int main() {
-    Random random(-100, 100);
+    Random random(0, 100);
 
     const char* directory_name = "DelaunayDemoImages";
     if (!std::filesystem::exists(directory_name)) {
@@ -52,7 +52,7 @@ int main() {
 
     Point2d b0 = {0, 0};
     Point2d b1 = {100, 0};
-    Point2d b2 = {0, 100};
+    Point2d b2 = {50, 70};
 
     auto [r, d] = MakeRoot(&b0, &b1, &b2);
     std::list<Point2d> points;
@@ -62,7 +62,7 @@ int main() {
         {&b2, &b0},
     };
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
         Point2d p; 
         do {
             p = {random(), random()};
@@ -99,8 +99,33 @@ int main() {
         }
 
         char filename[64];
-        sprintf(filename, "%s/%04d.svg", directory_name, i);
 
+        sprintf(filename, "%s/n%04d.svg", directory_name, i);
         WriteSVG(filename, edges);
+
+
+        auto leaves = r->GetAllLeaves();
+        std::list<std::pair<Point2d*, Point2d*>> temp_edges;
+
+        for (auto&& leaf : leaves) {
+            auto accessible_leaf = leaf.lock();
+
+            for (int j = 0; j < 3; ++j) {
+                Point2d* p0 = accessible_leaf->points[j];
+                Point2d* p1 = accessible_leaf->points[(j + 1) % 3];
+
+                if (*p0 < *p1) {
+                    temp_edges.push_back({p0, p1});
+                }
+                else {
+                    temp_edges.push_back({p1, p0});
+                }
+            }
+        }
+
+        temp_edges.unique();
+
+        sprintf(filename, "%s/l%04d.svg", directory_name, i);
+        WriteSVG(filename, temp_edges);
     }
 }
