@@ -3,7 +3,7 @@
 #ifndef __CIRCLE_H__
 #define __CIRCLE_H__
 
-#include "point3d.h"
+#include "point2d.h"
 
 /*
 Represent a circle on the XY plane.
@@ -13,7 +13,7 @@ struct Circle {
     The center point of the circle.
     The Z value should be ignored.
     */
-    Point3d center;
+    Point2d center;
 
     // The radius of the circle.
     double radius;
@@ -28,7 +28,7 @@ struct Circle {
     [return]
     If the circle contains the point, return true, other else false.
     */
-    bool Contains(Point3d point) const;
+    bool Contains(Point2d point) const;
 };
 
 #endif // __CIRCLE_H__

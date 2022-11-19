@@ -6,7 +6,7 @@
 #include <memory>
 #include <vector>
 
-#include "point3d.h"
+#include "point2d.h"
 #include "circle.h"
 
 /*
@@ -20,7 +20,7 @@ Edge `points[2]` - `points[0]` is between `children[2]` and `neighbors[2]`.
 `neighbors` must be assigned a pointer that is not nullptr in the end of initialization.
 */
 struct Triangle: public std::enable_shared_from_this<Triangle> {
-    Point3d* points[3];
+    Point2d* points[3];
 
     // Child triangles inside the triangle.
     std::shared_ptr<Triangle> children[3];
@@ -32,7 +32,7 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     Initialize all members.
     Assign `children` and `neighbors` nullptr.
     */
-    Triangle(Point3d* p0, Point3d* p1, Point3d* p2);
+    Triangle(Point2d* p0, Point2d* p1, Point2d* p2);
 
     /*
     Delete `children`.
@@ -61,7 +61,7 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     [return]
     If the triangle contains the point, return true, other else false.
     */
-    bool Contains(Point3d* point) const;
+    bool Contains(Point2d* point) const;
 
     /*
     Find the deepest triangle containing the point.
@@ -70,7 +70,7 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     [return]
     The deepest triangle.
     */
-    std::weak_ptr<Triangle> FindDeepest(Point3d* point) const;
+    std::weak_ptr<Triangle> FindDeepest(Point2d* point) const;
 
     /*
     Get index of point that consist the Triangle and a neighbor.
@@ -96,7 +96,7 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     [params]
     - point: the new vertex
     */
-    void Divide(Point3d* point);
+    void Divide(Point2d* point);
 
     /*
     Reconnect a edge if it is illegal.

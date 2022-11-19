@@ -2,7 +2,7 @@
 
 #include "../include/triangle.h"
 
-Triangle::Triangle(Point3d* p0, Point3d* p1, Point3d* p2) {
+Triangle::Triangle(Point2d* p0, Point2d* p1, Point2d* p2) {
     points[0] = p0;
     points[1] = p1;
     points[2] = p2;

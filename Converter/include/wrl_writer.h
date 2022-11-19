@@ -6,8 +6,8 @@
 #include <string>
 #include <vector>
 
-#include "alias.h"
 #include "map2d.h"
+#include "point2d.h"
 #include "index_set.h"
 #include "point_type.h"
 
@@ -21,6 +21,6 @@ Ground point's color is #00FF00, building point's is #FF0000, and other's is #FF
 - indices: set of 3 indices that consist of a triangle
 - point_types: map of `PointType` that whether a point is on ground or on building
 */
-void WriteWRL(std::string path, const PointSet& points, const std::vector<IndexSet>& indices, const Map2d<PointType>& point_types);
+void WriteWRL(std::string path, const std::vector<Point2d>& points, const std::vector<double>& z_values, const std::vector<IndexSet>& indices, const Map2d<std::pair<double, PointType>>& point_types);
 
 #endif // __WRL_WRITER_H__

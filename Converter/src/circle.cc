@@ -2,9 +2,8 @@
 
 #include "../include/circle.h"
 
-bool Circle::Contains(Point3d point) const {
-    Vector3d vector = center - point;
-    vector.z = 0;
+bool Circle::Contains(Point2d point) const {
+    Vector2d vector = center - point;
     double distance = vector.Length();
     return distance < radius;
 }
