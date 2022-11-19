@@ -114,12 +114,11 @@ void AddGroundPoints(std::vector<Point2d>& points, std::vector<double>& z_values
     int index_set_count = indices.size();
 
     std::vector<IndexSetWithOrigin> point_labels[points_count];
-    Point2d origins[index_set_count];
 
     for (int i = 0; i < index_set_count; ++i) {
         IndexSet index_set = indices[i];
 
-        Point2d origin;
+        Point2d origin = {0, 0};
         for (int i = 0; i < 3; ++i) {
             origin += points[index_set[i]];
         }
