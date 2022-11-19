@@ -13,24 +13,12 @@ int main() {
 
     for (int x = -200; x <= 300; x++) {
         for (int y = -200; y < 0; y++) {
-            
+            Point3d point;
+            point.x = x;
+            point.y = y;
+            assert(triangle->Contains(&point));
         }
         
     }
-    
 
-    for (double x = 0.1; x < 3; x += 0.1) {
-        Point3d p = {x, 0.1, Rand()};
-        assert(r1->Contains(&p));
-    }
-
-    for (double y = 0.1; y < 3; y += 0.1) {
-        Point3d p = {0.1, y, Rand()};
-        assert(r1->Contains(&p));
-    }
-
-    for (double x = 0.1, y = 2.9; x < 3 && y > 0; x += 0.1, y -= 0.1) {
-        Point3d p = {x, y, Rand()};
-        assert(r1->Contains(&p));
-    }
 }
