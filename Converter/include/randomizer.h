@@ -3,13 +3,15 @@
 #ifndef __RANDOMIZER_H__
 #define __RANDOMIZER_H__
 
-#include "alias.h"
+#include <vector>
+
+#include "point2d.h"
 
 /*
-Randomize the order of point set.
+Randomize the order of point vector.
 [params]
-- points: set of points
+- points: vector of points
 */
-void Randomize(PointSet& points);
+void Randomize(std::vector<Point2d>& points);
 
 #endif // __RANDOMIZER_H__

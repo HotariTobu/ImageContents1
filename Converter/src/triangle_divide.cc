@@ -11,7 +11,7 @@ Determine if a point is on a line segment.
 [return]
 Return true if `point` is on the segment other else false.
 */
-bool IsBetween(Point3d point1, Point3d point2, Point3d point) {
+bool IsBetween(Point2d point1, Point2d point2, Point2d point) {
     if ((point1.x <= point.x && point.x <= point2.x) || (point2.x <= point.x && point.x <= point1.x)) {
         if ((point1.y <= point.y && point.y <= point2.y) || (point2.y <= point.y && point.y <= point1.y)) {
             if ((point.y * (point1.x - point2.x)) + (point1.y * (point2.x - point.x)) + (point2.y * (point.x - point1.x)) == 0) {
@@ -23,18 +23,18 @@ bool IsBetween(Point3d point1, Point3d point2, Point3d point) {
     return false;
 }
 
-void Triangle::Divide(Point3d* point) {
+void Triangle::Divide(Point2d* point) {
     auto deepest = FindDeepest(point).lock();
 
     for (int i0 = 0; i0 < 3; ++i0) {
         int i1 = (i0 + 1) % 3;
         int i2 = (i0 + 2) % 3;
 
-        Point3d* point0 = deepest->points[i0];
-        Point3d* point1 = deepest->points[i1];
+        Point2d* point0 = deepest->points[i0];
+        Point2d* point1 = deepest->points[i1];
 
         if (IsBetween(*(point0), *(point1), *point)) {
-            Point3d* point2 = deepest->points[i2];
+            Point2d* point2 = deepest->points[i2];
 
             auto child1 = std::make_shared<Triangle>(point, point1, point2);
             auto child2 = std::make_shared<Triangle>(point, point2, point0);
@@ -56,7 +56,7 @@ void Triangle::Divide(Point3d* point) {
             int j0 = (j2 + 1) % 3;
             int j1 = (j2 + 2) % 3;
 
-            Point3d* point4 = neighbor->points[j2];
+            Point2d* point4 = neighbor->points[j2];
 
             auto neighbor1 = std::make_shared<Triangle>(point, point0, point4);
             auto neighbor2 = std::make_shared<Triangle>(point, point4, point1);
@@ -85,8 +85,8 @@ void Triangle::Divide(Point3d* point) {
         for (int i0 = 0; i0 < 3; ++i0) {
             int i1 = (i0 + 1) % 3;
 
-            Point3d* point0 = deepest->points[i0];
-            Point3d* point1 = deepest->points[i1];
+            Point2d* point0 = deepest->points[i0];
+            Point2d* point1 = deepest->points[i1];
 
             auto child = std::make_shared<Triangle>(point, point0, point1);
 

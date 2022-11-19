@@ -11,6 +11,7 @@ struct Point3d {
     double y;
     double z;
 
+
     // Return the point as a vector.
     Vector3d ToVector() const;
 

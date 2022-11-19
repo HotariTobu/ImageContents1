@@ -24,6 +24,7 @@ struct Vector3d {
     // Calculate cross product with `vector`.
     Vector3d Cross(const Vector3d vector) const;
     
+    
     // Return the vector as a point.
     Point3d ToPoint() const;
 

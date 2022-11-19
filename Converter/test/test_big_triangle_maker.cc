@@ -10,20 +10,19 @@
 
 bool CanPass() {
     constexpr int points_count = 20;
-    PointSet points(points_count);
+    std::vector<Point2d> points;
 
     for (int i = 0; i < points_count; i++) {
-        Point3d point;
+        Point2d point;
         point.x = rand();
         point.y = rand();
-        point.z = rand();
-        points[i] = point;
+        points.push_back(point);
     }
 
     auto [p0, p1, p2] = MakeBigTriangle(points);
     Triangle triangle(&p0, &p1, &p2);
 
-    for (Point3d point : points) {
+    for (Point2d point : points) {
         if (!triangle.Contains(&point)) {
             return false;
         }

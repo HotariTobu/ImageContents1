@@ -6,15 +6,9 @@
 #include <random>
 #include <sstream>
 
-#include "../include/triangle.h"
 #include "near.h"
-
-std::default_random_engine random_engine;
-std::uniform_real_distribution<double> random_distribution;
-
-double Rand() {
-    return random_distribution(random_engine);
-}
+#include "random.h"
+#include "../include/triangle.h"
 
 template<typename T>
 bool EqualsAsSet(T c1, T c2) {
@@ -49,7 +43,7 @@ std::string Describe(Triangle triangle) {
     std::stringstream stream;
 
     for (int i = 0; i < 3; i++) {
-        Point3d point = *triangle.points[i];
+        Point2d point = *triangle.points[i];
         stream << '(' << (int)point.x << ", " << (int)point.y << "), ";
     }
 
@@ -57,17 +51,15 @@ std::string Describe(Triangle triangle) {
 }
 
 int main() {
-    std::random_device random_device;
-    random_engine = std::default_random_engine(random_device());
-    random_distribution = std::uniform_real_distribution<double>(-100, 100);
+    Random random(-100, 100);
 
-    Point3d p0 = {0, 0, Rand()};
-    Point3d p1 = {3, 0, Rand()};
-    Point3d p2 = {0, 3, Rand()};
+    Point2d p0 = {0, 0};
+    Point2d p1 = {3, 0};
+    Point2d p2 = {0, 3};
 
-    Point3d p3 = {1, 1, Rand()};
-    Point3d p4 = {8, 8, Rand()};
-    Point3d p5 = {1.5, 1.5, Rand()};
+    Point2d p3 = {1, 1};
+    Point2d p4 = {8, 8};
+    Point2d p5 = {1.5, 1.5};
 
     {
         auto r1 = std::make_shared<Triangle>(&p0, &p1, &p2);
@@ -76,34 +68,6 @@ int main() {
         r1->neighbors[2] = r1;
 
         assert(!r1->HasChild());
-
-        Circle incircle = r1->GetIncircle();
-        Circle circumcircle = r1->GetCircumcircle();
-
-        assert(Near(incircle.center, {0.878679656440357, 0.878679656440357, 0}) && Near(incircle.radius, 0.87867965644));
-        assert(Near(circumcircle.center, {1.5, 1.5, 0}) && Near(circumcircle.radius, 2.12132034356));
-
-        for (double x = 0.1; x < 3; x += 0.1) {
-            Point3d p = {x, 0.1, Rand()};
-            assert(r1->Contains(&p));
-        }
-
-        for (double y = 0.1; y < 3; y += 0.1) {
-            Point3d p = {0.1, y, Rand()};
-            assert(r1->Contains(&p));
-        }
-
-        for (double x = 0.1, y = 2.9; x < 3 && y > 0; x += 0.1, y -= 0.1) {
-            Point3d p = {x, y, Rand()};
-            assert(r1->Contains(&p));
-        }
-    }
-
-    {
-        auto r1 = std::make_shared<Triangle>(&p0, &p1, &p2);
-        r1->neighbors[0] = r1;
-        r1->neighbors[1] = r1;
-        r1->neighbors[2] = r1;
 
         auto n1 = std::make_shared<Triangle>(&p4, &p2, &p1);
         n1->neighbors[0] = n1;
@@ -123,7 +87,7 @@ int main() {
 
         assert(r1->HasChild());
 
-        Point3d p6 = {1, 0.5, Rand()};
+        Point2d p6 = {1, 0.5};
 
         assert(*c0 == *r1->FindDeepest(&p6).lock());
 

@@ -5,10 +5,9 @@
 #include <cmath>
 #include <tuple>
 
-std::tuple<Point3d, Point3d, Point3d> MakeBigTriangle(const PointSet& points) {
+std::tuple<Point2d, Point2d, Point2d> MakeBigTriangle(const std::vector<Point2d>& points) {
     std::pair<double, double> rect_start = {points[0].x, points[0].y};
     std::pair<double, double> rect_end = {points[0].x, points[0].y};
-    double sum_z = 0;
     for (const auto& point : points){
         if(rect_start.first > point.x){
             rect_start.first = point.x;
@@ -22,21 +21,19 @@ std::tuple<Point3d, Point3d, Point3d> MakeBigTriangle(const PointSet& points) {
         if(rect_end.second < point.y){
             rect_end.second = point.y;
         }
-        sum_z += point.z;
     }
     std::pair<double, double> center = {(rect_end.first - rect_start.first) / 2.0, (rect_end.second - rect_start.second) / 2.0};  
-    double r = Vector3d{rect_end.first - center.first, rect_end.second - center.second, 0}.Length() + 1;
+    double r = Vector2d{rect_end.first - center.first, rect_end.second - center.second}.Length() + 1;
     double x1 = center.first - std::sqrt(3) * r;  
-    double y1 = center.second - r;  
-    double z = sum_z / points.size();
-    Point3d p1 = Point3d{x1, y1, z};  
+    double y1 = center.second - r;
+    Point2d p1 = Point2d{x1, y1};  
       
     float x2 = center.first + std::sqrt(3) * r;  
     float y2 = center.second - r;  
-    Point3d p2 = Point3d{x2, y2, z};  
+    Point2d p2 = Point2d{x2, y2};  
       
     float x3 = center.first;  
     float y3 = center.second + 2 * r;  
-    Point3d p3 = Point3d{x3, y3, z}; 
+    Point2d p3 = Point2d{x3, y3}; 
     return std::make_tuple(p1, p2, p3);
 }

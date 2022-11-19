@@ -6,9 +6,26 @@
 #include "../include/maps_combiner.h"
 
 bool CanPass(Map2d<double> map1, Map2d<double> map2, Map2d<double> answer) {
-    std::vector<Map2d<double>> maps = {map1, map2};
-    auto result = CombineMaps(maps);
-    return result == answer;
+    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
+
+    auto result = CombineMaps({
+        {map1, PointType::GROUND},
+        {map2, PointType::BUILDING},
+    });
+    
+    Map2d<double> result2;
+    result2.x = result.x;
+    result2.y = result.y;
+    result2.width = result.width;
+    result2.height = result.height;
+    result2.data = std::vector<std::vector<double>>(result.height + 2, std::vector<double>(result.width + 2, nan));
+    for (int y = 1; y <= result.height; y++) {
+        for (int x = 1; x <= result.height; x++) {
+            result2.data[y][x] = result.data[y][x].first;
+        }
+    }
+
+    return result2 == answer;
 }
 
 int main() {
