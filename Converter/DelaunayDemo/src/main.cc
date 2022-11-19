@@ -27,7 +27,7 @@ public:
 void WriteSVG(const std::string& path, std::list<std::pair<Point2d*, Point2d*>> edges) {
     std::ofstream ofs(path);
 
-    ofs << R"(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d=")";
+    ofs << R"(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -70 100 70"><path d=")";
 
     for (auto edge : edges) {
         Point2d point1 = *edge.first;
