@@ -1,10 +1,11 @@
 add_target()
 
 target_link_libraries(Converter GeometryLib)
+# target_link_libraries(Converter DatLib)
 target_link_libraries(Converter MapLib)
 target_link_libraries(Converter MainLib)
 
-set(DEPEND_ON_GEOMEYRYLIB big_triangle_maker;ground_points_adder;randomizer;triangle;wrl_writer)
+set(DEPEND_ON_GEOMEYRYLIB big_triangle_maker;ground_points_adder;randomizer;triangle;triangle_circle;triangle_contains;wrl_writer)
 set(DEPEND_ON_MAPLIB ground_points_adder;maps_combiner;wrl_writer)
 set(DEPEND_ON_RANDOMLIB big_triangle_maker;ground_points_adder;maps_combiner;triangle_circle;triangle;wrl_writer)
 
