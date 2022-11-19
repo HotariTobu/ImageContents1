@@ -69,34 +69,6 @@ int main() {
 
         assert(!r1->HasChild());
 
-        Circle incircle = r1->GetIncircle();
-        Circle circumcircle = r1->GetCircumcircle();
-
-        assert(Near(incircle.center, {0.878679656440357, 0.878679656440357}) && Near(incircle.radius, 0.87867965644));
-        assert(Near(circumcircle.center, {1.5, 1.5}) && Near(circumcircle.radius, 2.12132034356));
-
-        for (double x = 0.1; x < 3; x += 0.1) {
-            Point2d p = {x, 0.1};
-            assert(r1->Contains(&p));
-        }
-
-        for (double y = 0.1; y < 3; y += 0.1) {
-            Point2d p = {0.1, y};
-            assert(r1->Contains(&p));
-        }
-
-        for (double x = 0.1, y = 2.9; x < 3 && y > 0; x += 0.1, y -= 0.1) {
-            Point2d p = {x, y};
-            assert(r1->Contains(&p));
-        }
-    }
-
-    {
-        auto r1 = std::make_shared<Triangle>(&p0, &p1, &p2);
-        r1->neighbors[0] = r1;
-        r1->neighbors[1] = r1;
-        r1->neighbors[2] = r1;
-
         auto n1 = std::make_shared<Triangle>(&p4, &p2, &p1);
         n1->neighbors[0] = n1;
         n1->neighbors[1] = n1;
