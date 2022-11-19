@@ -64,6 +64,7 @@ bool CanPass(std::vector<Point3d> points, std::vector<IndexSet> indices, std::se
     AddGroundPoints(points_2d, z_values, indices);
 
     points.clear();
+    points.resize(z_values.size());
     for (int i = 0; i < points.size(); i++) {
         points[i] = {
             points_2d[i].x,
