@@ -11,6 +11,8 @@ void Triangle::Flip() {
 
     // When edge `point1` - `point2` is illegal edge.
     if (this->GetCircumcircle().Contains(*point4)) {
+        int j1 = (j2 + 2) % 3;
+        
         Point2d* point0 = points[0];
         Point2d* point1 = points[1];
         Point2d* point2 = points[2];
@@ -20,9 +22,6 @@ void Triangle::Flip() {
 
         children[0] = child0;
         children[2] = child2;
-
-        int j1 = (j2 + 2) % 3;
-
         neighbor->children[j2] = child2;
         neighbor->children[j1] = child0;
 
@@ -32,6 +31,11 @@ void Triangle::Flip() {
         child2->neighbors[0] = child0;
         child2->neighbors[1] = neighbor->neighbors[j2];
         child2->neighbors[2] = neighbors[2];
+
+        child0->UpdateNeighbor(0);
+        child0->UpdateNeighbor(1);
+        child2->UpdateNeighbor(1);
+        child2->UpdateNeighbor(2);
 
         child0->Flip();
         child2->Flip();

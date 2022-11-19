@@ -83,6 +83,14 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     int GetNeighborPointIndex(int neighbor_index);
 
     /*
+    Overwrite a neighbor's `neighbors` with the triangle.
+    A neighbor that is next to the triangle is assigned it.
+    [params]
+    - neighbor_index: index of neighbor must be in [0, 2]
+    */
+    void UpdateNeighbor(int neighbor_index);
+
+    /*
     Divide the triangle into 2 or 3 triangles and add new triangles as children.
     Update `children`.
     [params]
@@ -112,5 +120,18 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
 
 bool operator==(const Triangle& triangle1, const Triangle& triangle2);
 bool operator!=(const Triangle& triangle1, const Triangle& triangle2);
+
+/*
+Make a root triangle.
+The triangle is set with a dummy triangle.
+They are neighbors of each other.
+The root's points are ordered counter-clockwise but the dummy is clockwise.
+[param]
+points to initialize the triangles
+[return]
+- 1st triangle: the root
+- 2nd triangle: the dummy
+*/
+std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(Point3d* p0, Point3d* p1, Point3d* p2);
 
 #endif // __TRIANGLE_H__

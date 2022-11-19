@@ -116,16 +116,16 @@ int main() {
 
 
         auto [p0, p1, p2] = MakeBigTriangle(points);
-        
-        auto root_triangle = std::make_shared<Triangle>(&p0, &p1, &p2);
-        root_triangle->neighbors[0] = root_triangle;
-        root_triangle->neighbors[1] = root_triangle;
-        root_triangle->neighbors[2] = root_triangle;
+        auto [root_triangle, dummy_triangle] = MakeRoot(&p0, &p1, &p2);
 
         Randomize(points);
 
         std::vector<double> z_values;
         z_values.reserve(points.size());
+
+        // for (auto point : points) {
+        //     root_triangle->Divide(&point);
+        // }
 
         for (auto&& point : points) {
             root_triangle->Divide(&point);
