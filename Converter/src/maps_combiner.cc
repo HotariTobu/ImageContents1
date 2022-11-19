@@ -15,8 +15,9 @@ Map2d<std::pair<double, PointType>> CombineMaps(const std::list<std::pair<Map2d<
     combine_maps.y = first_map.y;
     combine_maps.width = width;
     combine_maps.height = height;
+    combine_maps.data = std::vector<std::vector<std::pair<double, PointType>>>(height + 2, std::vector<std::pair<double, PointType>>(width + 2, {0, PointType::NONE}));
 
-    for (auto ite = ++maps.begin(); ite != maps.end(); ++ite) {
+    for (auto ite = maps.begin(); ite != maps.end(); ++ite) {
         for (int y = 1; y <= height; ++y) {
             for (int x = 1; x <= width; ++x) {
                 if (!std::isnan(ite->first.data[y][x])) {

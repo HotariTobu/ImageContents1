@@ -9,8 +9,8 @@ bool CanPass(Map2d<double> map1, Map2d<double> map2, Map2d<double> answer) {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
     auto result = CombineMaps({
-        {map1, PointType::NONE},
-        {map2, PointType::NONE},
+        {map1, PointType::GROUND},
+        {map2, PointType::BUILDING},
     });
     
     Map2d<double> result2;
