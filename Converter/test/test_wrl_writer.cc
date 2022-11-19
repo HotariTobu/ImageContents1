@@ -5,12 +5,26 @@
 #include <fstream>
 #include <sstream>
 
+#include "point3d.h"
 #include "../include/wrl_writer.h"
 
-bool CanPass(PointSet points, std::vector<IndexSet> indices, Map2d<PointType> point_types, const char* answer) {
+bool CanPass(std::vector<Point3d> points, std::vector<IndexSet> indices, Map2d<PointType> point_types, const char* answer) {
     const char* filename = "test.wrl";
 
-    WriteWRL(filename, points, indices, point_types);
+    std::vector<Point2d> points_2d(points.size());
+    std::vector<double> z_values(points.size());
+    for (int i = 0; i < points.size(); i++) {
+        points_2d[i] = {
+            points[i].x,
+            points[i].y
+        };
+        z_values[i] = points[i].z;
+    }
+
+    Map2d<std::pair<double, PointType>> map;
+    map.data = std::vector<std::vector<std::pair<double, PointType>>>(point_types.height, std::vector<std::pair<double, PointType>>(point_types.width, {0, PointType::NONE}));
+
+    WriteWRL(filename, points_2d, z_values, indices, map);
 
     std::ifstream ifs(filename);
     std::stringstream buffer;

@@ -4,13 +4,14 @@
 
 #include <algorithm>
 #include <cmath>
-#include <vector>
+
+#include "point3d.h"
 
 double ground_point_threshold;
 
 struct IndexSetWithOrigin {
     int index_set_index;
-    Point3d origin;
+    Point2d origin;
 };
 
 struct IndexSetWithAngle {
@@ -24,15 +25,19 @@ struct IndexSetWithEdge {
     Vector3d edge;
 };
 
-std::vector<IndexSetWithEdge> GetEdges(const PointSet& points, const std::vector<IndexSet>& indices, const std::vector<IndexSetWithOrigin>& point_label, int index) {
-    Point3d base_point = points[index];
+Point3d Merge(Point2d point, double z) {
+    return {point.x, point.y, z};
+}
+
+std::vector<IndexSetWithEdge> GetEdges(const std::vector<Point2d>& points, const std::vector<double>& z_values, const std::vector<IndexSet>& indices, const std::vector<IndexSetWithOrigin>& point_label, int index) {
+    Point2d base_point_2d = points[index];
     int edges_count = point_label.size();
 
     std::vector<IndexSetWithAngle> labels(edges_count);
 
     for (int i = 0; i < edges_count; ++i) {
         IndexSetWithOrigin index_set_with_origin = point_label[i];
-        Vector3d vector = index_set_with_origin.origin - base_point;
+        Vector2d vector = index_set_with_origin.origin - base_point_2d;
 
         int index_set_index = index_set_with_origin.index_set_index;
         double angle = std::atan2(vector.y, vector.x);
@@ -42,6 +47,7 @@ std::vector<IndexSetWithEdge> GetEdges(const PointSet& points, const std::vector
 
     std::sort(labels.begin(), labels.end(), [](IndexSetWithAngle l1, IndexSetWithAngle l2) { return l1.angle < l2.angle; });
 
+    Point3d base_point_3d = Merge(base_point_2d, z_values[index]);
     std::vector<IndexSetWithEdge> edge_labels(edges_count);
 
     for (int i = 0; i < edges_count; ++i) {
@@ -53,8 +59,10 @@ std::vector<IndexSetWithEdge> GetEdges(const PointSet& points, const std::vector
             ++j;
         }
 
-        Point3d another_point = points[index_set[(j + 1) % 3]];
-        Vector3d edge = another_point - base_point;
+        int another_index = index_set[(j + 1) % 3];
+
+        Point3d another_point_3d = Merge(points[another_index], z_values[another_index]);        
+        Vector3d edge = another_point_3d - base_point_3d;
 
         edge_labels[i] = {index_set_index, j, edge};
     }
@@ -101,32 +109,17 @@ std::vector<double> GetTilts(const std::vector<IndexSetWithEdge>& edge_labels) {
     return tilts;
 }
 
-Point3d GetGroundPoint(Point3d base_point, const std::vector<IndexSetWithEdge>& edge_labels) {
-    int edges_count = edge_labels.size();
-    double min_z = edge_labels[0].edge.z;
-
-    for (int i = 1; i < edges_count; ++i) {
-        double z = edge_labels[i].edge.z;
-        if (min_z > z) {
-            min_z = z;
-        }
-    }
-
-    base_point.z += min_z;
-    return base_point;
-}
-
-void AddGroundPoints(PointSet& points, std::vector<IndexSet>& indices) {
+void AddGroundPoints(std::vector<Point2d>& points, std::vector<double>& z_values, std::vector<IndexSet>& indices) {
     int points_count = points.size();
     int index_set_count = indices.size();
 
     std::vector<IndexSetWithOrigin> point_labels[points_count];
-    Point3d origins[index_set_count];
+    Point2d origins[index_set_count];
 
     for (int i = 0; i < index_set_count; ++i) {
         IndexSet index_set = indices[i];
 
-        Point3d origin = {0, 0, 0};
+        Point2d origin;
         for (int i = 0; i < 3; ++i) {
             origin += points[index_set[i]];
         }
@@ -142,7 +135,7 @@ void AddGroundPoints(PointSet& points, std::vector<IndexSet>& indices) {
     for (int i = 0; i < points_count; ++i) {
         auto point_label = point_labels[i];
 
-        auto edge_labels = GetEdges(points, indices, point_label, i);
+        auto edge_labels = GetEdges(points, z_values, indices, point_label, i);
         if (!IsCycled(indices, edge_labels)) {
             continue;
         }
@@ -163,9 +156,12 @@ void AddGroundPoints(PointSet& points, std::vector<IndexSet>& indices) {
             continue;
         }
         
-        Point3d ground_point = GetGroundPoint(points[i], edge_labels);
+        auto min_ite = std::min_element(edge_labels.begin(), edge_labels.end(), [](const IndexSetWithEdge& l1, const IndexSetWithEdge& l2) {
+            return l1.edge.z < l2.edge.z;
+        });
         int ground_point_index = points.size();
-        points.push_back(ground_point);
+        points.push_back(points[i]);
+        z_values.push_back(z_values[i] + min_ite->edge.z);
 
         for (int j = 0; j < candidates_count; ++j) {
             int candidate = candidates[j];

@@ -6,17 +6,17 @@
 #include "../include/randomizer.h"
 
 bool CanPass() {
-    PointSet points;
+    constexpr int points_count = 20;
+    std::vector<Point2d> points;
 
-    for (int i = 0; i < 10; i++) {
-        Point3d point;
+    for (int i = 0; i < points_count; i++) {
+        Point2d point;
         point.x = rand();
         point.y = rand();
-        point.z = rand();
         points.push_back(point);
     }
     
-    PointSet clone = points;
+    std::vector<Point2d> clone = points;
 
     Randomize(clone);
 
@@ -26,7 +26,7 @@ bool CanPass() {
 int main() {
     srand(std::time(NULL));
 
-    assert(CanPass());
-    assert(CanPass());
-    assert(CanPass());
+    for (int i = 0; i < 5; ++i) {
+        assert(CanPass());
+    }
 }

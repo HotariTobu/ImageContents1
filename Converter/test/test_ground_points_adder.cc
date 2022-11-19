@@ -5,13 +5,14 @@
 #include <limits>
 #include <set>
 
+#include "point3d.h"
 #include "../include/ground_points_adder.h"
 #include "../include/index_set.h"
 #include "../include/wrl_writer.h"
 
 extern double ground_point_threshold;
 
-Map2d<PointType> GetPointTypeMap(const PointSet& points) {
+Map2d<std::pair<double, PointType>> GetPointTypeMap(const std::vector<Point3d>& points) {
     int min_x = std::numeric_limits<int>().max();
     int min_y = std::numeric_limits<int>().max();
     int max_x = std::numeric_limits<int>().min();
@@ -36,23 +37,42 @@ Map2d<PointType> GetPointTypeMap(const PointSet& points) {
     int width = max_x - min_x + 3;
     int height = max_y - min_y + 3;
 
-    Map2d<PointType> result;
+    Map2d<std::pair<double, PointType>> result;
     result.x = min_x;
     result.y = min_y;
-    result.data = std::vector<std::vector<PointType>>(height, std::vector<PointType>(width, PointType::NONE));
+    result.data = std::vector<std::vector<std::pair<double, PointType>>>(height, std::vector<std::pair<double, PointType>>(width, {0, PointType::NONE}));
 
     return result;
 }
 
-bool CanPass(PointSet points, std::vector<IndexSet> indices, std::set<std::vector<Point3d>> answer) {
+bool CanPass(std::vector<Point3d> points, std::vector<IndexSet> indices, std::set<std::vector<Point3d>> answer) {
     int index_set_count = indices.size();
     auto point_types = GetPointTypeMap(points);
 
-    WriteWRL("before.wrl", points, indices, point_types);
+    std::vector<Point2d> points_2d(points.size());
+    std::vector<double> z_values(points.size());
+    for (int i = 0; i < points.size(); i++) {
+        points_2d[i] = {
+            points[i].x,
+            points[i].y
+        };
+        z_values[i] = points[i].z;
+    }
 
-    AddGroundPoints(points, indices);
+    WriteWRL("before.wrl", points_2d, z_values, indices, point_types);
 
-    WriteWRL("after.wrl", points, indices, point_types);
+    AddGroundPoints(points_2d, z_values, indices);
+
+    points.clear();
+    for (int i = 0; i < points.size(); i++) {
+        points[i] = {
+            points_2d[i].x,
+            points_2d[i].y,
+            z_values[i]
+        };
+    }
+
+    WriteWRL("after.wrl", points_2d, z_values, indices, point_types);
 
     std::filesystem::remove("before.wrl");
     std::filesystem::remove("after.wrl");
