@@ -6,7 +6,7 @@ target_link_libraries(Converter MainLib)
 
 set(DEPEND_ON_GEOMEYRYLIB big_triangle_maker;ground_points_adder;randomizer;triangle;wrl_writer)
 set(DEPEND_ON_MAPLIB ground_points_adder;maps_combiner;wrl_writer)
-set(DEPEND_ON_RANDOMLIB big_triangle_maker;ground_points_adder;maps_combiner;triangle_circle;triangle_contains;triangle;wrl_writer)
+set(DEPEND_ON_RANDOMLIB big_triangle_maker;ground_points_adder;maps_combiner;triangle_circle;triangle;wrl_writer)
 
 foreach(TEST_FILENAME IN LISTS DEPEND_ON_GEOMEYRYLIB)
     target_link_libraries(TEST_${TEST_FILENAME} GeometryLib)
