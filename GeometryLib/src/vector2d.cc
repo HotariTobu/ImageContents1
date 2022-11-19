@@ -23,7 +23,7 @@ double Vector2d::Inner(const Vector2d vector) const {
 }
 
 double Vector2d::Cross(const Vector2d vector) const {
-    return (x * vector.y) - (y * vector.z);
+    return (x * vector.y) - (y * vector.x);
 }
 
 Point2d Vector2d::ToPoint() const {
@@ -51,7 +51,6 @@ Vector2d& Vector2d::operator*=(const Vector2d vector) {
 Vector2d& Vector2d::operator*=(const double value) {
     x *= value;
     y *= value;
-    z *= value;
     return *this;
 }
 
