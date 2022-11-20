@@ -39,17 +39,6 @@ std::vector<std::shared_ptr<T>> SharedCast(std::vector<std::weak_ptr<T>> contain
     return result;
 }
 
-std::string Describe(Triangle& triangle) {
-    std::stringstream stream;
-
-    for (int i = 0; i < 3; i++) {
-        Point2d point = *(triangle.points[i]);
-        stream << '(' << (int)point.x << ", " << (int)point.y << "), ";
-    }
-
-    return stream.str();
-}
-
 int main() {
     Random random(-100, 100);
 
