@@ -280,16 +280,16 @@ int main() {
 
         char filename[64];
 
-        sprintf(filename, "%s/n%04d.svg", directory_name, i);
+        sprintf(filename, "%s/flipping-%04d.svg", directory_name, i);
         WriteSVG(filename, edges);
 
 
         flipped_edges = GetUniqueLeavesEdges(root_triangle);
 
-        sprintf(filename, "%s/l%04d.svg", directory_name, i);
+        sprintf(filename, "%s/flipped-%04d.svg", directory_name, i);
         WriteSVG(filename, flipped_edges);
 
-        sprintf(filename, "%s/g%04d.html", directory_name, i);
+        sprintf(filename, "%s/with-graph-%04d.html", directory_name, i);
         DrawGraphInHTML(filename, points, flipped_edges, root_triangle);
     }
 }
