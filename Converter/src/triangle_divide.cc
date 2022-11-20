@@ -103,7 +103,10 @@ void Triangle::Divide(Point2d* point) {
             child->neighbors[2] = deepest->children[i1];
 
             child->UpdateNeighbor(1);
+        }
 
+        for (int i = 0; i < 3; ++i) {
+            auto child = deepest->children[i];
             child->Flip();
         }
     }
