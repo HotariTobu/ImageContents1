@@ -48,15 +48,15 @@ Vector2d& Vector2d::operator*=(const Vector2d vector) {
     return *this;
 }
 
-Vector2d& Vector2d::operator*=(const double value) {
-    x *= value;
-    y *= value;
-    return *this;
-}
-
 Vector2d& Vector2d::operator/=(const Vector2d vector) {
     x /= vector.x;
     y /= vector.y;
+    return *this;
+}
+
+Vector2d& Vector2d::operator*=(const double value) {
+    x *= value;
+    y *= value;
     return *this;
 }
 

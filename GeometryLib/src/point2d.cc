@@ -27,15 +27,15 @@ Point2d& Point2d::operator*=(const Point2d point) {
     return *this;
 }
 
-Point2d& Point2d::operator*=(const double value) {
-    x *= value;
-    y *= value;
-    return *this;
-}
-
 Point2d& Point2d::operator/=(const Point2d point) {
     x /= point.x;
     y /= point.y;
+    return *this;
+}
+
+Point2d& Point2d::operator*=(const double value) {
+    x *= value;
+    y *= value;
     return *this;
 }
 
@@ -72,7 +72,7 @@ bool operator<(const Point2d point1, const Point2d point2) {
     return false;
 }
 
-Vector2d operator+(const Point2d point1, const Point2d point2) {
+Point2d operator+(const Point2d point1, const Point2d point2) {
     return {
         point1.x + point2.x ,
         point1.y + point2.y
