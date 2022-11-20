@@ -4,8 +4,8 @@
 
 #include <stack>
 
-std::list<std::weak_ptr<Triangle>> Triangle::GetAllLeaves() const {
-    std::list<std::weak_ptr<Triangle>> leaves;
+std::list<IndexedPointSet> Triangle::ListLeafPointSet() const {
+    std::list<IndexedPointSet> leaf_point_set_list;
 
     std::stack<std::weak_ptr<Triangle>> triangle_stack;
     triangle_stack.push(std::const_pointer_cast<Triangle>(shared_from_this()));
@@ -15,7 +15,7 @@ std::list<std::weak_ptr<Triangle>> Triangle::GetAllLeaves() const {
         triangle_stack.pop();
 
         if (!triangle->HasChild()) {
-            leaves.push_back(triangle);
+            leaf_point_set_list.push_back(triangle->points);
             continue;
         }
 
@@ -27,5 +27,5 @@ std::list<std::weak_ptr<Triangle>> Triangle::GetAllLeaves() const {
         }
     }
 
-    return leaves;
+    return leaf_point_set_list;
 }

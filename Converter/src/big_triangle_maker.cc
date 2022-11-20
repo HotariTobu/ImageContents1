@@ -4,21 +4,21 @@
 
 #include <cmath>
 
-std::tuple<Point2d, Point2d, Point2d> MakeBigTriangle(const std::vector<Point2d>& points) {
-    std::pair<double, double> rect_start = {points[0].x, points[0].y};
-    std::pair<double, double> rect_end = {points[0].x, points[0].y};
+std::tuple<Point2d, Point2d, Point2d> MakeBigTriangle(const std::vector<IndexedPoint>& points) {
+    std::pair<double, double> rect_start = {points[0]->x, points[0]->y};
+    std::pair<double, double> rect_end = {points[0]->x, points[0]->y};
     for (const auto& point : points){
-        if(rect_start.first > point.x){
-            rect_start.first = point.x;
+        if(rect_start.first > point->x){
+            rect_start.first = point->x;
         }
-        if(rect_start.second > point.y){
-            rect_start.second = point.y;
+        if(rect_start.second > point->y){
+            rect_start.second = point->y;
         }
-        if(rect_end.first < point.x){
-            rect_end.first = point.x;
+        if(rect_end.first < point->x){
+            rect_end.first = point->x;
         }
-        if(rect_end.second < point.y){
-            rect_end.second = point.y;
+        if(rect_end.second < point->y){
+            rect_end.second = point->y;
         }
     }
     std::pair<double, double> center = {(rect_end.first - rect_start.first) / 2.0, (rect_end.second - rect_start.second) / 2.0};  

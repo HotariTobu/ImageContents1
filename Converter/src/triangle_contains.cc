@@ -2,7 +2,7 @@
 
 #include "../include//triangle.h"
 
-bool Triangle::Contains(Point2d* point) const {
+bool Triangle::Contains(const IndexedPoint& point) const {
     bool signs[3];
     for (int i = 0; i < 3; ++i) {
         Vector2d edge = *(points[(i + 1) % 3]) - *(points[i]);

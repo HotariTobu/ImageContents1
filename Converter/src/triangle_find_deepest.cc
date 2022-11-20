@@ -2,7 +2,7 @@
 
 #include "../include//triangle.h"
 
-std::weak_ptr<Triangle> Triangle::FindDeepest(Point2d* point) const {
+std::weak_ptr<Triangle> Triangle::FindDeepest(const IndexedPoint& point) const {
     auto triangle = std::const_pointer_cast<Triangle>(shared_from_this());
 
     for (int i = 0; i < 3; ++i) {

@@ -1,24 +1,24 @@
 // Created by HotariTobu
 
-#include "../include/triangle.h"
+#include "../include/root_maker.h"
 
 #include <array>
 #include <cmath>
 #include <map>
 #include <vector>
 
-std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(Point2d* p0, Point2d* p1, Point2d* p2) {
-    std::map<double, Point2d*> points_with_angle;
+std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(const IndexedPoint& p0, const IndexedPoint& p1, const IndexedPoint& p2) {
+    std::map<double, IndexedPoint> points_with_angle;
 
     Point2d origin = (*p0 + *p1 + *p2) / 3;
-    for (Point2d* point : {p0, p1, p2}) {
+    for (auto&& point : {p0, p1, p2}) {
         Vector2d vector = *point - origin;
         double angle = std::atan2(vector.y, vector.x);
 
         points_with_angle.insert({angle, point});
     }
 
-    std::vector<Point2d*> sorted_points;
+    std::vector<IndexedPoint> sorted_points;
 
     for (auto&& point_with_angle : points_with_angle) {
         sorted_points.push_back(point_with_angle.second);

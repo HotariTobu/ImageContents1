@@ -4,7 +4,7 @@
 
 #include <sstream>
 
-Triangle::Triangle(Point2d* p0, Point2d* p1, Point2d* p2) {
+Triangle::Triangle(const IndexedPoint& p0, const IndexedPoint& p1, const IndexedPoint& p2) {
     points[0] = p0;
     points[1] = p1;
     points[2] = p2;

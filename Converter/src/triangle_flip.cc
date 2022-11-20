@@ -7,15 +7,15 @@ void Triangle::Flip() {
 
     auto neighbor = neighbors[1].lock();
 
-    Point2d* point4 = neighbor->points[j2];
+    IndexedPoint&& point4 = neighbor->points[j2];
 
     // When edge `point1` - `point2` is illegal edge.
     if (this->GetCircumcircle().Contains(*point4)) {
         int j1 = (j2 + 2) % 3;
         
-        Point2d* point0 = points[0];
-        Point2d* point1 = points[1];
-        Point2d* point2 = points[2];
+        IndexedPoint&& point0 = points[0];
+        IndexedPoint&& point1 = points[1];
+        IndexedPoint&& point2 = points[2];
 
         auto child0 = std::make_shared<Triangle>(point0, point1, point4);
         auto child2 = std::make_shared<Triangle>(point0, point4, point2);

@@ -23,15 +23,15 @@ bool IsBetween(Point2d point1, Point2d point2, Point2d point) {
     return false;
 }
 
-void Triangle::Divide(Point2d* point) {
+void Triangle::Divide(const IndexedPoint& point) {
     auto deepest = FindDeepest(point).lock();
 
     for (int i0 = 0; i0 < 3; ++i0) {
         int i1 = (i0 + 1) % 3;
         int i2 = (i0 + 2) % 3;
 
-        Point2d* point0 = deepest->points[i0];
-        Point2d* point1 = deepest->points[i1];
+        IndexedPoint&& point0 = deepest->points[i0];
+        IndexedPoint&& point1 = deepest->points[i1];
 
         if (IsBetween(*(point0), *(point1), *point)) {
             auto neighbor = deepest->neighbors[i0].lock();
@@ -40,8 +40,8 @@ void Triangle::Divide(Point2d* point) {
             int j0 = (j2 + 1) % 3;
             int j1 = (j2 + 2) % 3;
 
-            Point2d* point2 = deepest->points[i2];
-            Point2d* point4 = neighbor->points[j2];
+            IndexedPoint&& point2 = deepest->points[i2];
+            IndexedPoint&& point4 = neighbor->points[j2];
 
             auto child1 = std::make_shared<Triangle>(point, point1, point2);
             auto child2 = std::make_shared<Triangle>(point, point2, point0);
@@ -84,8 +84,8 @@ void Triangle::Divide(Point2d* point) {
         for (int i0 = 0; i0 < 3; ++i0) {
             int i1 = (i0 + 1) % 3;
 
-            Point2d* point0 = deepest->points[i0];
-            Point2d* point1 = deepest->points[i1];
+            IndexedPoint&& point0 = deepest->points[i0];
+            IndexedPoint&& point1 = deepest->points[i1];
 
             auto child = std::make_shared<Triangle>(point, point0, point1);
 

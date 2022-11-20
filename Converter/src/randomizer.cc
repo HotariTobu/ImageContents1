@@ -5,8 +5,9 @@
 #include <algorithm>
 #include <random>
 
-void Randomize(std::vector<Point2d>& points) {
+template<typename T>
+void Randomize(T& container) {
   std::random_device seed_gen;
   std::mt19937 engine(seed_gen());
-  std::shuffle(points.begin(), points.end(), engine);
+  std::shuffle(std.begin(container), std.end(container), engine);
 }
