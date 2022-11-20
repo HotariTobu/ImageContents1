@@ -103,10 +103,10 @@ int main() {
         n1->neighbors[1] = c1;
 
         auto [r2, d2] = MakeRoot(&p0, &p1, &p2);
-        auto [n2, d3] = MakeRoot(&p1, &p4, &p2);
+        auto [n2, d3] = MakeRoot(&p2, &p1, &p4);
         
         r2->neighbors[1] = n2;
-        n2->neighbors[2] = r2;
+        n2->neighbors[0] = r2;
 
         r2->Divide(&p3);
 
