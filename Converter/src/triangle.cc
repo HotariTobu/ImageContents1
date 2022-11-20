@@ -2,6 +2,8 @@
 
 #include "../include/triangle.h"
 
+#include <sstream>
+
 Triangle::Triangle(Point2d* p0, Point2d* p1, Point2d* p2) {
     points[0] = p0;
     points[1] = p1;
@@ -19,6 +21,17 @@ bool Triangle::HasChild() const {
     }
     
     return false;
+}
+
+std::string Triangle::Describe() const noexcept {
+    std::stringstream stream;
+
+    for (int i = 0; i < 3; i++) {
+        Point2d point = *points[i];
+        stream << ", (" << point.x << ", " << point.y << ")";
+    }
+
+    return stream.str().substr(2);
 }
 
 bool HasSamePoints(const Triangle& triangle1, const Triangle& triangle2) {

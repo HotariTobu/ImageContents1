@@ -2,34 +2,29 @@
 
 #include "../include/triangle.h"
 
-#include <algorithm>
 #include <array>
 #include <cmath>
+#include <map>
 
-std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(Point3d* p0, Point3d* p1, Point3d* p2) {
-    std::array<Point3d*, 3> points = {p0, p1, p2};
+std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(Point2d* p0, Point2d* p1, Point2d* p2) {
+    std::map<double, Point2d*> points_with_angle;
 
-    Point3d origin;
-    for (int i = 0; i < 3; i++) {
-        origin += *points[i];
-    }
-    origin /= 3;
-    
-    std::array<int, 3> indices;
-    std::array<double, 3> angles;
+    Point2d origin = (*p0 + *p1 + *p2) / 3;
+    for (Point2d* point : {p0, p1, p2}) {
+        Vector2d vector = *point - origin;
+        double angle = std::atan2(vector.y, vector.x);
 
-    for (int i = 0; i < 3; i++) {
-        indices[i] = i;
-
-        Point3d point = *points[i];
-        Vector3d vector = point - origin;
-        angles[i] = std::atan2(point.y, point.x);
+        points_with_angle.insert({angle, point});
     }
 
-    std::sort(indices.begin(), indices.end(), [angles](int i1, int i2) { return angles[i1] < angles[i2]; });
+    std::vector<Point2d*> sorted_points;
 
-    auto root_triangle = std::make_shared<Triangle>(points[indices[0]], points[indices[1]], points[indices[2]]);
-    auto dummy_triangle = std::make_shared<Triangle>(points[indices[0]], points[indices[2]], points[indices[1]]);
+    for (auto&& point_with_angle : points_with_angle) {
+        sorted_points.push_back(point_with_angle.second);
+    }
+
+    auto root_triangle = std::make_shared<Triangle>(sorted_points[0], sorted_points[1], sorted_points[2]);
+    auto dummy_triangle = std::make_shared<Triangle>(sorted_points[0], sorted_points[2], sorted_points[1]);
 
     root_triangle->neighbors[0] = dummy_triangle;
     root_triangle->neighbors[1] = dummy_triangle;

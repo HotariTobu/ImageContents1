@@ -30,8 +30,9 @@ struct Vector2d {
     Vector2d& operator+=(const Vector2d vector);
     Vector2d& operator-=(const Vector2d vector);
     Vector2d& operator*=(const Vector2d vector);
-    Vector2d& operator*=(const double value);
     Vector2d& operator/=(const Vector2d vector);
+    
+    Vector2d& operator*=(const double value);
     Vector2d& operator/=(const double value);
 };
 

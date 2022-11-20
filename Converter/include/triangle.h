@@ -4,6 +4,7 @@
 #define __TRIANGLE_H__
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "point2d.h"
@@ -116,6 +117,13 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     Return list of leaves.
     */
     std::vector<std::weak_ptr<Triangle>> GetAllLeaves() const;
+
+    /*
+    Describe the triangle with values of `points`.
+    [return]
+    Return the description of the triangle.
+    */
+    std::string Describe() const noexcept;
 };
 
 bool operator==(const Triangle& triangle1, const Triangle& triangle2);
@@ -132,6 +140,6 @@ points to initialize the triangles
 - 1st triangle: the root
 - 2nd triangle: the dummy
 */
-std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(Point3d* p0, Point3d* p1, Point3d* p2);
+std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(Point2d* p0, Point2d* p1, Point2d* p2);
 
 #endif // __TRIANGLE_H__

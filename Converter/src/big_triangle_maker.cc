@@ -3,7 +3,6 @@
 #include "../include//big_triangle_maker.h"
 
 #include <cmath>
-#include <tuple>
 
 std::tuple<Point2d, Point2d, Point2d> MakeBigTriangle(const std::vector<Point2d>& points) {
     std::pair<double, double> rect_start = {points[0].x, points[0].y};
@@ -35,5 +34,5 @@ std::tuple<Point2d, Point2d, Point2d> MakeBigTriangle(const std::vector<Point2d>
     float x3 = center.first;  
     float y3 = center.second + 2 * r;  
     Point2d p3 = Point2d{x3, y3}; 
-    return std::make_tuple(p1, p2, p3);
+    return {p1, p2, p3};
 }
