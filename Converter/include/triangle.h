@@ -4,6 +4,7 @@
 #define __TRIANGLE_H__
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "point2d.h"
@@ -116,6 +117,13 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     Return list of leaves.
     */
     std::vector<std::weak_ptr<Triangle>> GetAllLeaves() const;
+
+    /*
+    Describe the triangle with values of `points`.
+    [return]
+    Return the description of the triangle.
+    */
+    std::string Describe() const noexcept;
 };
 
 bool operator==(const Triangle& triangle1, const Triangle& triangle2);
