@@ -22,8 +22,6 @@ extern double separator_threshold;
 
 static int trials_number;
 
-constexpr double nan = std::numeric_limits<double>::quiet_NaN();
-
 std::string threshold_suffix;
 
 void init(std::map<std::string, std::string> option) {
@@ -39,6 +37,8 @@ void init(std::map<std::string, std::string> option) {
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
+    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
+
     std::string destination_file_path_ground = destination_base_path + FILENAME_SUFFIX + threshold_suffix + "_ground.csv";
     std::string destination_file_path_building = destination_base_path + FILENAME_SUFFIX + threshold_suffix + "_building.csv";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path_ground << ", " << destination_file_path_building << std::endl;

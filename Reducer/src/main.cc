@@ -21,8 +21,6 @@
 
 extern double searcher_threshold;
 
-constexpr double nan = std::numeric_limits<double>::quiet_NaN();
-
 std::string threshold_suffix;
 
 void init(std::map<std::string, std::string> option) {
@@ -31,6 +29,8 @@ void init(std::map<std::string, std::string> option) {
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
+    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
+
     std::string destination_file_path = destination_base_path + FILENAME_SUFFIX + threshold_suffix + ".csv";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 

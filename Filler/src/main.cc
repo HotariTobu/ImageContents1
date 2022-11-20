@@ -26,12 +26,12 @@
     #define FILENAME_SUFFIX_2 "_MEDIAN"
 #endif
 
-constexpr double nan = std::numeric_limits<double>::quiet_NaN();
-
 void init(std::map<std::string, std::string> option) {
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
+    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
+
     std::string destination_file_path = destination_base_path + FILENAME_SUFFIX_1 + FILENAME_SUFFIX_2 + ".csv";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
     
