@@ -5,6 +5,7 @@
 #include <array>
 #include <cmath>
 #include <map>
+#include <vector>
 
 std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(Point2d* p0, Point2d* p1, Point2d* p2) {
     std::map<double, Point2d*> points_with_angle;

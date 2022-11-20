@@ -5,7 +5,7 @@
 
 #include <memory>
 #include <string>
-#include <vector>
+#include <list>
 
 #include "point2d.h"
 #include "circle.h"
@@ -116,7 +116,7 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     [return]
     Return list of leaves.
     */
-    std::vector<std::weak_ptr<Triangle>> GetAllLeaves() const;
+    std::list<std::weak_ptr<Triangle>> GetAllLeaves() const;
 
     /*
     Describe the triangle with values of `points`.

@@ -4,8 +4,8 @@
 
 #include <stack>
 
-std::vector<std::weak_ptr<Triangle>> Triangle::GetAllLeaves() const {
-    std::vector<std::weak_ptr<Triangle>> leaves;
+std::list<std::weak_ptr<Triangle>> Triangle::GetAllLeaves() const {
+    std::list<std::weak_ptr<Triangle>> leaves;
 
     std::stack<std::weak_ptr<Triangle>> triangle_stack;
     triangle_stack.push(std::const_pointer_cast<Triangle>(shared_from_this()));

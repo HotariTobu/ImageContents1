@@ -28,12 +28,11 @@ bool EqualsAsSet(T c1, T c2) {
 }
 
 template<typename T>
-std::vector<std::shared_ptr<T>> SharedCast(std::vector<std::weak_ptr<T>> container) {
-    int elements_count = container.size();
-    std::vector<std::shared_ptr<T>> result(elements_count);
+std::list<std::shared_ptr<T>> SharedCast(std::list<std::weak_ptr<T>> container) {
+    std::list<std::shared_ptr<T>> result;
 
-    for (int i = 0; i < elements_count; ++i) {
-        result[i] = container[i].lock();
+    for (auto&& element : container) {
+        result.push_back(element.lock());
     }
 
     return result;
@@ -192,7 +191,7 @@ int main() {
 
         auto result_leaves = r2->GetAllLeaves();
 
-        std::vector<std::weak_ptr<Triangle>> answer_leaves = {
+        std::list<std::weak_ptr<Triangle>> answer_leaves = {
             r2->children[0],
             r2->children[2],
             n2->children[0],
