@@ -133,40 +133,55 @@ std::list<Point3d> AddGroundPoints(const std::map<Point2d, Attribute>& data, con
 
     std::list<Point3d> additional_points;
 
-    int i = 0;
+    auto points_label_ite = points_label.begin();
+    int additional_points_count = 0;
     for (auto [base_point, attribute] : data) {
-        auto point_label = points_label[i];
+        auto point_label = *points_label_ite;
         double base_z = data.at(base_point).z;
 
         auto edges_label = GetEdgesLabel(point_label, base_point, base_z, data);
         if (!IsCycled(edges_label)) {
+            ++points_label_ite;
             continue;
         }
 
         int candidates_count = SetFlags(edges_label);
         if (candidates_count == 0) {
+            ++points_label_ite;
             continue;
         }
         
         auto min_ite = std::min_element(edges_label.begin(), edges_label.end(), [](const PointSetWithEdge& l1, const PointSetWithEdge& l2) {
             return l1.edge.z < l2.edge.z;
         });
-        int ground_point_index = points.size();
-        points.push_back(points[i]);
-        z_values.push_back(z_values[i] + min_ite->edge.z);
 
-        
-        ++i;
+        int ground_point_index = points_count + points.size();
+        Point2d ground_point = {
+            base_point.x,
+            base_point.y,
+            base_z + min_ite->edge.z
+        };
+
+        additional_points.push_back(ground_point);
+
+        for (auto&& edge_label : edge_labels) {
+            int i0 = edge_label.point_index;
+            int i1 = (i0 + 1) % 3;
+            int i2 = (i0 + 2) % 3;
+
+
+        }
+
+        IndexedPoint ground_point_set = {ground_point_index, &additional_points.back()}
+        point_set_list.push_back(inde)
+
+        ++points_label_ite;
     }
 
     for (int i = 0; i < points_count; ++i) {
 
         for (int j = 0; j < candidates_count; ++j) {
             int candidate = candidates[j];
-
-            int i0 = edge_labels[candidate].point_index;
-            int i1 = (i0 + 1) % 3;
-            int i2 = (i0 + 2) % 3;
 
             int index_set_index = edge_labels[candidate].index_set_index;
             IndexSet index_set = indices[index_set_index];

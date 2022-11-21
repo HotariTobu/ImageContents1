@@ -65,7 +65,7 @@ void process_file(const std::string source_file_path, const std::string destinat
 
     auto additional_points = AddGroundPoints(data, leaf_point_set_list);
 
-    WriteWRL(destination_file_path, points_with_type, triangle_indices);
+    WriteWRL(destination_file_path, data, additional_points, triangle_indices);
 }
 
 /*
