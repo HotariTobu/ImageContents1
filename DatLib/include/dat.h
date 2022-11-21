@@ -5,16 +5,18 @@
 
 #include <string>
 #include <map>
+#include <utility>
 
 #include "point2d.h"
+#include "rectangle.h"
 
 template<typename T>
-std::map<Point2d, T> ReadDAT(const std::string& path);
+std::pair<std::map<Point2d, T>, Rectangle> ReadDAT(const std::string& path);
 
 template<typename T>
 void WriteDAT(const std::string& path, const std::map<Point2d, T>& data);
 
-typename std::map<Point2d, double> ReadDAT(const std::string& path);
+typename std::pair<std::map<Point2d, T>, Rectangle> ReadDAT(const std::string& path);
 typename void WriteDAT(const std::string& path, const std::map<Point2d, double>& data);
 
 #endif // __DAT_H__

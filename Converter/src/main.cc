@@ -31,7 +31,7 @@ void process_file(const std::string source_file_path, const std::string destinat
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
 
-    auto data = ReadDAT<Attribute>(source_file_path);
+    auto [data, _] = ReadDAT<Attribute>(source_file_path);
 
     int data_size = data.size();
     if (data_size == 0) {
