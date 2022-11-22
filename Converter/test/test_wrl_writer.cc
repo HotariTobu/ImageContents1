@@ -8,7 +8,12 @@
 #include "point3d.h"
 #include "../include/wrl_writer.h"
 
-std::pair<std::list<IndexedPoint2dSet>, std::vector<IndexedPoint2d>> GetPointSetList(int points_count, const std::list<IndexSet>& index_set_list) {
+bool CanPass(const char* answer, const std::map<Point2d, Attribute>& data, const std::list<IndexSet>& index_set_list, const std::list<std::pair<Point2d, double>>& additional_points = {}, const std::list<IndexSet>& additional_index_set_list = {}) {
+    const char* filename = "test.wrl";
+
+
+    int points_count = data.size();
+
     std::vector<IndexedPoint2d> points;
     points.reserve(points_count);
 
@@ -25,16 +30,9 @@ std::pair<std::list<IndexedPoint2dSet>, std::vector<IndexedPoint2d>> GetPointSet
         for (int i = 0; i < 3; i++) {
             point_set[i] = &points[index_set[i]];
         }
-        
+        point_set_list.push_back(point_set);
     }
     
-    return {point_set_list, points};
-}
-
-bool CanPass(const char* answer, const std::map<Point2d, Attribute>& data, const std::list<IndexSet>& index_set_list, const std::list<std::pair<Point2d, double>>& additional_points = {}, const std::list<IndexSet>& additional_index_set_list = {}) {
-    const char* filename = "test.wrl";
-
-    auto [point_set_list, points] = GetPointSetList(data.size(), index_set_list);
 
     WriteWRL(filename, data, point_set_list, additional_points, additional_index_set_list);
 
@@ -63,8 +61,8 @@ Shape {
             color [
 0 1 0,
 1 0 0,
-0 1 0,
 1 1 1,
+0 1 0,
 0 1 0,
             ]
         }
@@ -72,8 +70,8 @@ Shape {
             point [
 0 3 -1,
 1 6 -0,
-2 9 -2,
 1 7 -2,
+2 9 -2,
 2 0 -2,
             ]
         }
@@ -87,8 +85,8 @@ Shape {
         {
             {{0, 1}, {3, PointType::GROUND}},
             {{1, 0}, {6, PointType::BUILDING}},
-            {{2, 2}, {9, PointType::GROUND}},
             {{1, 2}, {7, PointType::NONE}},
+            {{2, 2}, {9, PointType::GROUND}},
         },
         {
             {0, 1, 2},
