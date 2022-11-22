@@ -18,7 +18,7 @@ IndexedPoint2d MakePoint(double x, double y) {
     return {index++, raw_point};
 }
 
-std::tuple<std::map<Point2d, Attribute>, std::list<IndexedPoint2dSet>, std::vector<IndexedPoint2d>> GetParams(const std::vector<Point3d>& points_3d, const std::vector<IndexSet>& index_set_list) {
+bool CanPass(const std::vector<Point3d>& points_3d, const std::vector<IndexSet>& index_set_list, const std::vector<std::vector<Point3d>>& answer) {
     std::map<Point2d, Attribute> data;
 
     int points_count = points_3d.size();
@@ -55,12 +55,7 @@ std::tuple<std::map<Point2d, Attribute>, std::list<IndexedPoint2dSet>, std::vect
         }
         
     }
-    
-    return {data, point_set_list, points};
-}
 
-bool CanPass(const std::vector<Point3d>& points, const std::vector<IndexSet>& index_set_list, const std::vector<std::vector<Point3d>>& answer) {
-    auto [data, point_set_list, _] = GetParams(points, index_set_list);
 
     WriteWRL("before.wrl", data, point_set_list);
     
