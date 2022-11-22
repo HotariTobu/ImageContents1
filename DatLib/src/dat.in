@@ -3,17 +3,14 @@
 #include "../include/dat.h"
 
 #include <fstream>
+#include <limits>
 
 template<typename T>
 std::pair<std::map<Point2d, T>, Rectangle> ReadDAT(const std::string& path) {
     std::ifstream ifs(path);
 
     std::map<Point2d, T> data;
-
-    double min_x = 0;
-    double min_y = 0;
-    double max_x = 0;
-    double max_y = 0;
+    Rectangle rectangle;
 
     while (ifs.good()) {
         double x, y;
@@ -23,24 +20,22 @@ std::pair<std::map<Point2d, T>, Rectangle> ReadDAT(const std::string& path) {
 
         data.insert({{x, y}, t});
 
-        if (min_x > x) {
-            min_x = x;
+        if (rectangle.min_x > x) {
+            rectangle.min_x = x;
         }
-        else if (max_x < x) {
-            max_x = x;
+        else if (rectangle.max_x < x) {
+            rectangle.max_x = x;
         }
 
-        if (min_y > y) {
-            min_y = y;
+        if (rectangle.min_y > y) {
+            rectangle.min_y = y;
         }
-        else if (max_y < y) {
-            max_y = y;
+        else if (rectangle.max_y < y) {
+            rectangle.max_y = y;
         }
     }
 
     ifs.close();
-
-    Rectangle rectangle(min_x, min_y, max_x - min_x + 1, max_y - min_y + 1);
 
     return {data, rectangle};
 }
@@ -55,3 +50,6 @@ void WriteDAT(const std::string& path, const std::map<Point2d, T>& data) {
 
     ofs.close();
 }
+
+template std::pair<std::map<Point2d, double>, Rectangle> ReadDAT(const std::string& path);
+template void WriteDAT(const std::string& path, const std::map<Point2d, double>& data);

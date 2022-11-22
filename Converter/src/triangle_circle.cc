@@ -19,9 +19,9 @@ double CosToSin(const double cos){
 }
 
 Circle Triangle::GetIncircle() {
-    Vector2d v_a = *points[1] - *points[2];
-    Vector2d v_b = *points[2] - *points[0];
-    Vector2d v_c = *points[0] - *points[1];
+    Vector2d v_a = **points[1] - **points[2];
+    Vector2d v_b = **points[2] - **points[0];
+    Vector2d v_c = **points[0] - **points[1];
 
     double d1 = v_a.Length();
     double d2 = v_b.Length();
@@ -29,28 +29,28 @@ Circle Triangle::GetIncircle() {
     double d123 = d1 + d2 + d3;
 
     Point2d center;
-    center.x = (d1 * points[0]->x + d2 * points[1]->x + d3 * points[2]->x) / d123;
-    center.y = (d1 * points[0]->y + d2 * points[1]->y + d3 * points[2]->y) / d123;
+    center.x = (d1 * (*points[0])->x + d2 * (*points[1])->x + d3 * (*points[2])->x) / d123;
+    center.y = (d1 * (*points[0])->y + d2 * (*points[1])->y + d3 * (*points[2])->y) / d123;
     double r = (2 * HeronsFormula(d1, d2, d3)) / (d123);
     return Circle{center, r};
 }
 
 Circle Triangle::GetCircumcircle() {
-    Vector2d v_bc = *points[1] - *points[2];
-    Vector2d v_ca = *points[2] - *points[0];
-    Vector2d v_ab = *points[0] - *points[1];
+    Vector2d v_bc = **points[1] - **points[2];
+    Vector2d v_ca = **points[2] - **points[0];
+    Vector2d v_ab = **points[0] - **points[1];
 
     double a = v_bc.Length();
     double b = v_ca.Length();
     double c = v_ab.Length();
     
-    Vector2d v_a = points[0]->ToVector();
-    Vector2d v_b = points[1]->ToVector();
-    Vector2d v_c = points[2]->ToVector();
+    Vector2d v_a = (*points[0])->ToVector();
+    Vector2d v_b = (*points[1])->ToVector();
+    Vector2d v_c = (*points[2])->ToVector();
     
-    double cos_a = CalculateCos(*points[1] - *points[0], *points[2] - *points[0]);
-    double cos_b = CalculateCos(*points[0] - *points[1], *points[2] - *points[1]);
-    double cos_c = CalculateCos(*points[0] - *points[2], *points[1] - *points[2]);
+    double cos_a = CalculateCos(**points[1] - **points[0], **points[2] - **points[0]);
+    double cos_b = CalculateCos(**points[0] - **points[1], **points[2] - **points[1]);
+    double cos_c = CalculateCos(**points[0] - **points[2], **points[1] - **points[2]);
 
     double sin_a = CosToSin(cos_a);
     double sin_b = CosToSin(cos_b);

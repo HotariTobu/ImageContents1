@@ -4,11 +4,13 @@
 #define __RANDOMIZER_H__
 
 /*
-Randomize the order of point vector.
+Randomize the order of a container.
 [params]
-- points: vector of points
+- points: the container
 */
 template<typename T>
 void Randomize(T& container);
+
+#include "../src/randomizer.in"
 
 #endif // __RANDOMIZER_H__

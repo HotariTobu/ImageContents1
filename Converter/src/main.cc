@@ -10,7 +10,7 @@
 #include "../include/attribute.h"
 #include "../include/big_triangle_maker.h"
 #include "../include/ground_points_adder.h"
-#include "../include/indexed_point.h"
+#include "../include/indexed_point2d.h"
 #include "../include/maps_combiner.h"
 #include "../include/randomizer.h"
 #include "../include/root_maker.h"
@@ -38,24 +38,29 @@ void process_file(const std::string source_file_path, const std::string destinat
         return;
     }
 
-    std::vector<IndexedPoint> points(data_size);
+    std::vector<IndexedPoint2d> points;
+    points.reserve(data_size);
+    
     int i = 0;
-    for (auto ite = data.begin(); ite != data.end(); ++ite) {
-        points[i] = {i, &ite->first};
+    for (auto&& [point_2d, _] : data) {
+        IndexedPoint2d point;
+        point.index = i;
+        point.point = &point_2d;
+        points[i] = point;
         ++i;
     }
 
     Randomize(points);
 
     auto [p0, p1, p2] = MakeBigTriangle(points);
-    IndexedPoint b0 = {-1, &p0};
-    IndexedPoint b1 = {-2, &p1};
-    IndexedPoint b2 = {-3, &p2};
+    IndexedPoint2d b0 = {-1, &p0};
+    IndexedPoint2d b1 = {-2, &p1};
+    IndexedPoint2d b2 = {-3, &p2};
     
-    auto [root_triangle, dummy_triangle] = MakeRoot(b0, b1, b2);
+    auto [root_triangle, dummy_triangle] = MakeRoot(&b0, &b1, &b2);
 
     for (auto&& point : points) {
-        root_triangle->Divide(point);
+        root_triangle->Divide(&point);
     }
 
     auto leaf_point_set_list = root_triangle->ListLeafPointSet();
@@ -63,9 +68,9 @@ void process_file(const std::string source_file_path, const std::string destinat
     root_triangle.reset();
     dummy_triangle.reset();
 
-    auto additional_points = AddGroundPoints(data, leaf_point_set_list);
+    auto [additional_points, additional_index_set_list] = AddGroundPoints(data, leaf_point_set_list);
 
-    WriteWRL(destination_file_path, data, additional_points, triangle_indices);
+    WriteWRL(destination_file_path, data, leaf_point_set_list, additional_points, additional_index_set_list);
 }
 
 /*

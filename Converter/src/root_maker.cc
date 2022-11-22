@@ -7,18 +7,18 @@
 #include <map>
 #include <vector>
 
-std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(const IndexedPoint& p0, const IndexedPoint& p1, const IndexedPoint& p2) {
-    std::map<double, IndexedPoint> points_with_angle;
+std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(const IndexedPoint2d* p0, const IndexedPoint2d* p1, const IndexedPoint2d* p2) {
+    std::map<double, const IndexedPoint2d*> points_with_angle;
 
-    Point2d origin = (*p0 + *p1 + *p2) / 3;
+    Point2d origin = (**p0 + **p1 + **p2) / 3;
     for (auto&& point : {p0, p1, p2}) {
-        Vector2d vector = *point - origin;
+        Vector2d vector = **point - origin;
         double angle = std::atan2(vector.y, vector.x);
 
         points_with_angle.insert({angle, point});
     }
 
-    std::vector<IndexedPoint> sorted_points;
+    std::vector<const IndexedPoint2d*> sorted_points;
 
     for (auto&& point_with_angle : points_with_angle) {
         sorted_points.push_back(point_with_angle.second);

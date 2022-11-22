@@ -3,19 +3,20 @@
 #include <cassert>
 
 #include "near.h"
-#include "random.h"
 #include "../include/triangle.h"
 
+IndexedPoint2d MakePoint(double x, double y) {
+    static int index = 0;
+    auto raw_point = new Point2d;
+    raw_point->x = x;
+    raw_point->y = y;
+    return {index++, raw_point};
+}
+
 int main() {
-    Random random(0, 1);
-
-    Point2d p0 = {0, 0};
-    Point2d p1 = {3, 0};
-    Point2d p2 = {0, 3};
-
-    Point2d p3 = {1, 1};
-    Point2d p4 = {8, 8};
-    Point2d p5 = {1.5, 1.5};
+    auto p0 = MakePoint(0, 0);
+    auto p1 = MakePoint(3, 0);
+    auto p2 = MakePoint(0, 3);
 
     auto r1 = std::make_shared<Triangle>(&p0, &p1, &p2);
     

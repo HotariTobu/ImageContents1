@@ -16,7 +16,7 @@ points to initialize the triangles
 - 1st triangle: the root
 - 2nd triangle: the dummy
 */
-std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(const IndexedPoint& p0, const IndexedPoint& p1, const IndexedPoint& p2);
+std::pair<std::shared_ptr<Triangle>, std::shared_ptr<Triangle>> MakeRoot(const IndexedPoint2d* p0, const IndexedPoint2d* p1, const IndexedPoint2d* p2);
 
 
 #endif // __ROOT_MAKER_H__

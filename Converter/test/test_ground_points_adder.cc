@@ -2,8 +2,6 @@
 
 #include <cassert>
 #include <filesystem>
-#include <limits>
-#include <set>
 
 #include "point3d.h"
 #include "../include/ground_points_adder.h"
@@ -12,81 +10,97 @@
 
 extern double ground_point_threshold;
 
-Map2d<std::pair<double, PointType>> GetPointTypeMap(const std::vector<Point3d>& points) {
-    int min_x = std::numeric_limits<int>().max();
-    int min_y = std::numeric_limits<int>().max();
-    int max_x = std::numeric_limits<int>().min();
-    int max_y = std::numeric_limits<int>().min();
-
-    for (Point3d point : points) {
-        if (min_x > point.x) {
-            min_x = point.x;
-        }
-        else if (max_x < point.x) {
-            max_x = point.x;
-        }
-
-        if (min_y > point.y) {
-            min_y = point.y;
-        }
-        else if (max_y < point.y) {
-            max_y = point.y;
-        }
-    }
-
-    int width = max_x - min_x + 3;
-    int height = max_y - min_y + 3;
-
-    Map2d<std::pair<double, PointType>> result;
-    result.x = min_x;
-    result.y = min_y;
-    result.data = std::vector<std::vector<std::pair<double, PointType>>>(height, std::vector<std::pair<double, PointType>>(width, {0, PointType::NONE}));
-
-    return result;
+IndexedPoint2d MakePoint(double x, double y) {
+    static int index = 0;
+    auto raw_point = new Point2d;
+    raw_point->x = x;
+    raw_point->y = y;
+    return {index++, raw_point};
 }
 
-bool CanPass(std::vector<Point3d> points, std::vector<IndexSet> indices, std::set<std::vector<Point3d>> answer) {
-    int index_set_count = indices.size();
-    auto point_types = GetPointTypeMap(points);
+std::tuple<std::map<Point2d, Attribute>, std::list<IndexedPoint2dSet>, std::vector<IndexedPoint2d>> GetParams(const std::vector<Point3d>& points_3d, const std::vector<IndexSet>& index_set_list) {
+    std::map<Point2d, Attribute> data;
 
-    std::vector<Point2d> points_2d(points.size());
-    std::vector<double> z_values(points.size());
-    for (int i = 0; i < points.size(); i++) {
-        points_2d[i] = {
-            points[i].x,
-            points[i].y
+    int points_count = points_3d.size();
+    std::vector<IndexedPoint2d> points;
+    points.reserve(points_count);
+
+    for (auto&& point_3d : points_3d) {
+        Point2d point_2d = {
+            point_3d.x,
+            point_3d.y,
         };
-        z_values[i] = points[i].z;
+
+        Attribute attribute;
+        attribute.type = PointType::NONE;
+        attribute.z = point_3d.z;
+
+        auto [pair, _] = data.insert({point_2d, attribute});
+
+        IndexedPoint2d point;
+        point.point = &(*pair).first;
+        points.push_back(point);
     }
 
-    WriteWRL("before.wrl", points_2d, z_values, indices, point_types);
-
-    AddGroundPoints(points_2d, z_values, indices);
-
-    points.clear();
-    points.resize(z_values.size());
-    for (int i = 0; i < points.size(); i++) {
-        points[i] = {
-            points_2d[i].x,
-            points_2d[i].y,
-            z_values[i]
-        };
+    for (int i = 0; i < points_count; i++) {
+        points[i].index = i;
     }
+    
+    std::list<IndexedPoint2dSet> point_set_list;
 
-    WriteWRL("after.wrl", points_2d, z_values, indices, point_types);
+    for (auto &&index_set : index_set_list) {
+        IndexedPoint2dSet point_set;
+        for (int i = 0; i < 3; i++) {
+            point_set[i] = &points[index_set[i]];
+        }
+        
+    }
+    
+    return {data, point_set_list, points};
+}
+
+bool CanPass(const std::vector<Point3d>& points, const std::vector<IndexSet>& index_set_list, const std::vector<std::vector<Point3d>>& answer) {
+    auto [data, point_set_list, _] = GetParams(points, index_set_list);
+
+    WriteWRL("before.wrl", data, point_set_list);
+    
+    auto [additional_points, additional_index_set_list] = AddGroundPoints(data, point_set_list);
+
+    WriteWRL("after.wrl", data, point_set_list, additional_points, additional_index_set_list);
 
     std::filesystem::remove("before.wrl");
     std::filesystem::remove("after.wrl");
 
-    std::set<std::vector<Point3d>> result;
-    for (IndexSet index_set : indices) {
-        std::vector<Point3d> point_set;
+    std::vector<std::vector<Point3d>> result;
+    result.reserve(point_set_list.size() + additional_index_set_list.size());
+
+    int data_size = data.size();
+    auto additional_points_vector_edition = std::vector(additional_points.begin(), additional_points.end());
+
+    for (auto&& point_set : point_set_list) {
+        std::vector<Point3d> raw_point_set;
 
         for (int i = 0; i < 3; ++i) {
-            point_set.push_back(points[index_set[i]]);
+            IndexedPoint2d point = *(point_set[i]);
+            Point3d point_3d;
+
+            if (point.index < data_size) {
+                Point2d point_2d = *const_cast<Point2d*>(point.point);
+                point_3d.x = point_2d.x;
+                point_3d.y = point_2d.y;
+                point_3d.z = data.at(point_2d).z;
+            }
+            else {
+                auto [point_2d, z] = additional_points_vector_edition[point.index - data_size];
+                point_3d.x = point_2d.x;
+                point_3d.y = point_2d.y;
+                point_3d.z = z;
+            }
+
+            raw_point_set[i] = point_3d;
         }
 
-        result.insert(point_set);
+        result.push_back(raw_point_set);
     }
     
     return result == answer;

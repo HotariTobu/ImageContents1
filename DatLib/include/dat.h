@@ -16,7 +16,6 @@ std::pair<std::map<Point2d, T>, Rectangle> ReadDAT(const std::string& path);
 template<typename T>
 void WriteDAT(const std::string& path, const std::map<Point2d, T>& data);
 
-typename std::pair<std::map<Point2d, T>, Rectangle> ReadDAT(const std::string& path);
-typename void WriteDAT(const std::string& path, const std::map<Point2d, double>& data);
+#include "../src/dat.in"
 
 #endif // __DAT_H__

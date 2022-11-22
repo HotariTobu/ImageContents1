@@ -4,7 +4,7 @@
 
 #include <sstream>
 
-Triangle::Triangle(const IndexedPoint& p0, const IndexedPoint& p1, const IndexedPoint& p2) {
+Triangle::Triangle(const IndexedPoint2d* p0, const IndexedPoint2d* p1, const IndexedPoint2d* p2) {
     points[0] = p0;
     points[1] = p1;
     points[2] = p2;
@@ -27,7 +27,7 @@ std::string Triangle::Describe() const noexcept {
     std::stringstream stream;
 
     for (int i = 0; i < 3; i++) {
-        Point2d point = *points[i];
+        Point2d point = **(points[i]);
         stream << ", (" << point.x << ", " << point.y << ")";
     }
 

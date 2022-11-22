@@ -2,25 +2,24 @@
 
 #include <cassert>
 #include <ctime>
+#include <vector>
 
 #include "../include/randomizer.h"
 
 bool CanPass() {
-    constexpr int points_count = 20;
-    std::vector<Point2d> points;
+    constexpr int count = 20;
 
-    for (int i = 0; i < points_count; i++) {
-        Point2d point;
-        point.x = rand();
-        point.y = rand();
-        points.push_back(point);
+    std::vector<int> values;
+
+    for (int i = 0; i < count; i++) {
+        values.push_back(rand());
     }
     
-    std::vector<Point2d> clone = points;
+    std::vector<int> clone = values;
 
     Randomize(clone);
 
-    return points != clone;
+    return values != clone;
 }
 
 int main() {
