@@ -37,7 +37,7 @@ int main() {
     auto p2 = MakePoint(0, 3);
 
     auto p3 = MakePoint(1, 1);
-    auto p4 = MakePoint(8, 8);
+    auto p4 = MakePoint(3, 3);
 
     auto [r2, d0] = MakeRoot(&p0, &p1, &p2);
     auto [n2, d1] = MakeRoot(&p1, &p4, &p2);
