@@ -2,6 +2,20 @@
 
 #include "../include/attribute.h"
 
+#include <limits>
+
+Attribute::Attribute() {
+    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
+
+    this->z = nan;
+    this->type = PointType::NONE;
+}
+
+Attribute::Attribute(double z, PointType type) {
+    this->z = z;
+    this->type = type;
+}
+
 std::istream& operator>>(std::istream& is, Attribute& attribute) {
     int type;
     is >> attribute.z >> type;

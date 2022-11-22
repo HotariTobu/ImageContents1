@@ -10,6 +10,9 @@
 struct Attribute {
     double z;
     PointType type;
+
+    Attribute();
+    Attribute(double z, PointType type);
 };
 
 std::istream& operator>>(std::istream& is, Attribute& attribute);
