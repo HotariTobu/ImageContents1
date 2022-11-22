@@ -2,9 +2,18 @@
 
 #include "../include/rectangle.h"
 
-Rectangle::Rectangle(double x, double y, double width, double height) {
-    this->x = x;
-    this->y = y;
-    this->width = width;
-    this->height = height;
+#include <limits>
+
+Rectangle::Rectangle() {
+    this->min_x = std::numeric_limits<double>::max();
+    this->min_y = std::numeric_limits<double>::max();
+    this->max_x = std::numeric_limits<double>::min();
+    this->max_y = std::numeric_limits<double>::min();
+}
+
+Rectangle::Rectangle(double min_x, double min_y, double max_x, double max_y) {
+    this->min_x = min_x;
+    this->min_y = min_y;
+    this->max_x = max_x;
+    this->max_y = max_y;
 }
