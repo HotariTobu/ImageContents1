@@ -7,9 +7,9 @@
 Represent a type of a point.
 */
 enum class PointType {
+    NONE,
     GROUND,
     BUILDING,
-    NONE,
 };
 
 #endif // __POINT_TYPE_H__
