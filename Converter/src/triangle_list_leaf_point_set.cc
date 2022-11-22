@@ -16,9 +16,9 @@ std::list<IndexedPoint2dSet> Triangle::ListLeafPointSet() const {
 
         if (!triangle->HasChild()) {
             leaf_point_set_list.push_back({
-                const_cast<IndexedPoint2d*>(triangle->points[0]),
-                const_cast<IndexedPoint2d*>(triangle->points[1]),
-                const_cast<IndexedPoint2d*>(triangle->points[2]),
+                *const_cast<IndexedPoint2d*>(triangle->points[0]),
+                *const_cast<IndexedPoint2d*>(triangle->points[1]),
+                *const_cast<IndexedPoint2d*>(triangle->points[2]),
             });
             continue;
         }

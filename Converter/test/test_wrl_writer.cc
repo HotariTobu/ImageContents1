@@ -28,7 +28,7 @@ bool CanPass(const char* answer, const std::map<Point2d, Attribute>& data, const
     for (auto &&index_set : index_set_list) {
         IndexedPoint2dSet point_set;
         for (int i = 0; i < 3; i++) {
-            point_set[i] = &points[index_set[i]];
+            point_set[i] = points[index_set[i]];
         }
         point_set_list.push_back(point_set);
     }

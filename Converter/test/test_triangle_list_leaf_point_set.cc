@@ -50,10 +50,10 @@ int main() {
     auto result_leaves = r2->ListLeafPointSet();
 
     std::list<IndexedPoint2dSet> answer_leaves = {
-        {&p3, &p0, &p1},
-        {&p3, &p2, &p0},
-        {&p3, &p1, &p4},
-        {&p3, &p4, &p2},
+        {p3, p0, p1},
+        {p3, p2, p0},
+        {p3, p1, p4},
+        {p3, p4, p2},
     };
 
     assert(EqualsAsSet(result_leaves, answer_leaves));

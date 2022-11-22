@@ -39,8 +39,8 @@ std::set<std::pair<const Point2d*, const Point2d*>> GetUniqueLeavesEdges(const s
 
     for (auto&& point_set : point_set_list) {
         for (int j = 0; j < 3; ++j) {
-            const Point2d* p0 = point_set[j]->point;
-            const Point2d* p1 = point_set[(j + 1) % 3]->point;
+            const Point2d* p0 = point_set[j].point;
+            const Point2d* p1 = point_set[(j + 1) % 3].point;
 
             if (*p0 < *p1) {
                 edges.insert({p0, p1});

@@ -12,12 +12,12 @@
 double ground_point_threshold;
 
 struct PointSetWithOrigin {
-    IndexedPoint2dSet* point_set;
+    IndexedPoint2dSet* point_set = nullptr;
     Point2d origin;
 };
 
 struct PointSetWithEdge {
-    IndexedPoint2dSet* point_set;
+    IndexedPoint2dSet* point_set = nullptr;
     int point_index_index;
     Vector3d edge;
     bool is_reconnected;
@@ -34,11 +34,11 @@ std::vector<PointSetWithEdge> GetEdgesLabel(const std::list<PointSetWithOrigin>&
         auto point_set = with_origin.point_set;
                 
         int j = 0;
-        while ((*point_set)[j]->point != base_point) {
+        while ((*point_set)[j].point != base_point) {
             ++j;
         }
 
-        auto another_point = *((*point_set)[(j + 1) % 3]->point);
+        auto another_point = *((*point_set)[(j + 1) % 3].point);
         Vector2d edge = another_point - *base_point;
 
         PointSetWithEdge with_edge;
@@ -112,14 +112,14 @@ std::pair<std::list<std::pair<Point2d, double>>, std::list<IndexSet>> AddGroundP
     for (auto&& point_set : point_set_list) {
         Point2d origin = {0, 0};
         for (int i = 0; i < 3; ++i) {
-            origin += **(point_set[i]);
+            origin += *(point_set[i]);
         }
         origin /= 3;
 
         PointSetWithOrigin point_set_with_origin = {&point_set, origin};
 
         for (int i = 0; i < 3; ++i) {
-            int point_index = point_set[i]->index;
+            int point_index = point_set[i].index;
             if (point_index < 0) {
                 continue;
             }
@@ -133,7 +133,7 @@ std::pair<std::list<std::pair<Point2d, double>>, std::list<IndexSet>> AddGroundP
 
     int i = 0;
     int ground_point_index = points_count;
-    for (auto [base_point, attribute] : data) {
+    for (auto&& [base_point, attribute] : data) {
         auto point_label = points_label[i];
         double base_z = data.at(base_point).z;
 
@@ -171,32 +171,32 @@ std::pair<std::list<std::pair<Point2d, double>>, std::list<IndexSet>> AddGroundP
             int point_index_index_0 = edge_label_0.point_index_index;
 
             if (edge_label_0.is_reconnected ^ edge_label_1.is_reconnected) {
-                int point_index_index_2 = (point_index_index_0 + 2) % 3;
-
                 IndexSet additional_index_set;
+                int point_index_index_2 = (point_index_index_0 + 2) % 3;
 
                 if (edge_label_0.is_reconnected) {
                     additional_index_set = {
                         ground_point_index,
-                        (*current_point_set)[point_index_index_2]->index,
-                        (*current_point_set)[point_index_index_0]->index
+                        (*current_point_set)[point_index_index_2].index,
+                        (*current_point_set)[point_index_index_0].index
                     };
                 }
                 else {
                     additional_index_set = {
                         ground_point_index,
-                        (*current_point_set)[point_index_index_0]->index,
-                        (*current_point_set)[point_index_index_2]->index
+                        (*current_point_set)[point_index_index_0].index,
+                        (*current_point_set)[point_index_index_2].index
                     };
                 }
 
                 additional_index_set_list.push_back(additional_index_set);
             }
 
-            (*current_point_set)[point_index_index_0]->index = ground_point_index;
-            (*current_point_set)[point_index_index_0]->point = &additional_points.back().first;
+            if (edge_label_0.is_reconnected) {
+                (*current_point_set)[point_index_index_0].index = ground_point_index;
+            }
         }
-        
+
         ++i;
         ++ground_point_index;
     }

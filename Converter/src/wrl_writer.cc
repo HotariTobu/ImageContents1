@@ -66,7 +66,7 @@ Shape {
 )";
 
     for (auto e : point_set_list) {
-        ofs << e[0]->index << ", " << e[1]->index << ", " << e[2]->index << ", " << "-1" << std::endl;
+        ofs << e[0].index << ", " << e[1].index << ", " << e[2].index << ", " << "-1" << std::endl;
     }
 
     for (auto e : additional_index_set_list) {
