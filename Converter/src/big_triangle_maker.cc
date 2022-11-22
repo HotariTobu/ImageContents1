@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-std::tuple<Point2d, Point2d, Point2d> MakeBigTriangle(const std::vector<IndexedPoint>& points) {
+std::tuple<Point2d, Point2d, Point2d> MakeBigTriangle(const std::vector<IndexedPoint2d>& points) {
     std::pair<double, double> rect_start = {points[0]->x, points[0]->y};
     std::pair<double, double> rect_end = {points[0]->x, points[0]->y};
     for (const auto& point : points){
