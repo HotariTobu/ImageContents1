@@ -48,7 +48,7 @@ void FloodFill(const Map2d<std::pair<double, Vector3d>>& map, std::vector<std::v
     }
 }
 
-std::vector<PointVectorSet> SearchPointGroups(const Map2d<std::pair<double, Vector3d>>& map) {
+std::vector<PointVectorSet> SearchPointGroups(const std::map<Point2d, Attribute>& data) {
     int group_count = 0;
     std::vector<std::vector<int>> group_map(map.height + 2, std::vector<int>(map.width + 2, kgroup_nan));
 
