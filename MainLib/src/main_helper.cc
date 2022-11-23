@@ -31,6 +31,8 @@ void HelpMain(const std::string option_file_path, const std::map<std::string, st
 
     if (!fs::exists(source_directory_path)) {
         std::cout << "Not exist: " << source_directory_path << std::endl;
+        std::filesystem::create_directories(source_directory_path);
+        std::cout << "Created: " << source_directory_path << std::endl;
         return;
     }
 
