@@ -5,13 +5,13 @@
 
 // Represent 3x3 values.
 struct Neighbor {
-    /*
-    Z values of neighbor.
-    1st dimension: Y-axis direction
-    2nd dimension: X-axis direction
-    Z = data[Y][X]
-    */
-    double data[3][3];
+    const double* head;
+    int stride;
+
+    Neighbor(int stride);
+
+    bool At(int x, int y, double* z) const;
+    bool IsAllNull() const;
 };
 
 bool operator==(const Neighbor neighbor1, const Neighbor neighbor2);
