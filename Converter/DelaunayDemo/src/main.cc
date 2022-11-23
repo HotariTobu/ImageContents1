@@ -4,6 +4,7 @@
 #include <chrono>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <list>
 #include <map>
 #include <random>
@@ -235,7 +236,7 @@ int main() {
     std::set<std::pair<Point2d*, Point2d*>> edges;
     std::set<std::pair<Point2d*, Point2d*>> flipped_edges = GetUniqueLeavesEdges(root_triangle);
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 1; i <= 100; i++) {
         Point2d p; 
         do {
             p = {random(), random()};
@@ -291,5 +292,7 @@ int main() {
 
         sprintf(filename, "%s/with-graph-%04d.html", directory_name, i);
         DrawGraphInHTML(filename, points, flipped_edges, root_triangle);
+
+        std::cout << "points count: " << i << std::endl;
     }
 }
