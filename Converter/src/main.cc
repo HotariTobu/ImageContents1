@@ -23,7 +23,7 @@ std::string threshold_suffix;
 
 void init(std::map<std::string, std::string> option) {
     ground_point_threshold = std::stod(option.at("ground_point_threshold"));
-    threshold_suffix = std::to_string(ground_point_threshold);
+    threshold_suffix = "_GRO" + std::to_string(ground_point_threshold);
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
