@@ -4,10 +4,10 @@
 #include <set>
 #include <string>
 
+#include "attribute.h"
 #include "dat.h"
-#include "point3d.h"
 #include "main_helper.h"
-#include "../include/attribute.h"
+#include "point3d.h"
 #include "../include/big_triangle_maker.h"
 #include "../include/ground_points_adder.h"
 #include "../include/indexed_point2d.h"

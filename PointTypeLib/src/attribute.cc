@@ -17,9 +17,25 @@ Attribute::Attribute(double z, PointType type) {
 }
 
 std::istream& operator>>(std::istream& is, Attribute& attribute) {
+    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
+
+    if (!is.good()) {
+        attribute.z = nan;
+        attribute.type = PointType::NONE;
+        return is;
+    }
+
+    is >> attribute.z;
+
+    if (!is.good()) {
+        attribute.type = PointType::NONE;
+        return is;
+    }
+
     int type;
-    is >> attribute.z >> type;
+    is >> type;
     attribute.type = static_cast<PointType>(type);
+    
     return is;
 }
 

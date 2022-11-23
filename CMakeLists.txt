@@ -19,6 +19,7 @@ add_subdirectory(MapLib)
 
 add_subdirectory(RandomLib)
 add_subdirectory(MainLib)
+add_subdirectory(PointTypeLib)
 
 add_subdirectory(Converter)
 add_subdirectory(Filler)
