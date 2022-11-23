@@ -22,7 +22,9 @@ struct ZMap {
     std::list<int> nan_point_indices;
 
     ZMap(const std::map<Point2d, double>& data, const Rectangle& rectangle);
+
     Point2d GetPoint(int index) const;
+    int GetIndex(int x, int y) const;
 };
 
 #endif // __Z_MAP_H__

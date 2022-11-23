@@ -48,7 +48,11 @@ Point2d ZMap::GetPoint(int index) const {
     int y = index / stride;
 
     return {
-        rectangle.min_x + x,
-        rectangle.min_y + y
+        rectangle.min_x + x - 1,
+        rectangle.min_y + y - 1
     };
+}
+
+int ZMap::GetIndex(int x, int y) const {
+    return x + y * stride;
 }
