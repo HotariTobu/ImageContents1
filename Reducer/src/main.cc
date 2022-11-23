@@ -21,17 +21,17 @@
 
 extern double searcher_threshold;
 
-std::string threshold_suffix;
+std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
     searcher_threshold = std::stod(option.at("searcher_threshold"));
-    threshold_suffix = std::to_string(searcher_threshold);
+    filename_suffix = std::to_string(searcher_threshold);
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
-    std::string destination_file_path = destination_base_path + FILENAME_SUFFIX + threshold_suffix + ".csv";
+    std::string destination_file_path = destination_base_path + FILENAME_SUFFIX + filename_suffix + ".csv";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
     Map2d<double> map = ReadCSV(source_file_path);

@@ -22,7 +22,7 @@ extern double separator_threshold;
 
 static int trials_number;
 
-std::string threshold_suffix;
+std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
     simulator_threshold = std::stod(option.at("simulator_threshold"));
@@ -33,14 +33,14 @@ void init(std::map<std::string, std::string> option) {
         throw std::runtime_error("`trials_number` must be more than 0.");
     }
 
-    threshold_suffix = std::to_string(simulator_threshold) + '|' + std::to_string(separator_threshold);
+    filename_suffix = FILENAME_SUFFIX + std::to_string(simulator_threshold) + '|' + std::to_string(separator_threshold);
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
-    std::string destination_file_path_ground = destination_base_path + FILENAME_SUFFIX + threshold_suffix + "_ground.csv";
-    std::string destination_file_path_building = destination_base_path + FILENAME_SUFFIX + threshold_suffix + "_building.csv";
+    std::string destination_file_path_ground = destination_base_path + filename_suffix + "_ground.csv";
+    std::string destination_file_path_building = destination_base_path + filename_suffix + "_building.csv";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path_ground << ", " << destination_file_path_building << std::endl;
 
     Map2d<double> map = ReadCSV(source_file_path);
