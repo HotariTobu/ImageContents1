@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <limits>
+#include <sstream>
 
 template<typename T>
 std::pair<std::map<Point2d, T>, Rectangle> ReadDAT(const std::string& path) {
@@ -12,11 +13,14 @@ std::pair<std::map<Point2d, T>, Rectangle> ReadDAT(const std::string& path) {
     std::map<Point2d, T> data;
     Rectangle rectangle;
 
-    while (ifs.good()) {
+    std::string line;
+    while (std::getline(ifs, line)) {
+        std::istringstream iss(line);
+        
         double x, y;
         T t;
 
-        ifs >> x >> y >> t;
+        iss >> x >> y >> t;
 
         data.insert({{x, y}, t});
 
