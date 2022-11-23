@@ -15,13 +15,14 @@ target_link_libraries(TEST_triangle_list_leaf_point_set GeometryLib)
 target_link_libraries(TEST_triangle GeometryLib)
 target_link_libraries(TEST_wrl_writer GeometryLib)
 
-target_link_libraries(TEST_wrl_writer DatLib)
-
-target_link_libraries(TEST_maps_combiner MapLib)
-
 target_link_libraries(TEST_big_triangle_maker RandomLib)
 
 target_link_libraries(TEST_ground_points_adder PointTypeLib)
+
+target_link_libraries(TEST_maps_combiner MapLib)
+target_link_libraries(TEST_maps_combiner PointTypeLib)
+
+target_link_libraries(TEST_wrl_writer DatLib)
 target_link_libraries(TEST_wrl_writer PointTypeLib)
 
 file(GLOB TRIANGLE_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle*.cc)
