@@ -3,6 +3,7 @@
 #include <cassert>
 #include <filesystem>
 #include <set>
+#include <vector>
 
 #include "point3d.h"
 #include "../include/ground_points_adder.h"
