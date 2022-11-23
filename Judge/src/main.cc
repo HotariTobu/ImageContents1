@@ -1,13 +1,14 @@
 // Created by HotariTobu
 
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <limits>
 #include <string>
 
-#include "csv_reader.h"
-#include "csv_writer.h"
+#include "dat.h"
 #include "main_helper.h"
+#include "z_map.h"
 #include "../include/simulator.h"
 #include "../include/separator.h"
 
@@ -39,24 +40,30 @@ void init(std::map<std::string, std::string> option) {
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
-    std::string destination_file_path_ground = destination_base_path + filename_suffix + "_ground.csv";
-    std::string destination_file_path_building = destination_base_path + filename_suffix + "_building.csv";
-    std::cout << "Converting: " << source_file_path << " > " << destination_file_path_ground << ", " << destination_file_path_building << std::endl;
+    std::string destination_file_path = destination_base_path + filename_suffix + ".dat";
+    std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
-    Map2d<double> map = ReadCSV(source_file_path);
 
-    int width = map.width;
-    int height = map.height;
+    auto [data, rectangle] = ReadDAT<double>(source_file_path);
+    ZMap z_map(data, rectangle);
 
-    std::vector<std::vector<double>> ease_of_stay_data_1;
-    std::vector<std::vector<double>> ease_of_stay_data_2;
+    if (!z_map.nan_point_indices.empty()) {
+        std::cout << "Warning: NaN points exist" << std::endl;
+    }
 
-    ease_of_stay_data_1 = std::vector<std::vector<double>>(height + 2, std::vector<double>(width + 2, 1));
+    int map_size = (z_map.width + 2) * (z_map.height + 2);
 
-    std::vector<std::vector<double>>* ease_of_stay_data_source = nullptr;
-    std::vector<std::vector<double>>* ease_of_stay_data_destination = nullptr;
+    auto ease_of_stay_data_1 = std::make_unique<double[]>(map_size);
+    auto ease_of_stay_data_2 = std::make_unique<double[]>(map_size);
 
-    for (int i = 0; i < trials_number; ++i){
+    std::unique_ptr<double[]>* ease_of_stay_data_source = nullptr;
+    std::unique_ptr<double[]>* ease_of_stay_data_destination = nullptr;
+
+    std::array<double, 9> neighbor_ease_of_stay_value;
+    Neighbor neighbor_ease_of_stay_values_ref(3);
+
+    Neighbor neighbor_z_values(z_map.stride);
+    for (int i = 0; i < trials_number; ++i) {
         if (i % 2 == 0) {
             ease_of_stay_data_source = &ease_of_stay_data_1;
             ease_of_stay_data_destination = &ease_of_stay_data_2;
@@ -66,61 +73,48 @@ void process_file(const std::string source_file_path, const std::string destinat
             ease_of_stay_data_destination = &ease_of_stay_data_1;
         }
 
-        *ease_of_stay_data_destination = std::vector<std::vector<double>>(height + 2, std::vector<double>(width + 2, 0));
+        std::fill(ease_of_stay_data_destination->get(), ease_of_stay_data_destination->get() + map_size, 0);
 
-        for (int y = 1; y <= height; ++y) {
-            for (int x = 1; x <= width; ++x) {
-                double ease_of_stay_value = (*ease_of_stay_data_source)[y][x];
+        for (int x = 1; x <= z_map.width; ++x) {
+            for (int y = 1; y <= z_map.height; ++y) {
+                int index = z_map.GetIndex(x, y);
+                double ease_of_stay_value = (*ease_of_stay_data_source)[index];
+                neighbor_z_values.head = &z_map.z_values[index];
 
-                Neighbor neighbor_heights = {
-
-#ifdef __4_NEIGHBOR
-// 4-neighbor _heightscode is hear...
-
-                                       nan, map.data[y - 1][x],                    nan,
-                    map.data[y    ][x - 1], map.data[y    ][x], map.data[y    ][x + 1],
-                                       nan, map.data[y + 1][x],                    nan,
-
-#elif __8_NEIGHBOR
-// 8-neighbor code is hear...
-
-                    map.data[y - 1][x - 1], map.data[y - 1][x], map.data[y - 1][x + 1],
-                    map.data[y    ][x - 1], map.data[y    ][x], map.data[y    ][x + 1],
-                    map.data[y + 1][x - 1], map.data[y + 1][x], map.data[y + 1][x + 1],
-
-#endif
-
-                };
-        
-                Neighbor neighbor_ease_of_stay_values = Simulate(ease_of_stay_value, neighbor_heights);
+                auto ease_of_stay_values = Simulate(ease_of_stay_value, neighbor_z_values);
 
 #ifdef __4_NEIGHBOR
 // 4-neighbor _heightscode is hear...
 
-                (*ease_of_stay_data_destination)[y - 1][x] += neighbor_ease_of_stay_values.data[0][1];
-                (*ease_of_stay_data_destination)[y][x - 1] += neighbor_ease_of_stay_values.data[1][0];
-                (*ease_of_stay_data_destination)[y][x    ] += neighbor_ease_of_stay_values.data[1][1];
-                (*ease_of_stay_data_destination)[y][x + 1] += neighbor_ease_of_stay_values.data[1][2];
-                (*ease_of_stay_data_destination)[y + 1][x] += neighbor_ease_of_stay_values.data[2][1];
+                for (int i = 0; i < 4; ++i) {
+                    int x = (-1 + i) % 2;
+                    int y = (-2 + i) % 2;
+
+                    int offset = z_map.GetIndex(x, y);
+
+                    (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[x + 1][y + 1];
+                }
+
+                (*ease_of_stay_data_destination)[index] += ease_of_stay_values[1][1];
 
 #elif __8_NEIGHBOR
 // 8-neighbor code is hear...
 
-                (*ease_of_stay_data_destination)[y - 1][x - 1] += neighbor_ease_of_stay_values.data[0][0];
-                (*ease_of_stay_data_destination)[y - 1][x    ] += neighbor_ease_of_stay_values.data[0][1];
-                (*ease_of_stay_data_destination)[y - 1][x + 1] += neighbor_ease_of_stay_values.data[0][2];
-                (*ease_of_stay_data_destination)[y    ][x - 1] += neighbor_ease_of_stay_values.data[1][0];
-                (*ease_of_stay_data_destination)[y    ][x    ] += neighbor_ease_of_stay_values.data[1][1];
-                (*ease_of_stay_data_destination)[y    ][x + 1] += neighbor_ease_of_stay_values.data[1][2];
-                (*ease_of_stay_data_destination)[y + 1][x - 1] += neighbor_ease_of_stay_values.data[2][0];
-                (*ease_of_stay_data_destination)[y + 1][x    ] += neighbor_ease_of_stay_values.data[2][1];
-                (*ease_of_stay_data_destination)[y + 1][x + 1] += neighbor_ease_of_stay_values.data[2][2];
+                for (int x = -1; x <= 1; ++x) {
+                    for (int y = -1; y <= 1; ++y) {
+                        int offset = z_map.GetIndex(x, y);
 
+                        (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[x + 1][y + 1];
+                    }
+                }
+                
 #endif
 
             }
         }
     }
+
+    WriteDAT(destination_file_path, data);
 
     Map2d<std::pair<double, double>> ease_of_stay_map;
     ease_of_stay_map.x = map.x;
