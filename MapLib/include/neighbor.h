@@ -5,7 +5,7 @@
 
 // Represent 3x3 values.
 struct Neighbor {
-    const double* head;
+    const double** head;
     int stride;
 
     Neighbor(int stride);

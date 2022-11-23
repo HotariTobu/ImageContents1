@@ -7,7 +7,7 @@ Neighbor::Neighbor(int stride) {
 }
 
 bool Neighbor::At(int x, int y, double* z) const {
-    const double* pointer = head + x + y * stride;
+    const double* pointer = head[x + y * stride];
     if (pointer == nullptr) {
         return false;
     }
@@ -19,7 +19,7 @@ bool Neighbor::At(int x, int y, double* z) const {
 bool Neighbor::IsAllNull() const {
     for (int x = 0; x < 3; ++x) {
         for (int y = 0; y < 3; ++y) {
-            if (head + x + y * stride != nullptr) {
+            if (head[x + y * stride] != nullptr) {
                 return false;
             }
         }

@@ -48,7 +48,7 @@ void process_file(const std::string source_file_path, const std::string destinat
 
         while (ite != end) {
             int index = *ite;
-            neighbor.head = z_map.z_values[index];
+            neighbor.head = &z_map.z_values[index];
             if (neighbor.IsAllNull()) {
                 ++ite;
                 continue;
