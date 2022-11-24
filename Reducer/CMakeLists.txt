@@ -20,6 +20,11 @@ foreach(FLAG1 IN LISTS FLAG1S)
     foreach(TEST_FILENAME IN LISTS DEPEND_ON_MAPLIB)
         target_link_libraries(TEST_${TEST_FILENAME}_${FLAG1} MapLib)
     endforeach()
+
+    target_link_libraries(TEST_normal_vector_getter_${FLAG1} PointTypeLib)
+
+    target_link_libraries(TEST_searcher_${FLAG1} MainLib)
+    target_link_libraries(TEST_searcher_${FLAG1} PointTypeLib)
 endforeach()
 
 set(USE_FACE_GETTER face_constructor;face_delete_inside_points;face_project_points)
