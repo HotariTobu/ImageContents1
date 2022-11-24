@@ -18,5 +18,7 @@ foreach(FLAG1 IN LISTS FLAG1S)
         foreach(TEST_FILENAME IN LISTS DEPEND_ON_MAPLIB)
             target_link_libraries(TEST_${TEST_FILENAME}_${FLAG1}_${FLAG2} MapLib)
         endforeach()
+
+        target_link_libraries(TEST_simulator_${FLAG1}_${FLAG2} PointTypeLib)
     endforeach() 
 endforeach()
