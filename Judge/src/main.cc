@@ -6,6 +6,7 @@
 #include <limits>
 #include <string>
 
+#include "attribute.h"
 #include "dat.h"
 #include "main_helper.h"
 #include "z_map.h"
@@ -44,7 +45,7 @@ void process_file(const std::string source_file_path, const std::string destinat
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
 
-    auto [data, rectangle] = ReadDAT<double>(source_file_path);
+    auto [data, rectangle] = ReadDAT<Attribute>(source_file_path);
     ZMap z_map(data, rectangle);
 
     if (!z_map.nan_point_indices.empty()) {
@@ -59,10 +60,7 @@ void process_file(const std::string source_file_path, const std::string destinat
     std::unique_ptr<double[]>* ease_of_stay_data_source = nullptr;
     std::unique_ptr<double[]>* ease_of_stay_data_destination = nullptr;
 
-    std::array<double, 9> neighbor_ease_of_stay_value;
-    Neighbor neighbor_ease_of_stay_values_ref(3);
-
-    Neighbor neighbor_z_values(z_map.stride);
+    Neighbor<Attribute> neighbor_z_values(z_map.stride);
     for (int i = 0; i < trials_number; ++i) {
         if (i % 2 == 0) {
             ease_of_stay_data_source = &ease_of_stay_data_1;
@@ -114,25 +112,15 @@ void process_file(const std::string source_file_path, const std::string destinat
         }
     }
 
-    WriteDAT(destination_file_path, data);
-
-    Map2d<std::pair<double, double>> ease_of_stay_map;
-    ease_of_stay_map.x = map.x;
-    ease_of_stay_map.y = map.y;
-    ease_of_stay_map.width = width;
-    ease_of_stay_map.height = height;
-    ease_of_stay_map.data = std::vector<std::vector<std::pair<double, double>>>(height + 2, std::vector<std::pair<double, double>>(width + 2));
-
-    for (int y = 1; y <= height; ++y) {
-        for (int x = 1; x <= width; ++x) {
-            ease_of_stay_map.data[y][x] = std::make_pair(map.data[y][x], (*ease_of_stay_data_destination)[y][x]);
+    for (int i = 0; i < map_size; ++i) {
+        if (z_map.z_values[i] != nullptr) {
+            double ease_of_stay_value = (*ease_of_stay_data_destination)[i];
+            PointType&& point_type = ease_of_stay_value > separator_threshold ? PointType::GROUND : PointType::BUILDING;
+            const_cast<Attribute*>(z_map.z_values[i])->type = point_type;
         }
     }
-
-    auto [map_ground, map_building] = Separate(ease_of_stay_map);
-
-    WriteCSV(destination_file_path_ground, map_ground);
-    WriteCSV(destination_file_path_building, map_building);
+    
+    WriteDAT(destination_file_path, data);
 }
 
 int main() {
