@@ -5,7 +5,7 @@
 #include <vector>
 #include <cmath>
 
-Vector3d GetNormalVectorIn(Neighbor neighbor) {
+Vector3d GetNormalVectorIn(Neighbor<ReducerAttribute> neighbor) {
     Vector3d normal_vector{0.0, 0.0, 0.0};
 
 #ifdef __4_NEIGHBOR
@@ -18,11 +18,22 @@ Vector3d GetNormalVectorIn(Neighbor neighbor) {
     const int edge_num = 8;
 
 #endif
+    ReducerAttribute attribute;
+    if (!neighbor.At(0, 0, &attribute)) {
+        return normal_vector;
+    }
+    double center_z = attribute.z;
+
     std::vector<Vector3d> v(edge_num);
     for(int i = 0; i < edge_num; ++i){
         v[i].y = points[i].first - 1;
         v[i].x = points[i].second - 1;
-        v[i].z = std::isnan(neighbor.data[points[i].first][points[i].second]) ? std::nan("") : neighbor.data[points[i].first][points[i].second] - neighbor.data[1][1];
+        if (neighbor.At(points[i].first - 1, points[i].second - 1, &attribute)) {
+            v[i].z = attribute.z - center_z;
+        }
+        else {
+            v[i].z = std::nan("");
+        }
     }
     for(int i = 0; i < edge_num; ++i){
         int j = (i + 1) % edge_num;

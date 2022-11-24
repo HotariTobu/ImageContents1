@@ -5,6 +5,7 @@
 
 #include "neighbor.h"
 #include "vector3d.h"
+#include "reducer_attribute.h"
 
 /*
 Calculate a normal vector of the center point.
@@ -15,6 +16,6 @@ Finally, normalize the vector.
 [return]
 The normal vector.
 */
-Vector3d GetNormalVectorIn(Neighbor neighbor);
+Vector3d GetNormalVectorIn(Neighbor<ReducerAttribute> neighbor);
 
 #endif // __NORMAL_VECTOR_GETTER_H__
