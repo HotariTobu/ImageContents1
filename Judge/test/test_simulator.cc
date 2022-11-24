@@ -7,13 +7,28 @@
 
 extern double simulator_threshold;
 
-bool CanPass(double value, Neighbor neighbor, Neighbor answer) {
-    return Simulate(value, neighbor) == answer;
+bool CanPass(double value, const std::array<double, 9>& neighbor_z_values, const std::array<std::array<double, 3>, 3>& answer) {
+    std::array<Attribute, 9> raw_neighbor_attributes;
+    for (int i = 0; i < 9; ++i) {
+        Attribute attribute;
+        attribute.z = neighbor_z_values[i];
+        raw_neighbor_attributes[i] = attribute;
+    }
+    
+    std::array<const Attribute*, 9> neighbor_attributes_ref;
+    for (int i = 0; i < 9; ++i) {
+        neighbor_attributes_ref[i] = &raw_neighbor_attributes[i];
+    }
+
+    Neighbor<Attribute> neighbor(3);
+    neighbor.head = &neighbor_attributes_ref[4];
+
+    auto result = Simulate(value, neighbor);
+    
+    return result == answer;
 }
 
 int main() {
-    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
-
     simulator_threshold = 2;
 
 #ifdef __UNIFORM

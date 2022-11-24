@@ -2,87 +2,86 @@
 
 #include "../include/face.h"
 
-#include <vector>
 #include <cmath>
-#include <algorithm>
+#include <map>
+#include <vector>
 
-bool ccw(const double x1, const double y1, const double x2, const double y2, const double x3, const double y3){
-    double dx1 = x2 - x1;
-    double dy1 = y2 - y1;
-    double dx2 = x3 - x1;
-    double dy2 = y3 - y1;
-    return dy1 * dx2 < dx1 * dy2;
+bool IsDent(Point2d p0, Point2d p1, Point2d p2) {
+    Vector2d&& v1 = p1 - p0;
+    Vector2d&& v2 = p2 - p0;
+    double&& cross_product = v1.Cross(v2);
+    return cross_product <= 0;
 }
 
 std::list<Point2d> Face::DeleteInsidePoints() {
-    std::vector<std::pair<double, int>> arg_seq;
-    int points_size = (int)_points.size();
-    int i = 0;
-    for (auto&& p : _points){
-        arg_seq.push_back({std::atan2(p.first.y,p.first.x), i});
-        ++i;
+    Point2d origin_2d = {
+        _origin.x,
+        _origin.y
+    };
+
+    std::map<double, const std::pair<Point2d, double *>*> sorted_points;
+
+    for (auto&& point : _points) {
+        Vector2d vector = point.first - origin_2d;
+        double angle = std::atan2(vector.y, vector.x);
+        sorted_points.insert({angle, &point});
     }
 
-    std::sort(arg_seq.begin(), arg_seq.end(), [](const std::pair<double, int>& as1, const std::pair<double, int>& as2){return as1.first < as2.first;});
-    
-    const int head = arg_seq[0].second;
-    int pnt = head;
-    int start = head;
+    int points_count = _points.size();
+    std::vector<std::pair<int, const std::pair<Point2d, double *>*>> iterator(points_count);
 
-    std::vector<int> next_num(points_size);
-    for (int i = 0; i < points_size - 1; ++i){
-        next_num[pnt] = arg_seq[i + 1].second;
-        pnt = next_num[pnt];
+    auto ite = sorted_points.cbegin();
+    for (int i = 0; i < points_count; ++i, ++ite) {
+        iterator[i] = {i + 1, ite->second};
     }
-    next_num[arg_seq[points_size - 1].second] = head;
+    iterator[points_count - 1].first = 0;
 
-    double min = _points[head].y;
-    for (int i = 0; i < points_size; ++i){
-        if(_points[arg_seq[pnt].second].y < min){
-            start=pnt;
-            min = _points[arg_seq[pnt].second].y;
+    sorted_points.clear();
+
+    int bottom_index = 0;
+    for (int i = 1; i < points_count; ++i) {
+        if (iterator[bottom_index].second->first.y > iterator[i].second->first.y) {
+            bottom_index = i;
         }
-        pnt = next_num[pnt];
     }
 
-    pnt=start;
-    int tmp_cnt = 0;
-    int cnt = 0;
-    int next1;
-    int next2;
-    while(1){
-        tmp_cnt = cnt;
-        while(1){
-            next1 = next_num[pnt];
-            next2 = next_num[next1];
-            if(!ccw(_points[pnt].x,_points[pnt].y, _points[next1].x, _points[next1].y, _points[next2].x, _points[next2].y)){
-                next_num[pnt] = next_num[next1];
-                cnt++;
-            } else{
-                pnt = next1;
-            }
-            if(pnt == start){
+    std::list<Point2d> deleted_points;
+    
+    auto current = &iterator[bottom_index];
+    int deleted_count = 0;
+    while (true) {
+        auto next = &iterator[current->first];
+        auto next_next = &iterator[next->first];
+
+        if (IsDent(current->second->first, next->second->first, next_next->second->first)) {
+            deleted_points.push_back(next->second->first);
+
+            current->first = next->first;
+            ++deleted_count;
+
+            next = next_next;
+        }
+
+        current = next;
+
+        if (current->first == bottom_index) {
+            if (deleted_count == 0) {
                 break;
             }
-        }
-        if(tmp_cnt == cnt){
-            break;
-        }
-    }
 
-    std::vector<Point3d> new_points;
-    pnt = start;
-
-    while (1){
-        new_points.push_back(_points[pnt]);
-        pnt = next_num[pnt];
-        if (pnt == start){
-            break;
+            deleted_count = 0;
         }
     }
 
-    _points.clear();
+    std::list<std::pair<Point2d, double *>> new_points;
+
+    do {
+        new_points.push_back(*current->second);
+        current = &iterator[current->first];
+    } while (current->first != bottom_index);
+
     _points = new_points;
+    return deleted_points;
 }
 
 
