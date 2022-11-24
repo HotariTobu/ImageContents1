@@ -36,7 +36,7 @@ void process_file(const std::string source_file_path, const std::string destinat
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
 
-    auto [data, rectangle] = ReadDAT<ReducerAttribute>(source_file_path);
+    auto&& [data, rectangle] = ReadDAT<ReducerAttribute>(source_file_path);
     ZMap z_map(data, rectangle);
 
     Neighbor<ReducerAttribute> neighbor_z_values(z_map.stride);
@@ -57,10 +57,10 @@ void process_file(const std::string source_file_path, const std::string destinat
             point_vector_list.push_back({
                 {
                     z_map.GetPoint(index),
-                    &z_map.z_values[index].z
+                    const_cast<double*>(&z_map.z_values[index]->z)
                 },
-                &z_map.z_values[index].normal_vector,
-            }):
+                &z_map.z_values[index]->normal_vector
+            });
         }
 
         Face face(point_vector_list);

@@ -45,7 +45,7 @@ void process_file(const std::string source_file_path, const std::string destinat
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
 
-    auto [data, rectangle] = ReadDAT<Attribute>(source_file_path);
+    auto&& [data, rectangle] = ReadDAT<Attribute>(source_file_path);
     ZMap z_map(data, rectangle);
 
     if (!z_map.nan_point_indices.empty()) {
