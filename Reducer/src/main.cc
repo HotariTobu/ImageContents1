@@ -35,6 +35,7 @@ void process_file(const std::string source_file_path, const std::string destinat
     std::string destination_file_path = destination_base_path + FILENAME_SUFFIX + filename_suffix + ".csv";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
+
     auto [data, rectangle] = ReadDAT<ReducerAttribute>(source_file_path);
     ZMap z_map(data, rectangle);
 
@@ -46,77 +47,23 @@ void process_file(const std::string source_file_path, const std::string destinat
             const_cast<ReducerAttribute*>(z_map.z_values[i])->normal_vector = normal_vector;
         }
     }
-    
-
-    
 
 
-    
-    WriteDAT(destination_file_path, data);
+    auto indices_list = SearchPointGroups(z_map);
 
-
-    Map2d<double> map = ReadCSV(source_file_path);
-
-    int width = map.width;
-    int height = map.height;
-
-    Map2d<std::pair<double, Vector3d>> normal_vector_map;
-    normal_vector_map.width = width;
-    normal_vector_map.height = height;
-    normal_vector_map.data = std::vector<std::vector<std::pair<double, Vector3d>>>(height + 2, std::vector<std::pair<double, Vector3d>>(width + 2));
-
-    for (int y = 1; y <= height; ++y) {
-        for (int x = 1; x <= width; ++x) {
-            Neighbor neighbor = {
-
-#ifdef __4_NEIGHBOR
-// 4-neighbor code is hear...
-
-                                   nan, map.data[y - 1][x],                    nan,
-                map.data[y    ][x - 1], map.data[y    ][x], map.data[y    ][x + 1],
-                                   nan, map.data[y + 1][x],                    nan,
-
-#elif __8_NEIGHBOR
-// 8-neighbor code is hear...
-
-                map.data[y - 1][x - 1], map.data[y - 1][x], map.data[y - 1][x + 1],
-                map.data[y    ][x - 1], map.data[y    ][x], map.data[y    ][x + 1],
-                map.data[y + 1][x - 1], map.data[y + 1][x], map.data[y + 1][x + 1],
-
-#endif
-
-            };
-
-            double z = map.data[y][x];
-            Vector3d normal_vector = GetNormalVectorIn(neighbor);
-
-            normal_vector_map.data[y][x] = std::make_pair(z, normal_vector);
+    for (auto&& indices : indices_list) {
+        std::list<std::pair<std::pair<Point2d, double*>, const Vector3d*>> point_vector_list;
+        for (int index : indices) {
+            point_vector_list.push_back({
+                {
+                    z_map.GetPoint(index),
+                    &z_map.z_values[index].z
+                },
+                &z_map.z_values[index].normal_vector,
+            }):
         }
-    }
 
-    int extended_width = width + 1;
-    int extended_height = height + 1;
-
-    for (int x = 1; x < extended_width; ++x) {
-        normal_vector_map.data[0][x].first = nan;
-        normal_vector_map.data[extended_height][x].first = nan;
-    }
-    
-    for (auto row : normal_vector_map.data) {
-        row[0].first = nan;
-        row[extended_width].first = nan;
-    }
-
-    Map2d<double> result_map;
-    result_map.x = map.x;
-    result_map.y = map.y;
-    result_map.width = width;
-    result_map.height = height;
-    result_map.data = std::vector<std::vector<double>>(height + 2, std::vector<double>(width + 2, nan));
-
-    auto point_groups = SearchPointGroups(normal_vector_map);
-    for (auto set : point_groups) {
-        Face face(set);
+        Face face(point_vector_list);
         face.DeleteInsidePoints();
         face.ProjectPoints();
 
@@ -125,7 +72,7 @@ void process_file(const std::string source_file_path, const std::string destinat
         }
     }
 
-    WriteCSV(destination_file_path, map);
+    WriteDAT(destination_file_path, data);
 }
 
 int main() {
