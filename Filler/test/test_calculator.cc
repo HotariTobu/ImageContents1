@@ -18,7 +18,7 @@ bool CanPass(const std::array<double, 9>& z_values, double answer) {
         }
     }
 
-    Neighbor neighbor(3);
+    Neighbor<double> neighbor(3);
     neighbor.head = &z_values_ref[4];
 
     double result = Calculate(neighbor);
