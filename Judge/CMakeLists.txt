@@ -7,6 +7,7 @@ foreach(FLAG1 IN LISTS FLAG1S)
         target_link_libraries(Judge_${FLAG1}_${FLAG2} DatLib)
         target_link_libraries(Judge_${FLAG1}_${FLAG2} MapLib)
         target_link_libraries(Judge_${FLAG1}_${FLAG2} MainLib)
+        target_link_libraries(Judge_${FLAG1}_${FLAG2} PointTypeLib)
     endforeach() 
 endforeach()
 
