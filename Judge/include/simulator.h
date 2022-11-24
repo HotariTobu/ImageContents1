@@ -5,6 +5,7 @@
 
 #include <array>
 
+#include "attribute.h"
 #include "neighbor.h"
 
 // double simulator_threshold;
@@ -25,6 +26,6 @@ In flexible mode, first, calculate unsigned differences for each point that can 
 additional ease of stay of neighbors.
 If value is 0, ease of stay is not changed.
 */
-std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor neighbor);
+std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor<Attribute> neighbor);
 
 #endif // __SIMULATOR_H__

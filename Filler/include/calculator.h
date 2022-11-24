@@ -13,6 +13,6 @@ Ignore nan in neighbors.
 [return]
 Calculated center value.
 */
-double Calculate(Neighbor neighbor);
+double Calculate(Neighbor<double> neighbor);
 
 #endif // __CALCULATOR_H__

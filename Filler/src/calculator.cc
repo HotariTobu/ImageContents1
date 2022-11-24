@@ -7,7 +7,7 @@
 #include <limits>
 #include <vector>
 
-double Calculate(Neighbor neighbor) {
+double Calculate(Neighbor<double> neighbor) {
 #ifdef __4_NEIGHBOR
 // 4-neighbor code is hear...
 #ifdef __MIN

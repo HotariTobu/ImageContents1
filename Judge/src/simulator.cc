@@ -7,7 +7,7 @@
 
 double simulator_threshold;
 
-std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor neighbor) {
+std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor<Attribute> neighbor) {
     std::array<std::array<double, 3>, 3> simulated_neighbor;
     simulated_neighbor[1][1] = 0;
 
@@ -27,7 +27,7 @@ std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor neighbor) {
     
 #endif
 
-    double center_z;
+    Attribute center_z;
     if (!neighbor.At(0, 0, &center_z)) {
         return simulated_neighbor;
     }
@@ -36,12 +36,12 @@ std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor neighbor) {
 // Uniform code is hear...
     int cnt = 0;
     for (int i = 0; i < edge_num; ++i){
-        double z;
+        Attribute z;
         if (!neighbor.At(points[i].first - 1, points[i].second - 1, &z)) {
             continue;
         }
 
-        if (z - center_z > simulator_threshold){
+        if (z.z - center_z.z > simulator_threshold){
             simulated_neighbor[points[i].second][points[i].first] = 0;
         }else {
             simulated_neighbor[points[i].second][points[i].first] = value;
@@ -57,12 +57,12 @@ std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor neighbor) {
 // Flexible code is hear...
     double sum_difference = 0;
     for (int i = 0; i < edge_num; ++i){
-        double z;
+        Attribute z;
         if (!neighbor.At(points[i].first - 1, points[i].second - 1, &z)) {
             continue;
         }
 
-        double difference = z - center_z;
+        double difference = z.z - center_z.z;
         if (difference > simulator_threshold){
             simulated_neighbor[points[i].second][points[i].first] = std::nan("");
         }else {

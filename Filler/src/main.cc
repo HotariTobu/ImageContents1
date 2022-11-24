@@ -45,7 +45,7 @@ void process_file(const std::string source_file_path, const std::string destinat
     auto [data, rectangle] = ReadDAT<double>(source_file_path);
     ZMap z_map(data, rectangle);
     
-    Neighbor neighbor(z_map.stride);
+    Neighbor<double> neighbor(z_map.stride);
     while (!z_map.nan_point_indices.empty()) {
         auto ite = z_map.nan_point_indices.cbegin();
         auto end = z_map.nan_point_indices.cend();
