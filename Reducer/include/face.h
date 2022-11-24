@@ -6,7 +6,7 @@
 #include <list>
 
 #include "point2d.h"
-#include "vector3d.h"
+#include "point3d.h"
 
 // Represent a face consisted from multiple points.
 class Face {
@@ -27,7 +27,6 @@ public:
 
     // Getter for `_normal`.
     Vector3d normal();
-    
 
     // Getter for `_points`.
     std::list<std::pair<Point2d, double*>> points();
