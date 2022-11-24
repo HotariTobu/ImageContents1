@@ -17,6 +17,7 @@ struct ZMap {
     int width;
     int height;
 
+    int size;
     int stride;
 
     std::unique_ptr<const T*[]> z_values;

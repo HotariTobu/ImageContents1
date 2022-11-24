@@ -52,10 +52,8 @@ void process_file(const std::string source_file_path, const std::string destinat
         std::cout << "Warning: NaN points exist" << std::endl;
     }
 
-    int map_size = (z_map.width + 2) * (z_map.height + 2);
-
-    auto ease_of_stay_data_1 = std::make_unique<double[]>(map_size);
-    auto ease_of_stay_data_2 = std::make_unique<double[]>(map_size);
+    auto ease_of_stay_data_1 = std::make_unique<double[]>(z_map.size);
+    auto ease_of_stay_data_2 = std::make_unique<double[]>(z_map.size);
 
     std::unique_ptr<double[]>* ease_of_stay_data_source = nullptr;
     std::unique_ptr<double[]>* ease_of_stay_data_destination = nullptr;
@@ -71,7 +69,7 @@ void process_file(const std::string source_file_path, const std::string destinat
             ease_of_stay_data_destination = &ease_of_stay_data_1;
         }
 
-        std::fill(ease_of_stay_data_destination->get(), ease_of_stay_data_destination->get() + map_size, 0);
+        std::fill(ease_of_stay_data_destination->get(), ease_of_stay_data_destination->get() + z_map.size, 0);
 
         for (int x = 1; x <= z_map.width; ++x) {
             for (int y = 1; y <= z_map.height; ++y) {
@@ -112,7 +110,7 @@ void process_file(const std::string source_file_path, const std::string destinat
         }
     }
 
-    for (int i = 0; i < map_size; ++i) {
+    for (int i = 0; i < z_map.size; ++i) {
         if (z_map.z_values[i] != nullptr) {
             double ease_of_stay_value = (*ease_of_stay_data_destination)[i];
             PointType&& point_type = ease_of_stay_value > separator_threshold ? PointType::GROUND : PointType::BUILDING;

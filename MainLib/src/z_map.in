@@ -9,9 +9,10 @@ ZMap<T>::ZMap(const std::map<Point2d, T>& data, const Rectangle& rectangle) {
     this->width = rectangle.max_x - rectangle.min_x + 1;
     this->height = rectangle.max_y - rectangle.min_y + 1;
     
+    this->size = (width + 2) * (height + 2);
     this->stride = width + 2;
 
-    this->z_values = std::make_unique<const T*[]>((width + 2) * (height + 2));
+    this->z_values = std::make_unique<const T*[]>(size);
 
     auto data_end = data.end();
     for (int x = 1; x <= width; ++x) {
