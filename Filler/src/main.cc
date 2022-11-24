@@ -42,15 +42,14 @@ void process_file(const std::string source_file_path, const std::string destinat
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
     
 
-    auto [data, rectangle] = ReadDAT<double>(source_file_path);
+    auto&& [data, rectangle] = ReadDAT<double>(source_file_path);
     ZMap z_map(data, rectangle);
     
     Neighbor<double> neighbor(z_map.stride);
     while (!z_map.nan_point_indices.empty()) {
         auto ite = z_map.nan_point_indices.cbegin();
-        auto end = z_map.nan_point_indices.cend();
 
-        while (ite != end) {
+        while (ite != z_map.nan_point_indices.cend()) {
             int index = *ite;
             neighbor.head = &z_map.z_values[index];
             if (neighbor.IsAllNull()) {
