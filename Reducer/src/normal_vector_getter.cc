@@ -10,11 +10,11 @@ Vector3d GetNormalVectorIn(Neighbor<ReducerAttribute> neighbor) {
 
 #ifdef __4_NEIGHBOR
     // 4-neighbor code is hear...
-    std::vector<std::pair<int, int>> points{{1, 2}, {2, 1}, {1, 0}, {0, 1}};
+    std::vector<std::pair<int, int>> points{{1, 2}, {0, 1}, {1, 0}, {2, 1}};
     const int edge_num = 4;
 #elif __8_NEIGHBOR
     // 8-neighbor code is hear...
-    std::vector<std::pair<int, int>> points{{0, 1}, {0, 2}, {1, 2}, {2, 2}, {2, 1}, {2, 0}, {1, 0}, {0, 0}};
+    std::vector<std::pair<int, int>> points{{0, 0}, {1, 0}, {2, 0}, {2, 1}, {2, 2}, {1, 2}, {0, 2}, {0, 1}};
     const int edge_num = 8;
 
 #endif
@@ -26,8 +26,8 @@ Vector3d GetNormalVectorIn(Neighbor<ReducerAttribute> neighbor) {
 
     std::vector<Vector3d> v(edge_num);
     for(int i = 0; i < edge_num; ++i){
-        v[i].y = points[i].first - 1;
-        v[i].x = points[i].second - 1;
+        v[i].x = points[i].first - 1;
+        v[i].y = points[i].second - 1;
         if (neighbor.At(points[i].first - 1, points[i].second - 1, &attribute)) {
             v[i].z = attribute.z - center_z;
         }
