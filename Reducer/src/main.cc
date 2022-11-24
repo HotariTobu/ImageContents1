@@ -5,12 +5,13 @@
 #include <limits>
 #include <string>
 
-#include "csv_reader.h"
-#include "csv_writer.h"
+#include "dat.h"
 #include "main_helper.h"
 #include "vector3d.h"
+#include "z_map.h"
 #include "../include/face.h"
 #include "../include/normal_vector_getter.h"
+#include "../include/reducer_attribute.h"
 #include "../include/searcher.h"
 
 #ifdef __4_NEIGHBOR
@@ -33,6 +34,26 @@ void process_file(const std::string source_file_path, const std::string destinat
 
     std::string destination_file_path = destination_base_path + FILENAME_SUFFIX + filename_suffix + ".csv";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
+
+    auto [data, rectangle] = ReadDAT<ReducerAttribute>(source_file_path);
+    ZMap z_map(data, rectangle);
+
+    Neighbor<ReducerAttribute> neighbor_z_values(z_map.stride);
+    for (int i = 0; i < z_map.size; ++i) {
+        if (z_map.z_values[i] != nullptr) {
+            neighbor_z_values.head = &z_map.z_values[i];
+            Vector3d&& normal_vector = GetNormalVectorIn(neighbor_z_values);
+            const_cast<ReducerAttribute*>(z_map.z_values[i])->normal_vector = normal_vector;
+        }
+    }
+    
+
+    
+
+
+    
+    WriteDAT(destination_file_path, data);
+
 
     Map2d<double> map = ReadCSV(source_file_path);
 
