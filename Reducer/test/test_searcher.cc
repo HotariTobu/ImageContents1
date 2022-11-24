@@ -3,24 +3,48 @@
 #include <cassert>
 #include <limits>
 #include <set>
+#include <vector>
 
 #include "../include/searcher.h"
 
 extern double searcher_threshold;
 
-bool CanPass(Map2d<std::pair<double, Vector3d>> map, std::set<std::set<std::pair<Point3d, Vector3d>>> answer) {
-    std::vector<PointVectorSet> result = SearchPointGroups(map);
+bool CanPass(const std::vector<std::pair<double, Vector3d>> attributes, int width, std::set<std::set<int>> answer) {
+    int points_count = attributes.size();
+    int height = points_count / width;
+    
+    std::map<Point2d, ReducerAttribute> data;
 
-    std::set<std::set<std::pair<Point3d, Vector3d>>> result2;
-    for (PointVectorSet pv : result) {
-        result2.insert(std::set(pv.begin(), pv.end()));
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            Point2d point = {(double)x, (double)y};
+            auto&& [z, vector] = attributes[x + y * width];
+
+            ReducerAttribute attribute;
+            attribute.z = z;
+            attribute.normal_vector = vector;
+
+            data.insert({point, attribute});
+        }
     }
 
-    return result2 == answer;
-}
+    Rectangle rectangle;
+    rectangle.min_x = 0;
+    rectangle.min_y = 0;
+    rectangle.max_x = width - 1;
+    rectangle.max_y = height - 1;
 
-std::pair<double, Vector3d> pack(double value, Vector3d vector) {
-    return std::make_pair(value, vector);
+    ZMap z_map(data, rectangle);
+
+    auto indices_list = SearchPointGroups(z_map);
+
+    std::set<std::set<int>> result;
+    for (auto&& indices : indices_list) {
+        std::set<int> index_set(indices.begin(), indices.end());
+        result.insert(index_set);
+    }
+
+    return result == answer;
 }
 
 int main() {
@@ -29,35 +53,16 @@ int main() {
     searcher_threshold = 0.5;
 
     assert(CanPass({
-        0, 0, 4, 4,
+        {  0, {0.1, 0.0, 0.9}}, {  1, {0.0, 1.0, 0.0}}, {  2, {0.0, 0.9, 0.1}}, {  3, {0.1, 1.0, 0.0}},
+        {  4, {0.0, 0.0, 1.0}}, {  5, {0.0, 0.0, 1.0}}, {  6, {0.1, 0.0, 1.0}}, {  7, {0.0, 1.0, 0.0}},
+        {  8, {0.0, 0.1, 0.9}}, {  9, {0.0, 0.1, 1.0}}, { 10, {0.0, 1.0, 0.0}}, { 11, {0.0, 1.0, 0.1}},
+        { 12, {0.0, 0.0, 1.0}}, { 13, {0.1, 0.9, 0.0}}, { 14, {0.0, 1.0, 0.0}}, { 15, {0.1, 0.9, 0.0}},
+    }, 4, {
         {
-            {pack(nan, {nan, nan, nan}), pack(nan, {nan, nan, nan}), pack(nan, {nan, nan, nan}), pack(nan, {nan, nan, nan}), pack(nan, {nan, nan, nan}), pack(nan, {nan, nan, nan})},
-            {pack(nan, {nan, nan, nan}), pack(  1, {0.1, 0.0, 0.9}), pack(  2, {0.0, 1.0, 0.0}), pack(  3, {0.0, 0.9, 0.1}), pack(  4, {0.1, 1.0, 0.0}), pack(nan, {nan, nan, nan})},
-            {pack(nan, {nan, nan, nan}), pack(  5, {0.0, 0.0, 1.0}), pack(  6, {0.0, 0.0, 1.0}), pack(  7, {0.1, 0.0, 1.0}), pack(  8, {0.0, 1.0, 0.0}), pack(nan, {nan, nan, nan})},
-            {pack(nan, {nan, nan, nan}), pack(  9, {0.0, 0.1, 0.9}), pack( 10, {0.0, 0.1, 1.0}), pack( 11, {0.0, 1.0, 0.0}), pack( 12, {0.0, 1.0, 0.1}), pack(nan, {nan, nan, nan})},
-            {pack(nan, {nan, nan, nan}), pack( 13, {0.0, 0.0, 1.0}), pack( 14, {0.1, 0.9, 0.0}), pack( 15, {0.0, 1.0, 0.0}), pack( 16, {0.1, 0.9, 0.0}), pack(nan, {nan, nan, nan})},
-            {pack(nan, {nan, nan, nan}), pack(nan, {nan, nan, nan}), pack(nan, {nan, nan, nan}), pack(nan, {nan, nan, nan}), pack(nan, {nan, nan, nan}), pack(nan, {nan, nan, nan})},
-        }
-    }, {
-        {
-            std::make_pair<Point3d, Vector3d>({0, 0,  1}, {0.1, 0.0, 0.9}),
-            std::make_pair<Point3d, Vector3d>({0, 1,  5}, {0.0, 0.0, 1.0}),
-            std::make_pair<Point3d, Vector3d>({0, 2,  9}, {0.0, 0.1, 0.9}),
-            std::make_pair<Point3d, Vector3d>({0, 3, 13}, {0.0, 0.0, 1.0}),
-            std::make_pair<Point3d, Vector3d>({1, 1,  6}, {0.0, 0.0, 1.0}),
-            std::make_pair<Point3d, Vector3d>({1, 2, 10}, {0.0, 0.1, 1.0}),
-            std::make_pair<Point3d, Vector3d>({2, 1,  7}, {0.1, 0.0, 1.0}),
+            0, 4, 8, 12, 5, 9, 6,
         },
         {
-            std::make_pair<Point3d, Vector3d>({1, 0,  2}, {0.0, 1.0, 0.0}),
-            std::make_pair<Point3d, Vector3d>({1, 3, 14}, {0.1, 0.9, 0.0}),
-            std::make_pair<Point3d, Vector3d>({2, 0,  3}, {0.0, 0.9, 0.1}),
-            std::make_pair<Point3d, Vector3d>({2, 2, 11}, {0.0, 1.0, 0.0}),
-            std::make_pair<Point3d, Vector3d>({2, 3, 15}, {0.0, 1.0, 0.0}),
-            std::make_pair<Point3d, Vector3d>({3, 0,  4}, {0.1, 1.0, 0.0}),
-            std::make_pair<Point3d, Vector3d>({3, 1,  8}, {0.0, 1.0, 0.0}),
-            std::make_pair<Point3d, Vector3d>({3, 2, 12}, {0.0, 1.0, 0.1}),
-            std::make_pair<Point3d, Vector3d>({3, 3, 16}, {0.1, 0.9, 0.0}),
+            1, 13, 2, 10, 14, 3 ,7 ,11 ,15,
         },
     }));
 }
