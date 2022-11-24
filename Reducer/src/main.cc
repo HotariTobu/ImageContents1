@@ -64,12 +64,14 @@ void process_file(const std::string source_file_path, const std::string destinat
         }
 
         Face face(point_vector_list);
-        face.DeleteInsidePoints();
-        face.ProjectPoints();
 
-        for (Point3d point : face.points()) {
-            result_map.data[point.y][point.x] = point.z;
+        auto deleted_points = face.DeleteInsidePoints();
+        for (auto&& deleted_point : deleted_points) {
+            auto ite = data.find(deleted_point);
+            data.erase(ite);
         }
+
+        face.ProjectPoints();
     }
 
     WriteDAT(destination_file_path, data);
