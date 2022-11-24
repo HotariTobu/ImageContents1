@@ -2,7 +2,8 @@
 
 #include "../include/z_map.h"
 
-ZMap::ZMap(const std::map<Point2d, double>& data, const Rectangle& rectangle) {
+template<typename T>
+ZMap<T>::ZMap(const std::map<Point2d, T>& data, const Rectangle& rectangle) {
     this->rectangle = rectangle;
 
     this->width = rectangle.max_x - rectangle.min_x + 1;
@@ -10,7 +11,7 @@ ZMap::ZMap(const std::map<Point2d, double>& data, const Rectangle& rectangle) {
     
     this->stride = width + 2;
 
-    this->z_values = std::make_unique<const double*[]>((width + 2) * (height + 2));
+    this->z_values = std::make_unique<const T*[]>((width + 2) * (height + 2));
 
     auto data_end = data.end();
     for (int x = 1; x <= width; ++x) {
@@ -43,7 +44,8 @@ ZMap::ZMap(const std::map<Point2d, double>& data, const Rectangle& rectangle) {
     }
 }
 
-Point2d ZMap::GetPoint(int index) const {
+template<typename T>
+Point2d ZMap<T>::GetPoint(int index) const {
     int x = index % stride;
     int y = index / stride;
 
@@ -53,6 +55,7 @@ Point2d ZMap::GetPoint(int index) const {
     };
 }
 
-int ZMap::GetIndex(int x, int y) const {
+template<typename T>
+int ZMap<T>::GetIndex(int x, int y) const {
     return x + y * stride;
 }

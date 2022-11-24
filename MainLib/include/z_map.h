@@ -10,6 +10,7 @@
 #include "point2d.h"
 #include "rectangle.h"
 
+template<typename T>
 struct ZMap {
     Rectangle rectangle;
     
@@ -18,13 +19,15 @@ struct ZMap {
 
     int stride;
 
-    std::unique_ptr<const double*[]> z_values;
+    std::unique_ptr<const T*[]> z_values;
     std::list<int> nan_point_indices;
 
-    ZMap(const std::map<Point2d, double>& data, const Rectangle& rectangle);
+    ZMap(const std::map<Point2d, T>& data, const Rectangle& rectangle);
 
     Point2d GetPoint(int index) const;
     int GetIndex(int x, int y) const;
 };
+
+#include "../src/z_map.in"
 
 #endif // __Z_MAP_H__
