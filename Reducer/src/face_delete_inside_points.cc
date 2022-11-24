@@ -14,7 +14,7 @@ bool ccw(const double x1, const double y1, const double x2, const double y2, con
     return dy1 * dx2 < dx1 * dy2;
 }
 
-void Face::DeleteInsidePoints() {
+std::list<Point2d> Face::DeleteInsidePoints() {
     std::vector<std::pair<double, int>> arg_seq;
     int points_size = (int)_points.size();
     for (int i = 0; i < points_size; ++i){
