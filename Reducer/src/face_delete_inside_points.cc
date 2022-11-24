@@ -17,8 +17,10 @@ bool ccw(const double x1, const double y1, const double x2, const double y2, con
 std::list<Point2d> Face::DeleteInsidePoints() {
     std::vector<std::pair<double, int>> arg_seq;
     int points_size = (int)_points.size();
-    for (int i = 0; i < points_size; ++i){
-        arg_seq.push_back({std::atan2(_points[i].y,_points[i].x), i});
+    int i = 0;
+    for (auto&& p : _points){
+        arg_seq.push_back({std::atan2(p.first.y,p.first.x), i});
+        ++i;
     }
 
     std::sort(arg_seq.begin(), arg_seq.end(), [](const std::pair<double, int>& as1, const std::pair<double, int>& as2){return as1.first < as2.first;});
