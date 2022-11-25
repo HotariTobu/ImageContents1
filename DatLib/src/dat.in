@@ -1,0 +1,59 @@
+// Created by HotariTobu
+
+#include "../include/dat.h"
+
+#include <fstream>
+#include <limits>
+#include <sstream>
+
+template<typename T>
+std::pair<std::map<Point2d, T>, Rectangle> ReadDAT(const std::string& path) {
+    std::ifstream ifs(path);
+
+    std::map<Point2d, T> data;
+    Rectangle rectangle;
+
+    std::string line;
+    while (std::getline(ifs, line)) {
+        std::istringstream iss(line);
+        
+        double x, y;
+        T t;
+
+        iss >> x >> y >> t;
+
+        data.insert({{x, y}, t});
+
+        if (rectangle.min_x > x) {
+            rectangle.min_x = x;
+        }
+        else if (rectangle.max_x < x) {
+            rectangle.max_x = x;
+        }
+
+        if (rectangle.min_y > y) {
+            rectangle.min_y = y;
+        }
+        else if (rectangle.max_y < y) {
+            rectangle.max_y = y;
+        }
+    }
+
+    ifs.close();
+
+    return {data, rectangle};
+}
+
+template<typename T>
+void WriteDAT(const std::string& path, const std::map<Point2d, T>& data) {
+    std::ofstream ofs(path);
+
+    for (auto&& [point, attribute] : data) {
+        ofs << point.x << ' ' << point.y << ' ' << attribute << std::endl;
+    }
+
+    ofs.close();
+}
+
+template std::pair<std::map<Point2d, double>, Rectangle> ReadDAT(const std::string& path);
+template void WriteDAT(const std::string& path, const std::map<Point2d, double>& data);

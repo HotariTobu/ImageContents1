@@ -3,9 +3,10 @@
 #ifndef __FACE_H__
 #define __FACE_H__
 
-#include "alias.h"
+#include <list>
+
+#include "point2d.h"
 #include "point3d.h"
-#include "vector3d.h"
 
 // Represent a face consisted from multiple points.
 class Face {
@@ -18,7 +19,7 @@ private:
 
 
     // Points that consist the face.
-    PointSet _points;
+    std::list<std::pair<Point2d, double*>> _points;
 
 public:
     // Getter for `_origin`.
@@ -26,22 +27,21 @@ public:
 
     // Getter for `_normal`.
     Vector3d normal();
-    
 
     // Getter for `_points`.
-    PointSet points();
+    std::list<std::pair<Point2d, double*>> points();
 
     /*
     Initialize all private members.
     [params]
     - set: set of pair of points and normal vectors
     */
-    Face(const PointVectorSet& set);
+    Face(const std::list<std::pair<std::pair<Point2d, double*>, const Vector3d*>>& point_vector_list);
 
     /*
     Find outside points and delete the others from `_points`.
     */
-    void DeleteInsidePoints();
+    std::list<Point2d> DeleteInsidePoints();
 
     /*
     Project points in `_points` to the face that is defined by `_origin` and `_normal`.

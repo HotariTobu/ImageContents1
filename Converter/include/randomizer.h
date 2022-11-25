@@ -3,15 +3,14 @@
 #ifndef __RANDOMIZER_H__
 #define __RANDOMIZER_H__
 
-#include <vector>
-
-#include "point2d.h"
-
 /*
-Randomize the order of point vector.
+Randomize the order of a container.
 [params]
-- points: vector of points
+- points: the container
 */
-void Randomize(std::vector<Point2d>& points);
+template<typename T>
+void Randomize(T& container);
+
+#include "../src/randomizer.in"
 
 #endif // __RANDOMIZER_H__

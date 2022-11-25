@@ -3,10 +3,13 @@
 #ifndef __GROUND_POINTS_ADDER_H__
 #define __GROUND_POINTS_ADDER_H__
 
-#include <vector>
+#include <list>
+#include <map>
 
-#include "index_set.h"
 #include "point2d.h"
+#include "attribute.h"
+#include "index_set.h"
+#include "indexed_point2d.h"
 
 // double ground_point_threshold;
 
@@ -16,6 +19,6 @@ Add lower points and triangles if tilt of surround triangles is lower than a thr
 - points: vector of the points
 - indices: vector of index set of triangles
 */
-void AddGroundPoints(std::vector<Point2d>& points, std::vector<double>& z_values, std::vector<IndexSet>& indices);
+std::pair<std::list<std::pair<Point2d, double>>, std::list<IndexSet>> AddGroundPoints(const std::map<Point2d, Attribute>& data, std::list<IndexedPoint2dSet>& point_set_list);
 
 #endif // __GROUND_POINTS_ADDER_H__

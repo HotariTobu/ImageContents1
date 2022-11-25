@@ -3,11 +3,13 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <list>
+#include <memory>
 #include <string>
 
-#include "csv_reader.h"
-#include "csv_writer.h"
+#include "dat.h"
 #include "main_helper.h"
+#include "z_map.h"
 #include "../include/calculator.h"
 
 #ifdef __4_NEIGHBOR
@@ -26,53 +28,52 @@
     #define FILENAME_SUFFIX_2 "_MEDIAN"
 #endif
 
+std::string filename_suffix;
+
 void init(std::map<std::string, std::string> option) {
+    filename_suffix += FILENAME_SUFFIX_1;
+    filename_suffix += FILENAME_SUFFIX_2;
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
-    std::string destination_file_path = destination_base_path + FILENAME_SUFFIX_1 + FILENAME_SUFFIX_2 + ".csv";
+    std::string destination_file_path = destination_base_path + filename_suffix + ".dat";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
     
-    Map2d<double> map = ReadCSV(source_file_path);
+
+    auto&& [data, rectangle] = ReadDAT<double>(source_file_path);
+    ZMap z_map(data, rectangle);
     
-    for (int y = 1; y <= map.height; ++y) {
-        for (int x = 1; x <= map.width; ++x) {
-            if (!std::isnan(map.data[y][x])) {
+    Neighbor<double> neighbor(z_map.stride);
+    while (!z_map.nan_point_indices.empty()) {
+        auto ite = z_map.nan_point_indices.cbegin();
+
+        while (ite != z_map.nan_point_indices.cend()) {
+            int index = *ite;
+            neighbor.head = &z_map.z_values[index];
+            if (neighbor.IsAllNull()) {
+                ++ite;
                 continue;
             }
-    
-            Neighbor neighbor = {
 
-#ifdef __4_NEIGHBOR
-// 4-neighbor code is hear...
+            ite = z_map.nan_point_indices.erase(ite);
 
-                                   nan, map.data[y - 1][x],                    nan,
-                map.data[y    ][x - 1],                nan, map.data[y    ][x + 1],
-                                   nan, map.data[y + 1][x],                    nan,
+            Point2d point = z_map.GetPoint(index);
+            double z = Calculate(neighbor);
 
-#elif __8_NEIGHBOR
-// 8-neighbor code is hear...
-
-                map.data[y - 1][x - 1], map.data[y - 1][x], map.data[y - 1][x + 1],
-                map.data[y    ][x - 1],                nan, map.data[y    ][x + 1],
-                map.data[y + 1][x - 1], map.data[y + 1][x], map.data[y + 1][x + 1],
-
-#endif
-
-            };
-
-            map.data[y][x] = Calculate(neighbor);
+            auto pair = data.insert({point, z});
+            z_map.z_values[index] = &pair.first->second;
         }
     }
 
-    WriteCSV(destination_file_path, map);
+    
+    WriteDAT(destination_file_path, data);
 }
 
 int main() {
     HelpMain("FillerOption.txt", {
-        {"source_directory_path", "intermediate_data_DATConverter"},
+        {"source_directory_path", "intermediate_data_Splitter"},
         {"destination_directory_path", "intermediate_data_Filler"},
     }, init, process_file);
 }

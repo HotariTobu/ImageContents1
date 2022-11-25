@@ -14,13 +14,15 @@ include(Helper.cmake)
 
 add_subdirectory(OperatorLib)
 add_subdirectory(GeometryLib)
-# add_subdirectory(DatLib)
+add_subdirectory(DatLib)
 add_subdirectory(MapLib)
 
 add_subdirectory(RandomLib)
 add_subdirectory(MainLib)
+add_subdirectory(PointTypeLib)
 
 add_subdirectory(Converter)
 add_subdirectory(Filler)
 add_subdirectory(Judge)
 add_subdirectory(Reducer)
+add_subdirectory(Splitter)

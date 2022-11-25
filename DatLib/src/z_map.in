@@ -1,0 +1,62 @@
+// Created by HotariTobu
+
+#include "../include/z_map.h"
+
+template<typename T>
+ZMap<T>::ZMap(const std::map<Point2d, T>& data, const Rectangle& rectangle) {
+    this->rectangle = rectangle;
+
+    this->width = rectangle.max_x - rectangle.min_x + 1;
+    this->height = rectangle.max_y - rectangle.min_y + 1;
+    
+    this->size = (width + 2) * (height + 2);
+    this->stride = width + 2;
+
+    this->z_values = std::make_unique<const T*[]>(size);
+
+    auto data_end = data.end();
+    for (int x = 1; x <= width; ++x) {
+        for (int y = 1; y <= height; ++y) {
+            auto ite = data.find({(double)(x + rectangle.min_x - 1), (double)(y + rectangle.min_y - 1)});
+            int index = x + y * stride;
+
+            if (ite == data_end) {
+                z_values[index] = nullptr;
+                nan_point_indices.push_back(index);
+            }
+            else {
+                z_values[index] = &ite->second;
+            }
+        }
+    }
+
+    int extended_width = width + 1;
+    int extended_height = height + 1;
+    int last_line = extended_height * stride;
+
+    for (int x = 0; x <= extended_width; ++x) {
+        z_values[x] = nullptr;
+        z_values[last_line + x] = nullptr;
+    }
+
+    for (int i = 0; i <= last_line; i += stride) {
+        z_values[i] = nullptr;
+        z_values[i + extended_width] = nullptr;
+    }
+}
+
+template<typename T>
+Point2d ZMap<T>::GetPoint(int index) const {
+    int offset_x = index % stride;
+    int offset_y = index / stride;
+
+    return {
+        offset_x + rectangle.min_x - 1,
+        offset_y + rectangle.min_y - 1
+    };
+}
+
+template<typename T>
+int ZMap<T>::GetIndex(int offset_x, int offset_y) const {
+    return offset_x + offset_y * stride;
+}

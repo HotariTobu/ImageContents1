@@ -4,21 +4,33 @@
 
 #include "../include/face.h"
 
-bool CanPass(PointVectorSet set, Point3d origin, Vector3d normal) {
-    PointSet points;
-    for (std::pair<Point3d, Vector3d> pv : set) {
-        points.push_back(pv.first);
+bool CanPass(const std::list<std::pair<Point3d, Vector3d>>& point_vector_list, Point3d origin, Vector3d normal) {
+    std::list<std::pair<std::pair<Point2d, double*>, const Vector3d*>> point_vector_list_ref;
+    std::list<std::pair<Point2d, double *>> points;
+    for (auto&& [point, vector] : point_vector_list) {
+        point_vector_list_ref.push_back({
+            {
+                {
+                    point.x,
+                    point.y
+                },
+                const_cast<double*>(&point.z)
+            },
+            &vector
+        });
+        points.push_back(point_vector_list_ref.back().first);
     }
 
-    Face face(set);
+    Face face(point_vector_list_ref);
+
     return Near(face.origin(), origin) && Near(face.normal(), normal) && face.points() == points;
 }
 
 int main() {
     assert(CanPass({
-        std::make_pair<Point3d, Vector3d>({ 1,  1, -1}, {0.57735 , 0.57735 , 0.57735 }),
-        std::make_pair<Point3d, Vector3d>({ 1, -1,  0}, {0.408248, 0.408248, 0.816497}),
-        std::make_pair<Point3d, Vector3d>({-1,  1,  0}, {0.408248, 0.816497, 0.408248}),
-        std::make_pair<Point3d, Vector3d>({-1, -1,  1}, {0.816497, 0.408248, 0.408248}),
+        {{ 1.0,  1.0, -1.0}, {0.57735 , 0.57735 , 0.57735 }},
+        {{ 1.0, -1.0,  0.0}, {0.408248, 0.408248, 0.816497}},
+        {{-1.0,  1.0,  0.0}, {0.408248, 0.816497, 0.408248}},
+        {{-1.0, -1.0,  1.0}, {0.816497, 0.408248, 0.408248}},
     }, {0, 0, 0}, {0.57735, 0.57735, 0.57735}));
 }

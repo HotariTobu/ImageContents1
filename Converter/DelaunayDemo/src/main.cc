@@ -13,56 +13,27 @@
 #include <string>
 #include <thread>
 
+#include "random.h"
+#include "../../include/root_maker.h"
 #include "../../include/triangle.h"
 
-class Random {
-private:
-    std::default_random_engine random_engine;
-    std::uniform_real_distribution<double> random_distribution;
-
-public:
-    Random(double min, double max) {
-        std::random_device random_device;
-        random_engine = std::default_random_engine(random_device());
-        random_distribution = std::uniform_real_distribution<double>(min, max);
-    }
-
-    double operator()() {
-        return random_distribution(random_engine);
-    }
-};
-
-std::list<Point2d*> GetUniquePoints(const std::weak_ptr<Triangle>& root_triangle) {
-    std::set<Point2d*> points;
+/*
+List edges that consist leaves of the triangle.
+It contains one edge per leaf triangle.
+[params]
+- root_triangle: the root triangle
+[return]
+Return a set of edges.
+*/
+std::set<std::pair<const Point2d*, const Point2d*>> GetUniqueLeavesEdges(const std::weak_ptr<Triangle>& root_triangle) {
+    std::set<std::pair<const Point2d*, const Point2d*>> edges;
     
-    auto leaves = root_triangle.lock()->GetAllLeaves();
+    auto point_set_list = root_triangle.lock()->ListLeafPointSet();
 
-    for (auto&& leaf : leaves) {
-        auto accessible_leaf = leaf.lock();
-
+    for (auto&& point_set : point_set_list) {
         for (int j = 0; j < 3; ++j) {
-            Point2d* p0 = accessible_leaf->points[j];
-            Point2d* p1 = accessible_leaf->points[(j + 1) % 3];
-
-            points.insert(p0);
-            points.insert(p1);
-        }
-    }
-
-    return std::list(points.begin(), points.end());
-}
-
-std::set<std::pair<Point2d*, Point2d*>> GetUniqueLeavesEdges(const std::weak_ptr<Triangle>& root_triangle) {
-    std::set<std::pair<Point2d*, Point2d*>> edges;
-    
-    auto leaves = root_triangle.lock()->GetAllLeaves();
-
-    for (auto&& leaf : leaves) {
-        auto accessible_leaf = leaf.lock();
-
-        for (int j = 0; j < 3; ++j) {
-            Point2d* p0 = accessible_leaf->points[j];
-            Point2d* p1 = accessible_leaf->points[(j + 1) % 3];
+            const Point2d* p0 = point_set[j].point;
+            const Point2d* p1 = point_set[(j + 1) % 3].point;
 
             if (*p0 < *p1) {
                 edges.insert({p0, p1});
@@ -83,14 +54,14 @@ int GetIndex(const T& container, typename T::value_type element) {
     return index;
 }
 
-void WriteSVG(const std::string& path, const std::set<std::pair<Point2d*, Point2d*>>& edges) {
+void WriteSVG(const std::string& path, const std::set<std::pair<const Point2d*, const Point2d*>>& edges) {
     std::ofstream ofs(path);
 
     ofs << R"(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -70 100 70"><path d=")";
 
     for (auto edge : edges) {
-        Point2d point1 = *edge.first;
-        Point2d point2 = *edge.second;
+        const Point2d point1 = *edge.first;
+        const Point2d point2 = *edge.second;
 
         ofs << 'M' << point1.x << ',' << -point1.y;
         ofs << 'L' << point2.x << ',' << -point2.y;
@@ -101,12 +72,12 @@ void WriteSVG(const std::string& path, const std::set<std::pair<Point2d*, Point2
     ofs.close();
 }
 
-void DrawGraphInHTML(const std::string& path, const std::list<Point2d>& points, const std::set<std::pair<Point2d*, Point2d*>>& edges, const std::weak_ptr<Triangle>& root_triangle) {
+void DrawGraphInHTML(const std::string& path, const std::list<Point2d>& points, const std::set<std::pair<const Point2d*, const Point2d*>>& edges, const std::weak_ptr<Triangle>& root_triangle) {
     struct Utility {
         static std::string GetLabel(const std::list<Point2d>& points, const std::weak_ptr<Triangle>& triangle) {
             std::set<int> indices;
-            for (Point2d* point : triangle.lock()->points) {
-                indices.insert(GetIndex(points, *point));
+            for (auto&& point : triangle.lock()->points) {
+                indices.insert(GetIndex(points, *(point->point)));
             }
 
             std::string label;
@@ -225,32 +196,43 @@ int main() {
     std::filesystem::create_directory(directory_name);
 
 
-    std::list<Point2d> points {
+    std::list<Point2d> raw_points {
         {0, 0},
         {100, 0},
         {50, 70},
     };
+
+    std::list<IndexedPoint2d> points {
+        {-1, &*raw_points.begin()},
+        {-2, &*++raw_points.begin()},
+        {-3, &*++++raw_points.begin()},
+    };
     
     auto [root_triangle, dummy_triangle] = MakeRoot(&*points.begin(), &*++points.begin(), &*++++points.begin());
 
-    std::set<std::pair<Point2d*, Point2d*>> edges;
-    std::set<std::pair<Point2d*, Point2d*>> flipped_edges = GetUniqueLeavesEdges(root_triangle);
+    auto edges = GetUniqueLeavesEdges(root_triangle);
+    auto flipped_edges = edges;
 
-    for (int i = 1; i <= 100; i++) {
-        Point2d p; 
+    for (int i = 0; i < 100; i++) {
+        Point2d raw_point;
+        IndexedPoint2d point;
         do {
-            p = {random(), random()};
-        } while (!root_triangle->Contains(&p));
+            raw_point = {random(), random()};
+            point.point = &raw_point;
+        } while (!root_triangle->Contains(&point));
         
-        points.push_back(p);
-        Point2d* point = &points.back();
+        raw_points.push_back(raw_point);
+
+        point.index = i;
+        point.point = &raw_points.back();
+        points.push_back(point);
 
 
-        auto deepest = root_triangle->FindDeepest(point).lock();
+        auto deepest = root_triangle->FindDeepest(&points.back()).lock();
         
-        root_triangle->Divide(point);
+        root_triangle->Divide(&points.back());
 
-        std::set<std::pair<Point2d*, Point2d*>> additional_edges;
+        std::set<std::pair<const Point2d*, const Point2d*>> additional_edges;
 
         int i1 = -1;
         for (int j = 0; j < 3; j++) {
@@ -260,19 +242,19 @@ int main() {
             }
         }
 
-        if (i1 != -1) {
+        if (i1 == -1) {
+            for (int j = 0; j < 3; j++) {
+                additional_edges.insert({point.point, deepest->points[j]->point});
+            }
+        }
+        else {
             int i0 = (i1 + 2) % 3;
             int j1 = deepest->GetNeighborPointIndex(i1);
 
             auto neighbor = deepest->neighbors[i1].lock();
 
-            additional_edges.insert({point, deepest->points[i0]});
-            additional_edges.insert({point, neighbor->points[j1]});
-        }
-        else {
-            for (int j = 0; j < 3; j++) {
-                additional_edges.insert({point, deepest->points[j]});
-            }
+            additional_edges.insert({point.point, deepest->points[i0]->point});
+            additional_edges.insert({point.point, neighbor->points[j1]->point});
         }
 
 
@@ -291,7 +273,7 @@ int main() {
         WriteSVG(filename, flipped_edges);
 
         sprintf(filename, "%s/with-graph-%04d.html", directory_name, i);
-        DrawGraphInHTML(filename, points, flipped_edges, root_triangle);
+        DrawGraphInHTML(filename, raw_points, flipped_edges, root_triangle);
 
         std::cout << "points count: " << i << std::endl;
     }

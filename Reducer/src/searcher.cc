@@ -8,18 +8,18 @@
 double searcher_threshold;
 
 constexpr int kgroup_nan = -1;
+constexpr int kgroup_null = -2;
+
+bool IsSafe(const int x, const int y, const int width, const int height)
+{
+    return (x >= 1 && x <= width) && (y >= 1 && y <= height);
+}
 
 double CalculateSimilarity(const Vector3d& vec1, const Vector3d& vec2){
     return vec1.Inner(vec2);
 }
 
-
-bool IsSafe(const int x, const int y, const int width, const int height)
-{
-    return (x >= 0 && x <= width + 2) && (y >= 0 && y <= height + 2);
-}
-
-void FloodFill(const Map2d<std::pair<double, Vector3d>>& map, std::vector<std::vector<int>>& group_map, const int x, const int y){
+void FloodFill(const ZMap<ReducerAttribute>& z_map, std::vector<std::vector<int>>& group_map, const int x, const int y){
     std::queue<std::pair<int, int>> q;
     q.push({x, y});
     std::vector<std::pair<int, int>> points{{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
@@ -30,16 +30,13 @@ void FloodFill(const Map2d<std::pair<double, Vector3d>>& map, std::vector<std::v
         q.pop();
 
         for(int i = 0; i < 4; i++){
-            if (!IsSafe(node_x + points[i].first, node_y + points[i].second, map.width, map.height)){
-                continue;
-            }
-            if (std::isnan(map.data[node_y + points[i].first][node_x + points[i].second].first)){
+            if (!IsSafe(node_x + points[i].second, node_y + points[i].first, z_map.width, z_map.height)){
                 continue;
             }
             if(group_map[node_y + points[i].first][node_x + points[i].second] != kgroup_nan){
                 continue;
             }
-            if(CalculateSimilarity(map.data[node_y][node_x].second, map.data[node_y + points[i].first][node_x + points[i].second].second) < searcher_threshold){
+            if(CalculateSimilarity(z_map.z_values[z_map.GetIndex(node_x, node_y)]->normal_vector, z_map.z_values[z_map.GetIndex(node_x + points[i].second, node_y + points[i].first)]->normal_vector) < searcher_threshold){
                 continue;            
             }
             group_map[node_y +  points[i].first][node_x +  points[i].second] = group_map[node_y][node_x];
@@ -48,25 +45,46 @@ void FloodFill(const Map2d<std::pair<double, Vector3d>>& map, std::vector<std::v
     }
 }
 
-std::vector<PointVectorSet> SearchPointGroups(const Map2d<std::pair<double, Vector3d>>& map) {
+std::list<std::list<int>> SearchPointGroups(const ZMap<ReducerAttribute>& z_map) {
     int group_count = 0;
-    std::vector<std::vector<int>> group_map(map.height + 2, std::vector<int>(map.width + 2, kgroup_nan));
+    std::vector<std::vector<int>> group_map(z_map.height + 2, std::vector<int>(z_map.width + 2, kgroup_nan));
 
-    for(int y = 1; y <= map.height; y++){
-        for(int x = 1; x <= map.width; x++){
+    /*for(auto& nan_point_indice : z_map.nan_point_indices){
+        Point2d nan_point = z_map.GetPoint(nan_point_indice);
+        group_map[nan_point.y][nan_point.x] = kgroup_null;
+    }*/
+
+    for(int y = 1; y <= z_map.height; ++y){
+        for(int x = 1; x <= z_map.width; ++x){
+            int index = z_map.GetIndex(x, y);
+            if(z_map.z_values[index] == nullptr){
+                group_map[y][x] = kgroup_null;
+            }
+        }
+    }
+    for(int y = 1; y <= z_map.height; ++y){
+        for(int x = 1; x <= z_map.width; ++x){
             if(group_map[y][x] != kgroup_nan){
                 continue;
             }
             group_map[y][x] = group_count;
-            FloodFill(map, group_map, x, y);
+            FloodFill(z_map, group_map, x, y);
             group_count++;
         }
     }
 
-    std::vector<PointVectorSet> pointGroups(group_count);
-    for(int y = 1; y <= map.height; y++){
-        for(int x = 1; x <= map.width; x++){
-            pointGroups[group_map[y][x]].push_back(std::make_pair(Point3d{(double)(x - 1), (double)(y - 1), map.data[y][x].first}, map.data[y][x].second));
+    std::list<std::list<int>> pointGroups(group_count);
+    for(int y = 1; y <= z_map.height; y++){
+        for(int x = 1; x <= z_map.width; x++){
+            if(group_map[y][x] < 0){
+                continue;
+            }
+            int list_indice = group_map[y][x];
+            auto itr = pointGroups.begin();
+            for(int i = 0; i < list_indice; ++i){
+                ++itr;
+            }
+            itr->push_back(z_map.GetIndex(x, y));
         }
     }
 

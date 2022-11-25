@@ -5,7 +5,7 @@
 
 #include "../include/maps_combiner.h"
 
-bool CanPass(Map2d<double> map1, Map2d<double> map2, Map2d<double> answer) {
+bool CanPass(const Map2d<double>& map1, const Map2d<double>& map2, const Map2d<double>& answer) {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
     auto result = CombineMaps({

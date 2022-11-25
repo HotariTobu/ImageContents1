@@ -1,13 +1,15 @@
 // Created by HotariTobu
 
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <limits>
 #include <string>
 
-#include "csv_reader.h"
-#include "csv_writer.h"
+#include "attribute.h"
+#include "dat.h"
 #include "main_helper.h"
+#include "z_map.h"
 #include "../include/simulator.h"
 #include "../include/separator.h"
 
@@ -22,7 +24,7 @@ extern double separator_threshold;
 
 static int trials_number;
 
-std::string threshold_suffix;
+std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
     simulator_threshold = std::stod(option.at("simulator_threshold"));
@@ -33,30 +35,31 @@ void init(std::map<std::string, std::string> option) {
         throw std::runtime_error("`trials_number` must be more than 0.");
     }
 
-    threshold_suffix = "_SIM" + std::to_string(simulator_threshold) + "_SEP" + std::to_string(separator_threshold);
+    threshold_suffix = FILENAME_SUFFIX + "_SIM" + std::to_string(simulator_threshold) + "_SEP" + std::to_string(separator_threshold);
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
-    std::string destination_file_path_ground = destination_base_path + FILENAME_SUFFIX + threshold_suffix + "_ground.csv";
-    std::string destination_file_path_building = destination_base_path + FILENAME_SUFFIX + threshold_suffix + "_building.csv";
-    std::cout << "Converting: " << source_file_path << " > " << destination_file_path_ground << ", " << destination_file_path_building << std::endl;
+    std::string destination_file_path = destination_base_path + filename_suffix + ".dat";
+    std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
-    Map2d<double> map = ReadCSV(source_file_path);
 
-    int width = map.width;
-    int height = map.height;
+    auto&& [data, rectangle] = ReadDAT<Attribute>(source_file_path);
+    ZMap z_map(data, rectangle);
 
-    std::vector<std::vector<double>> ease_of_stay_data_1;
-    std::vector<std::vector<double>> ease_of_stay_data_2;
+    if (!z_map.nan_point_indices.empty()) {
+        std::cout << "Warning: NaN points exist" << std::endl;
+    }
 
-    ease_of_stay_data_1 = std::vector<std::vector<double>>(height + 2, std::vector<double>(width + 2, 1));
+    auto ease_of_stay_data_1 = std::make_unique<double[]>(z_map.size);
+    auto ease_of_stay_data_2 = std::make_unique<double[]>(z_map.size);
 
-    std::vector<std::vector<double>>* ease_of_stay_data_source = nullptr;
-    std::vector<std::vector<double>>* ease_of_stay_data_destination = nullptr;
+    std::unique_ptr<double[]>* ease_of_stay_data_source = nullptr;
+    std::unique_ptr<double[]>* ease_of_stay_data_destination = nullptr;
 
-    for (int i = 0; i < trials_number; ++i){
+    Neighbor<Attribute> neighbor_z_values(z_map.stride);
+    for (int i = 0; i < trials_number; ++i) {
         if (i % 2 == 0) {
             ease_of_stay_data_source = &ease_of_stay_data_1;
             ease_of_stay_data_destination = &ease_of_stay_data_2;
@@ -66,79 +69,56 @@ void process_file(const std::string source_file_path, const std::string destinat
             ease_of_stay_data_destination = &ease_of_stay_data_1;
         }
 
-        *ease_of_stay_data_destination = std::vector<std::vector<double>>(height + 2, std::vector<double>(width + 2, 0));
+        std::fill(ease_of_stay_data_destination->get(), ease_of_stay_data_destination->get() + z_map.size, 0);
 
-        for (int y = 1; y <= height; ++y) {
-            for (int x = 1; x <= width; ++x) {
-                double ease_of_stay_value = (*ease_of_stay_data_source)[y][x];
+        for (int x = 1; x <= z_map.width; ++x) {
+            for (int y = 1; y <= z_map.height; ++y) {
+                int index = z_map.GetIndex(x, y);
+                double ease_of_stay_value = (*ease_of_stay_data_source)[index];
+                neighbor_z_values.head = &z_map.z_values[index];
 
-                Neighbor neighbor_heights = {
-
-#ifdef __4_NEIGHBOR
-// 4-neighbor _heightscode is hear...
-
-                                       nan, map.data[y - 1][x],                    nan,
-                    map.data[y    ][x - 1], map.data[y    ][x], map.data[y    ][x + 1],
-                                       nan, map.data[y + 1][x],                    nan,
-
-#elif __8_NEIGHBOR
-// 8-neighbor code is hear...
-
-                    map.data[y - 1][x - 1], map.data[y - 1][x], map.data[y - 1][x + 1],
-                    map.data[y    ][x - 1], map.data[y    ][x], map.data[y    ][x + 1],
-                    map.data[y + 1][x - 1], map.data[y + 1][x], map.data[y + 1][x + 1],
-
-#endif
-
-                };
-        
-                Neighbor neighbor_ease_of_stay_values = Simulate(ease_of_stay_value, neighbor_heights);
+                auto ease_of_stay_values = Simulate(ease_of_stay_value, neighbor_z_values);
 
 #ifdef __4_NEIGHBOR
 // 4-neighbor _heightscode is hear...
 
-                (*ease_of_stay_data_destination)[y - 1][x] += neighbor_ease_of_stay_values.data[0][1];
-                (*ease_of_stay_data_destination)[y][x - 1] += neighbor_ease_of_stay_values.data[1][0];
-                (*ease_of_stay_data_destination)[y][x    ] += neighbor_ease_of_stay_values.data[1][1];
-                (*ease_of_stay_data_destination)[y][x + 1] += neighbor_ease_of_stay_values.data[1][2];
-                (*ease_of_stay_data_destination)[y + 1][x] += neighbor_ease_of_stay_values.data[2][1];
+                for (int i = 0; i < 4; ++i) {
+                    int x = (-1 + i) % 2;
+                    int y = (-2 + i) % 2;
+
+                    int offset = z_map.GetIndex(x, y);
+
+                    (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[x + 1][y + 1];
+                }
+
+                (*ease_of_stay_data_destination)[index] += ease_of_stay_values[1][1];
 
 #elif __8_NEIGHBOR
 // 8-neighbor code is hear...
 
-                (*ease_of_stay_data_destination)[y - 1][x - 1] += neighbor_ease_of_stay_values.data[0][0];
-                (*ease_of_stay_data_destination)[y - 1][x    ] += neighbor_ease_of_stay_values.data[0][1];
-                (*ease_of_stay_data_destination)[y - 1][x + 1] += neighbor_ease_of_stay_values.data[0][2];
-                (*ease_of_stay_data_destination)[y    ][x - 1] += neighbor_ease_of_stay_values.data[1][0];
-                (*ease_of_stay_data_destination)[y    ][x    ] += neighbor_ease_of_stay_values.data[1][1];
-                (*ease_of_stay_data_destination)[y    ][x + 1] += neighbor_ease_of_stay_values.data[1][2];
-                (*ease_of_stay_data_destination)[y + 1][x - 1] += neighbor_ease_of_stay_values.data[2][0];
-                (*ease_of_stay_data_destination)[y + 1][x    ] += neighbor_ease_of_stay_values.data[2][1];
-                (*ease_of_stay_data_destination)[y + 1][x + 1] += neighbor_ease_of_stay_values.data[2][2];
+                for (int x = -1; x <= 1; ++x) {
+                    for (int y = -1; y <= 1; ++y) {
+                        int offset = z_map.GetIndex(x, y);
 
+                        (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[x + 1][y + 1];
+                    }
+                }
+                
 #endif
 
             }
         }
     }
 
-    Map2d<std::pair<double, double>> ease_of_stay_map;
-    ease_of_stay_map.x = map.x;
-    ease_of_stay_map.y = map.y;
-    ease_of_stay_map.width = width;
-    ease_of_stay_map.height = height;
-    ease_of_stay_map.data = std::vector<std::vector<std::pair<double, double>>>(height + 2, std::vector<std::pair<double, double>>(width + 2));
-
-    for (int y = 1; y <= height; ++y) {
-        for (int x = 1; x <= width; ++x) {
-            ease_of_stay_map.data[y][x] = std::make_pair(map.data[y][x], (*ease_of_stay_data_destination)[y][x]);
+    for (int i = 0; i < z_map.size; ++i) {
+        if (z_map.z_values[i] != nullptr) {
+            double ease_of_stay_value = (*ease_of_stay_data_destination)[i];
+            PointType&& point_type = ease_of_stay_value > separator_threshold ? PointType::GROUND : PointType::BUILDING;
+            const_cast<Attribute*>(z_map.z_values[i])->type = point_type;
         }
     }
-
-    auto [map_ground, map_building] = Separate(ease_of_stay_map);
-
-    WriteCSV(destination_file_path_ground, map_ground);
-    WriteCSV(destination_file_path_building, map_building);
+    
+    WriteDAT(destination_file_path, data);
 }
 
 int main() {

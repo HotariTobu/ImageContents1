@@ -2,90 +2,84 @@
 
 #include "../include/ground_points_adder.h"
 
-#include <algorithm>
+#include "algorithm"
 #include <cmath>
+#include <map>
+#include <vector>
 
 #include "point3d.h"
 
 double ground_point_threshold;
 
-struct IndexSetWithOrigin {
-    int index_set_index;
+struct PointSetWithOrigin {
+    IndexedPoint2dSet* point_set = nullptr;
     Point2d origin;
 };
 
-struct IndexSetWithAngle {
-    int index_set_index;
-    double angle;
-};
-
-struct IndexSetWithEdge {
-    int index_set_index;
-    int point_index;
+struct PointSetWithEdge {
+    IndexedPoint2dSet* point_set = nullptr;
+    int point_index_index;
     Vector3d edge;
+    bool is_reconnected;
 };
 
-Point3d Merge(Point2d point, double z) {
-    return {point.x, point.y, z};
-}
-
-std::vector<IndexSetWithEdge> GetEdges(const std::vector<Point2d>& points, const std::vector<double>& z_values, const std::vector<IndexSet>& indices, const std::vector<IndexSetWithOrigin>& point_label, int index) {
-    Point2d base_point_2d = points[index];
+std::vector<PointSetWithEdge> GetEdgesLabel(const std::list<PointSetWithOrigin>& point_label, const Point2d* base_point, double base_z, const std::map<Point2d, Attribute>& data) {
     int edges_count = point_label.size();
 
-    std::vector<IndexSetWithAngle> labels(edges_count);
-
-    for (int i = 0; i < edges_count; ++i) {
-        IndexSetWithOrigin index_set_with_origin = point_label[i];
-        Vector2d vector = index_set_with_origin.origin - base_point_2d;
-
-        int index_set_index = index_set_with_origin.index_set_index;
+    std::map<double, PointSetWithEdge> edges_label;
+    for (auto&& with_origin : point_label) {
+        Vector2d vector = with_origin.origin - *base_point;
         double angle = std::atan2(vector.y, vector.x);
 
-        labels[i] = {index_set_index, angle};
-    }
-
-    std::sort(labels.begin(), labels.end(), [](IndexSetWithAngle l1, IndexSetWithAngle l2) { return l1.angle < l2.angle; });
-
-    Point3d base_point_3d = Merge(base_point_2d, z_values[index]);
-    std::vector<IndexSetWithEdge> edge_labels(edges_count);
-
-    for (int i = 0; i < edges_count; ++i) {
-        int index_set_index = labels[i].index_set_index;
-        IndexSet index_set = indices[index_set_index];
-
+        auto point_set = with_origin.point_set;
+                
         int j = 0;
-        while (index_set[j] != index) {
+        while ((*point_set)[j].point != base_point) {
             ++j;
         }
 
-        int another_index = index_set[(j + 1) % 3];
+        auto another_point = (*point_set)[(j + 1) % 3];
+        if (another_point.index < 0) {
+            continue;
+        }
+        
+        auto another_point_3d = *(another_point.point);
+        Vector2d edge = another_point_3d - *base_point;
 
-        Point3d another_point_3d = Merge(points[another_index], z_values[another_index]);        
-        Vector3d edge = another_point_3d - base_point_3d;
+        PointSetWithEdge with_edge;
+        with_edge.point_set = point_set;
+        with_edge.point_index_index = j;
+        with_edge.edge = {
+            edge.x,
+            edge.y,
+            data.at(another_point_3d).z - base_z
+        };
 
-        edge_labels[i] = {index_set_index, j, edge};
+        edges_label.insert({angle, with_edge});
     }
 
-    return edge_labels;
+    std::vector<PointSetWithEdge> sorted_edges_label;
+    for (auto [_, with_edge] : edges_label) {
+        sorted_edges_label.push_back(with_edge);
+    }
+
+    return sorted_edges_label;
 }
 
-bool IsCycled(const std::vector<IndexSet>& indices, const std::vector<IndexSetWithEdge> edge_labels) {
-    int edges_count = edge_labels.size();
+
+bool IsCycled(const std::vector<PointSetWithEdge>& edges_label) {
+    int edges_count = edges_label.size();
 
     for (int i0 = 0; i0 < edges_count; ++i0) {
         int i1 = (i0 + 1) % edges_count;
         
-        IndexSetWithEdge edge_0 = edge_labels[i0];
-        IndexSetWithEdge edge_1 = edge_labels[i1];
+        auto&& with_edge_0 = edges_label[i0];
+        auto&& with_edge_1 = edges_label[i1];
 
-        IndexSet index_set_0 = indices[edge_0.index_set_index];
-        IndexSet index_set_1 = indices[edge_1.index_set_index];
+        auto* point_set_0 = with_edge_0.point_set;
+        auto* point_set_1 = with_edge_1.point_set;
 
-        int point_index_0 = edge_0.point_index;
-        int point_index_1 = edge_1.point_index;
-
-        if (index_set_0[(point_index_0 + 2) % 3] != index_set_1[(point_index_1 + 1) % 3]) {
+        if ((*point_set_0)[(with_edge_0.point_index_index + 2) % 3] != (*point_set_1)[(with_edge_1.point_index_index + 1) % 3]) {
             return false;
         }
     }
@@ -93,96 +87,124 @@ bool IsCycled(const std::vector<IndexSet>& indices, const std::vector<IndexSetWi
     return true;
 }
 
-std::vector<double> GetTilts(const std::vector<IndexSetWithEdge>& edge_labels) {
-    int edges_count = edge_labels.size();
-    std::vector<double> tilts(edges_count);
+int SetFlags(std::vector<PointSetWithEdge>& edges_label) {
+    int edges_count = edges_label.size();
+    int candidates_count = 0;
 
     for (int i0 = 0; i0 < edges_count; ++i0) {
         int i1 = (i0 + 1) % edges_count;
         
-        Vector3d vector = edge_labels[i0].edge.Cross(edge_labels[i1].edge);
+        Vector3d vector = edges_label[i0].edge.Cross(edges_label[i1].edge);
         vector.Normalize();
 
-        tilts[i0] = vector.Inner({0, 0, 1});
+        double tilt = vector.Inner({0, 0, 1});
+        bool is_reconnected = tilt < ground_point_threshold;
+        edges_label[i0].is_reconnected = is_reconnected;
+
+        if (is_reconnected) {
+            ++candidates_count;
+        }
     }
 
-    return tilts;
+    return candidates_count;
 }
 
-void AddGroundPoints(std::vector<Point2d>& points, std::vector<double>& z_values, std::vector<IndexSet>& indices) {
-    int points_count = points.size();
-    int index_set_count = indices.size();
+std::pair<std::list<std::pair<Point2d, double>>, std::list<IndexSet>> AddGroundPoints(const std::map<Point2d, Attribute>& data, std::list<IndexedPoint2dSet>& point_set_list) {
+    int points_count = data.size();
 
-    std::vector<IndexSetWithOrigin> point_labels[points_count];
+    std::list<PointSetWithOrigin> points_label[points_count];
 
-    for (int i = 0; i < index_set_count; ++i) {
-        IndexSet index_set = indices[i];
-
+    for (auto&& point_set : point_set_list) {
         Point2d origin = {0, 0};
         for (int i = 0; i < 3; ++i) {
-            origin += points[index_set[i]];
+            origin += *(point_set[i]);
         }
         origin /= 3;
 
-        IndexSetWithOrigin index_set_with_origin = {i, origin};
+        PointSetWithOrigin point_set_with_origin = {&point_set, origin};
 
         for (int i = 0; i < 3; ++i) {
-            point_labels[index_set[i]].push_back(index_set_with_origin);
+            int point_index = point_set[i].index;
+            if (point_index < 0) {
+                continue;
+            }
+
+            points_label[point_index].push_back(point_set_with_origin);
         }
     }
 
-    for (int i = 0; i < points_count; ++i) {
-        auto point_label = point_labels[i];
+    std::list<std::pair<Point2d, double>> additional_points;
+    std::list<IndexSet> additional_index_set_list;
 
-        auto edge_labels = GetEdges(points, z_values, indices, point_label, i);
-        if (!IsCycled(indices, edge_labels)) {
+    int i = 0;
+    int ground_point_index = points_count;
+    for (auto&& [base_point, attribute] : data) {
+        auto point_label = points_label[i];
+        double base_z = data.at(base_point).z;
+
+        auto edges_label = GetEdgesLabel(point_label, &base_point, base_z, data);
+        if (!IsCycled(edges_label)) {
+            ++i;
             continue;
         }
 
-        auto tilts = GetTilts(edge_labels);
-
-        std::vector<int> candidates;
-
-        int edges_count = edge_labels.size();
-        for (int j = 0; j < edges_count; ++j) {
-            if (tilts[j] < ground_point_threshold) {
-                candidates.push_back(j);
-            }
-        }
-
-        int candidates_count = candidates.size();
+        int candidates_count = SetFlags(edges_label);
         if (candidates_count == 0) {
+            ++i;
             continue;
         }
         
-        auto min_ite = std::min_element(edge_labels.begin(), edge_labels.end(), [](const IndexSetWithEdge& l1, const IndexSetWithEdge& l2) {
+        auto min_ite = std::min_element(edges_label.begin(), edges_label.end(), [](const PointSetWithEdge& l1, const PointSetWithEdge& l2) {
             return l1.edge.z < l2.edge.z;
         });
-        int ground_point_index = points.size();
-        points.push_back(points[i]);
-        z_values.push_back(z_values[i] + min_ite->edge.z);
 
-        for (int j = 0; j < candidates_count; ++j) {
-            int candidate = candidates[j];
+        additional_points.push_back({
+            {
+                base_point.x,
+                base_point.y,
+            },
+            base_z + min_ite->edge.z
+        });
 
-            int i0 = edge_labels[candidate].point_index;
-            int i1 = (i0 + 1) % 3;
-            int i2 = (i0 + 2) % 3;
+        int edges_count = edges_label.size();
 
-            int index_set_index = edge_labels[candidate].index_set_index;
-            IndexSet index_set = indices[index_set_index];
+        for (int j = 0; j < edges_count; ++j) {
+            auto edge_label_0 = edges_label[j];
+            auto edge_label_1 = edges_label[(j + 1) % edges_count];
 
-            if (candidates[(j + candidates_count - 1) % candidates_count] != (candidate + edges_count - 1) % edges_count) {
-                IndexSet prev_index_set = {ground_point_index, index_set[i0], index_set[i1]};
-                indices.push_back(prev_index_set);
+            auto* current_point_set = edge_label_0.point_set;
+            int point_index_index_0 = edge_label_0.point_index_index;
+
+            if (edge_label_0.is_reconnected ^ edge_label_1.is_reconnected) {
+                IndexSet additional_index_set;
+                int point_index_index_2 = (point_index_index_0 + 2) % 3;
+
+                if (edge_label_0.is_reconnected) {
+                    additional_index_set = {
+                        ground_point_index,
+                        (*current_point_set)[point_index_index_2].index,
+                        (*current_point_set)[point_index_index_0].index
+                    };
+                }
+                else {
+                    additional_index_set = {
+                        ground_point_index,
+                        (*current_point_set)[point_index_index_0].index,
+                        (*current_point_set)[point_index_index_2].index
+                    };
+                }
+
+                additional_index_set_list.push_back(additional_index_set);
             }
 
-            if (candidates[(j + 1) % candidates_count] != (candidate + 1) % edges_count) {
-                IndexSet next_index_set = {ground_point_index, index_set[i2], index_set[i0]};
-                indices.push_back(next_index_set);
+            if (edge_label_0.is_reconnected) {
+                (*current_point_set)[point_index_index_0].index = ground_point_index;
             }
-
-            indices[index_set_index][i0] = ground_point_index;
         }
+
+        ++i;
+        ++ground_point_index;
     }
+
+    return {additional_points, additional_index_set_list};
 }

@@ -4,35 +4,38 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 #include "point3d.h"
 #include "../include/wrl_writer.h"
 
-bool CanPass(std::vector<Point3d> points, std::vector<IndexSet> indices, Map2d<PointType> point_types, const char* answer) {
+bool CanPass(const char* answer, const std::map<Point2d, Attribute>& data, const std::list<IndexSet>& index_set_list, const std::list<std::pair<Point2d, double>>& additional_points = {}, const std::list<IndexSet>& additional_index_set_list = {}) {
     const char* filename = "test.wrl";
 
-    std::vector<Point2d> points_2d(points.size());
-    std::vector<double> z_values(points.size());
-    for (int i = 0; i < points.size(); i++) {
-        points_2d[i] = {
-            points[i].x,
-            points[i].y
-        };
-        z_values[i] = points[i].z;
-    }
 
-    Map2d<std::pair<double, PointType>> map;
-    double width = point_types.width;
-    double height = point_types.height;
-    map.data = std::vector<std::vector<std::pair<double, PointType>>>(height + 2, std::vector<std::pair<double, PointType>>(width + 2, {0, PointType::NONE}));
-    for (int y = 1; y <= height; y++) {
-        for (int x = 1; x <= width; x++) {
-            map.data[y][x].second = point_types.data[y][x];
+    int points_count = data.size();
+
+    std::vector<IndexedPoint2d> points;
+    points.reserve(points_count);
+
+    for (int i = 0; i < points_count; i++) {
+        IndexedPoint2d point;
+        point.index = i;
+        points.push_back(point);
+    }
+    
+    std::list<IndexedPoint2dSet> point_set_list;
+
+    for (auto &&index_set : index_set_list) {
+        IndexedPoint2dSet point_set;
+        for (int i = 0; i < 3; i++) {
+            point_set[i] = points[index_set[i]];
         }
+        point_set_list.push_back(point_set);
     }
     
 
-    WriteWRL(filename, points_2d, z_values, indices, map);
+    WriteWRL(filename, data, point_set_list, additional_points, additional_index_set_list);
 
     std::ifstream ifs(filename);
     std::stringstream buffer;
@@ -49,29 +52,8 @@ bool CanPass(std::vector<Point3d> points, std::vector<IndexSet> indices, Map2d<P
 int main() {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
-    assert(
-        CanPass(
-            {
-                {0, 1, 3},
-                {1, 0, 6},
-                {2, 2, 9},
-                {1, 2, 7},
-            },
-            {
-                {0, 1, 2},
-                {0, 1, 3},
-            },
-            {
-                -2, 7, 3, 3,
-                {
-                    {PointType::NONE,   PointType::NONE,     PointType::NONE,   PointType::NONE, PointType::NONE},
-                    {PointType::NONE,   PointType::NONE, PointType::BUILDING,   PointType::NONE, PointType::NONE},
-                    {PointType::NONE, PointType::GROUND,     PointType::NONE,   PointType::NONE, PointType::NONE},
-                    {PointType::NONE,   PointType::NONE,     PointType::NONE, PointType::GROUND, PointType::NONE},
-                    {PointType::NONE,   PointType::NONE,     PointType::NONE,   PointType::NONE, PointType::NONE},
-                }
-            },
-            R"(#VRML V2.0 utf8
+    assert(CanPass(
+        R"(#VRML V2.0 utf8
 
 Shape {
     geometry IndexedFaceSet {
@@ -80,24 +62,42 @@ Shape {
             color [
 0 1 0,
 1 0 0,
-0 1 0,
 1 1 1,
+0 1 0,
+0 1 0,
             ]
         }
         coord Coordinate {
             point [
 0 3 -1,
 1 6 -0,
-2 9 -2,
 1 7 -2,
+2 9 -2,
+2 0 -2,
             ]
         }
         coordIndex [
 0, 1, 2, -1
 0, 1, 3, -1
+2, 1, 0, -1
         ]
     }
-})"
-        )
-    );
+})",
+        {
+            {{0, 1}, {3, PointType::GROUND}},
+            {{1, 0}, {6, PointType::BUILDING}},
+            {{1, 2}, {7, PointType::NONE}},
+            {{2, 2}, {9, PointType::GROUND}},
+        },
+        {
+            {0, 1, 2},
+            {0, 1, 3},
+        },
+        {
+            {{2, 2}, 0},
+        },
+        {
+            {2, 1, 0},
+        }
+    ));
 }

@@ -10,6 +10,6 @@
     return _normal;
  }
  
- PointSet Face::points() {
+ std::list<std::pair<Point2d, double*>> Face::points() {
     return _points;
  }

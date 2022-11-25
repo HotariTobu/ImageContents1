@@ -1,0 +1,44 @@
+// Created by HotariTobu
+
+#include "../include/neighbor.h"
+
+template<typename T>
+Neighbor<T>::Neighbor(int stride) {
+    this->stride = stride;
+}
+
+template<typename T>
+bool Neighbor<T>::At(int x, int y, T* v) const {
+    const T* pointer = head[x + y * stride];
+    if (pointer == nullptr) {
+        return false;
+    }
+
+    *v = *pointer;
+    return true;
+}
+
+template<typename T>
+bool Neighbor<T>::IsAllNull() const {
+    for (int x = 0; x < 3; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            if (head[x + y * stride] != nullptr) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}
+
+template<typename T>
+bool operator==(const Neighbor<T> neighbor1, const Neighbor<T> neighbor2) {
+    return
+        neighbor1.head == neighbor2.head &&
+        neighbor1.stride == neighbor2.stride;
+}
+
+template<typename T>
+bool operator!=(const Neighbor<T> neighbor1, const Neighbor<T> neighbor2) {
+    return !(neighbor1 == neighbor2);
+}

@@ -3,22 +3,22 @@
 #ifndef __SEARCHER_H__
 #define __SEARCHER_H__
 
-#include <utility>
-#include <vector>
+#include <list>
 
-#include "map2d.h"
-#include "alias.h"
-#include "vector3d.h"
+#include "reducer_attribute.h"
+#include "z_map.h"
 
 // double searcher_threshold;
 
 /*
 Create groups of points that are similar to each other for their normal vectors.
+A group includes a point if the inner product of normal vectors of the point and a neighbor point in the group is bigger than the threshold. 
 [params]
-- map: map of heights and normal vector
+- z_map: a map that the key is a 2d point and the value is the attribute of the point that includes the normal vector
 [return]
-Set of the groups of points.
+List of indices lists to reference `ZMap::z_values`.
+An indices list consists of indices of points that are in the same group.
 */
-std::vector<PointVectorSet> SearchPointGroups(const Map2d<std::pair<double, Vector3d>>& map);
+std::list<std::list<int>> SearchPointGroups(const ZMap<ReducerAttribute>& z_map);
 
 #endif // __SEARCHER_H__

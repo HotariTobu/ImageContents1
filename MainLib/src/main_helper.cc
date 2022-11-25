@@ -43,7 +43,7 @@ void HelpMain(const std::string option_file_path, const std::map<std::string, st
     for (const auto& file : fs::directory_iterator(source_directory_path)) {
         fs::path source_file_path = file.path();
 
-        if (ToLower(source_file_path.extension().string()) != ".csv") {
+        if (ToLower(source_file_path.extension().string()) != ".dat") {
             continue;
         }
 
