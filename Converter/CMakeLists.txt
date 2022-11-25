@@ -12,8 +12,8 @@ target_link_libraries(TEST_big_triangle_maker RandomLib)
 target_link_libraries(TEST_ground_points_adder GeometryLib)
 target_link_libraries(TEST_ground_points_adder PointTypeLib)
 
-target_link_libraries(TEST_maps_combiner MapLib)
-target_link_libraries(TEST_maps_combiner PointTypeLib)
+# target_link_libraries(TEST_maps_combiner MapLib)
+# target_link_libraries(TEST_maps_combiner PointTypeLib)
 
 target_link_libraries(TEST_randomizer GeometryLib)
 
@@ -25,8 +25,6 @@ target_link_libraries(TEST_triangle GeometryLib)
 target_link_libraries(TEST_wrl_writer GeometryLib)
 target_link_libraries(TEST_wrl_writer DatLib)
 target_link_libraries(TEST_wrl_writer PointTypeLib)
-
-set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/src/maps_combinder.cc TARGET_DIRECTORY Converter PROPERTIES HEADER_FILE_ONLY ON)
 
 file(GLOB TRIANGLE_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/triangle*.cc)
 foreach(FILE_PATH IN ITEMS ${TRIANGLE_SOURCE_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/src/circle.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/indexed_point.cc)
