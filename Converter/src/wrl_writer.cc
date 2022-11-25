@@ -10,6 +10,9 @@ void WriteWRL(const std::string& path, const std::map<Point2d, Attribute>& data,
     ofs << R"(#VRML V2.0 utf8
 
 Shape {
+    appearance Appearance {
+        material Material {}
+    }
     geometry IndexedFaceSet {
         colorPerVertex TRUE
         color Color {

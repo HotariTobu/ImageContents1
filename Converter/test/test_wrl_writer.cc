@@ -56,6 +56,9 @@ int main() {
         R"(#VRML V2.0 utf8
 
 Shape {
+    appearance Appearance {
+        material Material {}
+    }
     geometry IndexedFaceSet {
         colorPerVertex TRUE
         color Color {
