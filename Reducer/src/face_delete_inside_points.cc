@@ -14,20 +14,25 @@ bool IsDent(Point2d p0, Point2d p1, Point2d p2) {
 }
 
 std::list<Point2d> Face::DeleteInsidePoints() {
+    int points_count = _points.size();
+    if (points_count <= 3) {
+        return {};
+    }
+
     Point2d origin_2d = {
         _origin.x,
         _origin.y
     };
 
-    std::map<double, const std::pair<Point2d, double *>*> sorted_points;
+    std::map<std::pair<double, double>, const std::pair<Point2d, double *>*> sorted_points;
 
     for (auto&& point : _points) {
         Vector2d vector = point.first - origin_2d;
         double angle = std::atan2(vector.y, vector.x);
-        sorted_points.insert({angle, &point});
+        double length = vector.Length();
+        sorted_points.insert({{angle, length}, &point});
     }
 
-    int points_count = _points.size();
     std::vector<std::pair<int, const std::pair<Point2d, double *>*>> iterator(points_count);
 
     auto ite = sorted_points.cbegin();
