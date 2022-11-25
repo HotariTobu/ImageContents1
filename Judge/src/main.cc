@@ -125,8 +125,8 @@ void process_file(const std::string source_file_path, const std::string destinat
     WriteDAT(destination_file_path, data);
 }
 
-int main() {
-    HelpMain("JudgeOption.txt", {
+int main(int argc, const char* argv[]) {
+    HelpMain(argc, argv, "JudgeOption.txt", {
         {"source_directory_path", "intermediate_data_Filler"},
         {"destination_directory_path", "intermediate_data_Judge"},
         {"simulator_threshold", "2"},

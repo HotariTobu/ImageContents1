@@ -80,8 +80,8 @@ void process_file(const std::string source_file_path, const std::string destinat
     WriteDAT(destination_file_path, data);
 }
 
-int main() {
-    HelpMain("ReducerOption.txt", {
+int main(int argc, const char* argv[]) {
+    HelpMain(argc, argv, "ReducerOption.txt", {
         {"source_directory_path", "intermediate_data_Judge"},
         {"destination_directory_path", "intermediate_data_Reducer"},
         {"searcher_threshold", "0.5"},

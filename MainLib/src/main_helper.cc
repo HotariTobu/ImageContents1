@@ -19,7 +19,7 @@ std::string ToLower(const std::string string) {
     return result;
 }
 
-void HelpMain(const std::string option_file_path, const std::map<std::string, std::string> default_option, std::function<void(std::map<std::string, std::string>&)> init, std::function<void(const std::string, const std::string)> process_file) {
+void HelpMain(int argc, const char* argv[], const std::string& option_file_path, const std::map<std::string, std::string>& default_option, std::function<void(std::map<std::string, std::string>&)> init, std::function<void(const std::string, const std::string)> process_file, const std::string& white_extension) {
     auto option = ReadOption(option_file_path);
 
     for (auto pair : default_option) {
@@ -40,10 +40,17 @@ void HelpMain(const std::string option_file_path, const std::map<std::string, st
 
     init(option);
 
-    for (const auto& file : fs::directory_iterator(source_directory_path)) {
-        fs::path source_file_path = file.path();
+    std::list<fs::path> file_paths;
+    for (int i = 0; i < argc; i++) {
+        file_paths.push_back(fs::path(argv[i]));
+    }
+    
+    for (auto&& file : fs::directory_iterator(source_directory_path)) {
+        file_paths.push_back(file.path());
+    }
 
-        if (ToLower(source_file_path.extension().string()) != ".dat") {
+    for (auto&& source_file_path : file_paths) {
+        if (ToLower(source_file_path.extension().string()) != white_extension) {
             continue;
         }
 

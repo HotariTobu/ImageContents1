@@ -79,8 +79,8 @@ void process_file(const std::string source_file_path, const std::string destinat
 /*
 Read 2 .csv file.
 */
-int main() {
-    HelpMain("ConverterOption.txt", {
+int main(int argc, const char* argv[]) {
+    HelpMain(argc, argv, "ConverterOption.txt", {
         {"source_directory_path", "intermediate_data_Reducer"},
         {"destination_directory_path", "destination_data"},
         {"ground_point_threshold", "0.5"},

@@ -71,8 +71,8 @@ void process_file(const std::string source_file_path, const std::string destinat
     WriteDAT(destination_file_path, data);
 }
 
-int main() {
-    HelpMain("FillerOption.txt", {
+int main(int argc, const char* argv[]) {
+    HelpMain(argc, argv, "FillerOption.txt", {
         {"source_directory_path", "intermediate_data_Splitter"},
         {"destination_directory_path", "intermediate_data_Filler"},
     }, init, process_file);

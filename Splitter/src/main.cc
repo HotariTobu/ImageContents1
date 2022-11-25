@@ -57,8 +57,8 @@ void process_file(const std::string source_file_path, const std::string destinat
     }
 }
 
-int main() {
-    HelpMain("SplitterOption.txt", {
+int main(int argc, const char* argv[]) {
+    HelpMain(argc, argv, "SplitterOption.txt", {
         {"source_directory_path", "source_data"},
         {"destination_directory_path", "intermediate_data_Splitter"},
         {"chunk_length", "100"},
