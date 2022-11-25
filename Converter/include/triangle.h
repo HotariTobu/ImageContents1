@@ -29,6 +29,9 @@ struct Triangle: public std::enable_shared_from_this<Triangle> {
     // Neighbor triangles outside the triangle.
     std::weak_ptr<Triangle> neighbors[3];
 
+    // Indicates if the triangle has been scanned when listing leaves.
+    bool HasBeenScanned;
+
     /*
     Initialize all members.
     Assign `children` and `neighbors` nullptr.

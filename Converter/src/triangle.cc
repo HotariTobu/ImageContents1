@@ -8,6 +8,8 @@ Triangle::Triangle(const IndexedPoint2d* p0, const IndexedPoint2d* p1, const Ind
     points[0] = p0;
     points[1] = p1;
     points[2] = p2;
+
+    HasBeenScanned = false;
 }
 
 Triangle::~Triangle() {
