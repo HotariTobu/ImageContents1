@@ -7,8 +7,8 @@
 Rectangle::Rectangle() {
     this->min_x = std::numeric_limits<double>::max();
     this->min_y = std::numeric_limits<double>::max();
-    this->max_x = std::numeric_limits<double>::min();
-    this->max_y = std::numeric_limits<double>::min();
+    this->max_x = -std::numeric_limits<double>::max();
+    this->max_y = -std::numeric_limits<double>::max();
 }
 
 Rectangle::Rectangle(double min_x, double min_y, double max_x, double max_y) {
