@@ -48,8 +48,8 @@ bool CanPass(const std::vector<std::pair<double, Vector3d>> attributes, int widt
     for (auto&& indices : index_vector) {
         std::set<int> index_set;
         for (int index : indices) {
-            int offset_x = index % width;
-            int offset_y = index / width;
+            int offset_x = index % width + 1;
+            int offset_y = index / width + 1;
 
             int new_index = z_map.GetIndex(offset_x, offset_y);
             index_set.insert(new_index);
