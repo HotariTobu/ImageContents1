@@ -112,7 +112,7 @@ int SetFlags(std::vector<PointSetWithEdge>& edges_label) {
 std::pair<std::list<std::pair<Point2d, double>>, std::list<IndexSet>> AddGroundPoints(const std::map<Point2d, Attribute>& data, std::list<IndexedPoint2dSet>& point_set_list) {
     int points_count = data.size();
 
-    std::list<PointSetWithOrigin> points_label[points_count];
+    std::vector<std::list<PointSetWithOrigin>> points_label(points_count);
 
     for (auto&& point_set : point_set_list) {
         Point2d origin = {0, 0};
