@@ -10,15 +10,8 @@ foreach(FLAG1 IN LISTS FLAG1S)
     endforeach() 
 endforeach()
 
-set(DEPEND_ON_MAPLIB calculator)
-
-foreach(FLAG1 IN LISTS FLAG1S)
-endforeach()
-
 foreach(FLAG1 IN LISTS FLAG1S)
     foreach(FLAG2 IN LISTS FLAG2S)
-        foreach(TEST_FILENAME IN LISTS DEPEND_ON_MAPLIB)
-            target_link_libraries(TEST_${TEST_FILENAME}_${FLAG1}_${FLAG2} MapLib)
-        endforeach()
+        target_link_libraries(TEST_calculator_${FLAG1}_${FLAG2} DatLib)
     endforeach() 
 endforeach()

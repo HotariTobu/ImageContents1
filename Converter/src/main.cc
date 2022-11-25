@@ -11,7 +11,6 @@
 #include "../include/big_triangle_maker.h"
 #include "../include/ground_points_adder.h"
 #include "../include/indexed_point2d.h"
-#include "../include/maps_combiner.h"
 #include "../include/randomizer.h"
 #include "../include/root_maker.h"
 #include "../include/triangle.h"
