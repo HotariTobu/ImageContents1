@@ -1,6 +1,7 @@
 add_target()
 
 target_link_libraries(DelaunayDemo GeometryLib)
+target_link_libraries(DelaunayDemo RandomLib)
 
 file(GLOB TRIANGLE_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/triangle*.cc)
 foreach(FILE_PATH IN LISTS TRIANGLE_SOURCE_FILES)
