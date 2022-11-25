@@ -36,8 +36,7 @@ void FloodFill(const ZMap<ReducerAttribute>& z_map, std::vector<std::vector<int>
             if(group_map[node_y + points[i].first][node_x + points[i].second] != kgroup_nan){
                 continue;
             }
-            Vector3d v1 = Vector3d{double(node_x), double(node_y), z_map.z_values[z_map.GetIndex(node_x, node_y)]->z};
-            if(CalculateSimilarity(, Vector3d{double(node_x + points[i].second), double(node_y + points[i].first), z_map.z_values[z_map.GetIndex(node_x + points[i].second, node_y + points[i].first)]->z}) < searcher_threshold){
+            if(CalculateSimilarity(z_map.z_values[z_map.GetIndex(node_x, node_y)]->normal_vector, z_map.z_values[z_map.GetIndex(node_x + points[i].second, node_y + points[i].first)]->normal_vector) < searcher_threshold){
                 continue;            
             }
             group_map[node_y +  points[i].first][node_x +  points[i].second] = group_map[node_y][node_x];
