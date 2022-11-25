@@ -38,8 +38,13 @@ std::vector<PointSetWithEdge> GetEdgesLabel(const std::list<PointSetWithOrigin>&
             ++j;
         }
 
-        auto another_point = *((*point_set)[(j + 1) % 3].point);
-        Vector2d edge = another_point - *base_point;
+        auto another_point = (*point_set)[(j + 1) % 3];
+        if (another_point.index < 0) {
+            continue;
+        }
+        
+        auto another_point_3d = *(another_point.point);
+        Vector2d edge = another_point_3d - *base_point;
 
         PointSetWithEdge with_edge;
         with_edge.point_set = point_set;
@@ -47,7 +52,7 @@ std::vector<PointSetWithEdge> GetEdgesLabel(const std::list<PointSetWithOrigin>&
         with_edge.edge = {
             edge.x,
             edge.y,
-            data.at(another_point).z - base_z
+            data.at(another_point_3d).z - base_z
         };
 
         edges_label.insert({angle, with_edge});
