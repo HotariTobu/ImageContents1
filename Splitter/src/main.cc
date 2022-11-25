@@ -10,12 +10,12 @@
 #include "main_helper.h"
 #include "z_map.h"
 
-double chunk_length;
+int chunk_length;
 
 std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
-    chunk_length = std::stod(option.at("chunk_length"));
+    chunk_length = std::stoi(option.at("chunk_length"));
     filename_suffix = "_CL_" + std::to_string(chunk_length);
 }
 
