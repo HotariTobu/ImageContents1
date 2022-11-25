@@ -26,7 +26,9 @@ std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
     searcher_threshold = std::stod(option.at("searcher_threshold"));
+    
     filename_suffix = std::to_string(searcher_threshold);
+    threshold_suffix = "_SER" + std::to_string(searcher_threshold);
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {

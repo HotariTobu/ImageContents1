@@ -4,6 +4,7 @@
 #include <chrono>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <list>
 #include <map>
 #include <random>
@@ -273,5 +274,7 @@ int main() {
 
         sprintf(filename, "%s/with-graph-%04d.html", directory_name, i);
         DrawGraphInHTML(filename, raw_points, flipped_edges, root_triangle);
+
+        std::cout << "points count: " << i << std::endl;
     }
 }

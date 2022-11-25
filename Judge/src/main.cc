@@ -35,7 +35,7 @@ void init(std::map<std::string, std::string> option) {
         throw std::runtime_error("`trials_number` must be more than 0.");
     }
 
-    filename_suffix = FILENAME_SUFFIX + std::to_string(simulator_threshold) + '_' + std::to_string(separator_threshold);
+    threshold_suffix = FILENAME_SUFFIX + "_SIM" + std::to_string(simulator_threshold) + "_SEP" + std::to_string(separator_threshold);
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <set>
 #include <string>
+#include <cmath>
 
 #include "attribute.h"
 #include "dat.h"
