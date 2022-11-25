@@ -12,26 +12,18 @@
 #include <string>
 #include <thread>
 
+#include "random.h"
 #include "../../include/root_maker.h"
 #include "../../include/triangle.h"
 
-class Random {
-private:
-    std::default_random_engine random_engine;
-    std::uniform_real_distribution<double> random_distribution;
-
-public:
-    Random(double min, double max) {
-        std::random_device random_device;
-        random_engine = std::default_random_engine(random_device());
-        random_distribution = std::uniform_real_distribution<double>(min, max);
-    }
-
-    double operator()() {
-        return random_distribution(random_engine);
-    }
-};
-
+/*
+List edges that consist leaves of the triangle.
+It contains one edge per leaf triangle.
+[params]
+- root_triangle: the root triangle
+[return]
+Return a set of edges.
+*/
 std::set<std::pair<const Point2d*, const Point2d*>> GetUniqueLeavesEdges(const std::weak_ptr<Triangle>& root_triangle) {
     std::set<std::pair<const Point2d*, const Point2d*>> edges;
     
