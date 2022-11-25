@@ -40,5 +40,5 @@ std::istream& operator>>(std::istream& is, Attribute& attribute) {
 }
 
 std::ostream& operator<<(std::ostream& os, Attribute& attribute) {
-    return os << attribute.z << static_cast<int>(attribute.type);
+    return os << attribute.z << ' ' << static_cast<int>(attribute.type);
 }
