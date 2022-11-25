@@ -2,62 +2,60 @@
 
 #include <cmath>
 #include <iostream>
-#include <limits>
-#include <list>
-#include <memory>
+#include <map>
 #include <string>
+#include <vector>
 
 #include "dat.h"
 #include "main_helper.h"
 #include "z_map.h"
-#include "../include/calculator.h"
+
+double chunk_length;
 
 std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
-    filename_suffix += FILENAME_SUFFIX_1;
-    filename_suffix += FILENAME_SUFFIX_2;
+    chunk_length = std::stod(option.at("chunk_length"));
+    filename_suffix = "_CL_" + std::to_string(chunk_length);
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
-    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
-
-    std::string destination_file_path = destination_base_path + filename_suffix + ".dat";
-    std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
-    
-
     auto&& [data, rectangle] = ReadDAT<double>(source_file_path);
     ZMap z_map(data, rectangle);
-    
-    Neighbor<double> neighbor(z_map.stride);
-    while (!z_map.nan_point_indices.empty()) {
-        auto ite = z_map.nan_point_indices.cbegin();
 
-        while (ite != z_map.nan_point_indices.cend()) {
-            int index = *ite;
-            neighbor.head = &z_map.z_values[index];
-            if (neighbor.IsAllNull()) {
-                ++ite;
-                continue;
-            }
+    int columns_count = std::ceil(z_map.width / chunk_length);
+    int rows_count = std::ceil(z_map.height / chunk_length);
 
-            ite = z_map.nan_point_indices.erase(ite);
+    auto chunks = std::vector<std::vector<std::map<Point2d, double>>>(columns_count, std::vector<std::map<Point2d, double>>(rows_count));
+
+    for (int x = 1; x <= z_map.width; ++x) {
+        for (int y = 1; y <= z_map.width; ++y) {
+            int column = x / chunk_length;
+            int row = y / chunk_length;
+
+            int index = z_map.GetIndex(x, y);
 
             Point2d point = z_map.GetPoint(index);
-            double z = Calculate(neighbor);
+            double z = *z_map.z_values[index];
 
-            auto pair = data.insert({point, z});
-            z_map.z_values[index] = &pair.first->second;
+            chunks[column][row].insert({point, z});
         }
     }
-
     
-    WriteDAT(destination_file_path, data);
+    for (int column = 0; column < columns_count; ++column) {
+        for (int row = 0; row < rows_count; ++row) {
+            std::string chunk_suffix = std::to_string(column) + '-' + std::to_string(row);
+            std::string destination_file_path = destination_base_path + filename_suffix + chunk_suffix + ".dat";
+            std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
+
+            WriteDAT(destination_file_path, chunks[column][row]);
+        }
+    }
 }
 
 int main() {
     HelpMain("FillerOption.txt", {
         {"source_directory_path", "source_data"},
-        {"destination_directory_path", "intermediate_data_Filler"},
+        {"destination_directory_path", "intermediate_data_Splitter"},
     }, init, process_file);
 }
