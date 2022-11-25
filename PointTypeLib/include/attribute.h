@@ -16,6 +16,6 @@ struct Attribute {
 };
 
 std::istream& operator>>(std::istream& is, Attribute& attribute);
-std::ostream& operator<<(std::ostream& os, Attribute& attribute);
+std::ostream& operator<<(std::ostream& os, const Attribute& attribute);
 
 #endif // __ATTRIBUTE_H__
