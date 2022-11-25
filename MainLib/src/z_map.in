@@ -39,7 +39,7 @@ ZMap<T>::ZMap(const std::map<Point2d, T>& data, const Rectangle& rectangle) {
         z_values[last_line + x] = nullptr;
     }
 
-    for (int i = 0; i <= last_line; i += width) {
+    for (int i = 0; i <= last_line; i += stride) {
         z_values[i] = nullptr;
         z_values[i + extended_width] = nullptr;
     }
