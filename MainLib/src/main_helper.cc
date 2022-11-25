@@ -31,9 +31,19 @@ void HelpMain(int argc, const char* argv[], const std::string& option_file_path,
 
     if (!fs::exists(source_directory_path)) {
         std::cout << "Not exist: " << source_directory_path << std::endl;
-        std::filesystem::create_directories(source_directory_path);
-        std::cout << "Created: " << source_directory_path << std::endl;
-        return;
+
+        std::cout << "Create it? (Y/n): ";
+        char answer;
+        std::cin >> answer;
+
+        if (answer == 'Y') {
+            std::filesystem::create_directories(source_directory_path);
+            std::cout << "Created: " << source_directory_path << std::endl;
+        }
+
+        if (argc <= 1) {
+            return;
+        }
     }
 
     fs::create_directories(destination_directory_path);
@@ -41,7 +51,7 @@ void HelpMain(int argc, const char* argv[], const std::string& option_file_path,
     init(option);
 
     std::list<fs::path> file_paths;
-    for (int i = 0; i < argc; i++) {
+    for (int i = 1; i < argc; i++) {
         file_paths.push_back(fs::path(argv[i]));
     }
     
