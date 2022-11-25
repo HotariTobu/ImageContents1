@@ -43,10 +43,9 @@ void process_file(const std::string source_file_path, const std::string destinat
     int i = 0;
     for (auto&& [point_2d, _] : data) {
         IndexedPoint2d point;
-        point.index = i;
+        point.index = i++;
         point.point = &point_2d;
-        points[i] = point;
-        ++i;
+        points.push_back(point);
     }
 
     Randomize(points);
