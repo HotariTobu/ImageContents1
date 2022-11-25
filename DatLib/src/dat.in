@@ -48,7 +48,7 @@ template<typename T>
 void WriteDAT(const std::string& path, const std::map<Point2d, T>& data) {
     std::ofstream ofs(path);
 
-    for (auto [point, attribute] : data) {
+    for (auto&& [point, attribute] : data) {
         ofs << point.x << ' ' << point.y << ' ' << attribute << std::endl;
     }
 
