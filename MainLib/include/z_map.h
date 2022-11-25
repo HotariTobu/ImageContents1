@@ -26,7 +26,7 @@ struct ZMap {
     ZMap(const std::map<Point2d, T>& data, const Rectangle& rectangle);
 
     Point2d GetPoint(int index) const;
-    int GetIndex(int x, int y) const;
+    int GetIndex(int offset_x, int offset_y) const;
 };
 
 #include "../src/z_map.in"

@@ -47,16 +47,16 @@ ZMap<T>::ZMap(const std::map<Point2d, T>& data, const Rectangle& rectangle) {
 
 template<typename T>
 Point2d ZMap<T>::GetPoint(int index) const {
-    int x = index % stride;
-    int y = index / stride;
+    int offset_x = index % stride;
+    int offset_y = index / stride;
 
     return {
-        rectangle.min_x + x - 1,
-        rectangle.min_y + y - 1
+        offset_x + rectangle.min_x - 1,
+        offset_y + rectangle.min_y - 1
     };
 }
 
 template<typename T>
-int ZMap<T>::GetIndex(int x, int y) const {
-    return x + y * stride;
+int ZMap<T>::GetIndex(int offset_x, int offset_y) const {
+    return offset_x + offset_y * stride;
 }
