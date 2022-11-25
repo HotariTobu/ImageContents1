@@ -26,38 +26,41 @@ void HelpMain(int argc, const char* argv[], const std::string& option_file_path,
         option.insert(pair);
     }
 
+    init(option);
+
     std::string source_directory_path = option.at("source_directory_path");
     std::string destination_directory_path = option.at("destination_directory_path");
 
-    if (!fs::exists(source_directory_path)) {
-        std::cout << "Not exist: " << source_directory_path << std::endl;
+    std::list<fs::path> file_paths;
 
-        std::cout << "Create it? (Y/n): ";
-        char answer;
-        std::cin >> answer;
+    if (argc > 1) {
+        for (int i = 1; i < argc; i++) {
+            file_paths.push_back(fs::path(argv[i]));
+        }
+    }
+    else {
+        if (!fs::exists(source_directory_path)) {
+            std::cout << "Not exist: " << source_directory_path << std::endl;
 
-        if (answer == 'Y') {
-            std::filesystem::create_directories(source_directory_path);
-            std::cout << "Created: " << source_directory_path << std::endl;
+            std::cout << "Create it? (Y/n): ";
+            char answer;
+            std::cin >> answer;
+
+            if (answer == 'Y') {
+                std::filesystem::create_directories(source_directory_path);
+                std::cout << "Created: " << source_directory_path << std::endl;
+            }
+            else {
+                return;
+            }
         }
 
-        if (argc <= 1) {
-            return;
+        for (auto&& file : fs::directory_iterator(source_directory_path)) {
+            file_paths.push_back(file.path());
         }
     }
 
     fs::create_directories(destination_directory_path);
-
-    init(option);
-
-    std::list<fs::path> file_paths;
-    for (int i = 1; i < argc; i++) {
-        file_paths.push_back(fs::path(argv[i]));
-    }
-    
-    for (auto&& file : fs::directory_iterator(source_directory_path)) {
-        file_paths.push_back(file.path());
-    }
 
     for (auto&& source_file_path : file_paths) {
         if (ToLower(source_file_path.extension().string()) != white_extension) {
