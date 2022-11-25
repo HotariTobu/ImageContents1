@@ -73,7 +73,7 @@ void process_file(const std::string source_file_path, const std::string destinat
 
 int main() {
     HelpMain("FillerOption.txt", {
-        {"source_directory_path", "source_data"},
+        {"source_directory_path", "intermediate_data_Splitter"},
         {"destination_directory_path", "intermediate_data_Filler"},
     }, init, process_file);
 }
