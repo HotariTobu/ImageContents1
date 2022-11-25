@@ -7,5 +7,5 @@
 
 int main() {
     Attribute attribute(3.14, PointType::GROUND);
-    std::cout << attribute << std::endl;
+    std::cout << ' ' << attribute << std::endl;
 }
