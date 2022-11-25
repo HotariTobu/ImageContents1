@@ -9,7 +9,7 @@
 
 extern double searcher_threshold;
 
-bool CanPass(const std::vector<std::pair<double, Vector3d>> attributes, int width, std::set<std::set<int>> answer) {
+bool CanPass(const std::vector<std::pair<double, Vector3d>> attributes, int width, std::vector<std::vector<int>> index_vector) {
     int points_count = attributes.size();
     int height = points_count / width;
     
@@ -42,6 +42,19 @@ bool CanPass(const std::vector<std::pair<double, Vector3d>> attributes, int widt
     for (auto&& indices : indices_list) {
         std::set<int> index_set(indices.begin(), indices.end());
         result.insert(index_set);
+    }
+
+    std::set<std::set<int>> answer;
+    for (auto&& indices : index_vector) {
+        std::set<int> index_set;
+        for (int index : indices) {
+            int offset_x = index % width;
+            int offset_y = index / width;
+
+            int new_index = z_map.GetIndex(offset_x, offset_y);
+            index_set.insert(new_index);
+        }
+        answer.insert(index_set);
     }
 
     return result == answer;
