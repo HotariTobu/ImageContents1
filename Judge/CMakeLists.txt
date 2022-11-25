@@ -8,11 +8,7 @@ foreach(FLAG1 IN LISTS FLAG1S)
         target_link_libraries(Judge_${FLAG1}_${FLAG2} MapLib)
         target_link_libraries(Judge_${FLAG1}_${FLAG2} MainLib)
         target_link_libraries(Judge_${FLAG1}_${FLAG2} PointTypeLib)
-    endforeach() 
-endforeach()
-
-foreach(FLAG1 IN LISTS FLAG1S)
-    foreach(FLAG2 IN LISTS FLAG2S)
+        
         target_link_libraries(TEST_separator_${FLAG1}_${FLAG2} MapLib)
         # target_link_libraries(TEST_simulator_${FLAG1}_${FLAG2} MapLib)
 
