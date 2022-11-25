@@ -25,16 +25,17 @@ extern double searcher_threshold;
 std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
-    searcher_threshold = std::stod(option.at("searcher_threshold"));
+    std::string searcher_threshold_str = option.at("searcher_threshold");
+    searcher_threshold = std::stod(searcher_threshold_str);
     
-    filename_suffix = std::to_string(searcher_threshold);
-    threshold_suffix = "_SER" + std::to_string(searcher_threshold);
+    filename_suffix += FILENAME_SUFFIX;
+    filename_suffix += "_SER" + searcher_threshold_str;
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
     constexpr double nan = std::numeric_limits<double>::quiet_NaN();
 
-    std::string destination_file_path = destination_base_path + FILENAME_SUFFIX + filename_suffix + ".dat";
+    std::string destination_file_path = destination_base_path + filename_suffix + ".dat";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
 

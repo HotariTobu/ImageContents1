@@ -27,15 +27,19 @@ static int trials_number;
 std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
-    simulator_threshold = std::stod(option.at("simulator_threshold"));
-    separator_threshold = std::stod(option.at("separator_threshold"));
+    std::string simulator_threshold_str = option.at("simulator_threshold");
+    std::string separator_threshold_str = option.at("separator_threshold");
+    simulator_threshold = std::stod(simulator_threshold_str);
+    separator_threshold = std::stod(separator_threshold_str);
     trials_number = std::stoi(option.at("trials_number"));
 
     if (trials_number <= 0) {
         throw std::runtime_error("`trials_number` must be more than 0.");
     }
 
-    threshold_suffix = FILENAME_SUFFIX + "_SIM" + std::to_string(simulator_threshold) + "_SEP" + std::to_string(separator_threshold);
+    filename_suffix += FILENAME_SUFFIX;
+    filename_suffix += "_SIM" + simulator_threshold_str;
+    filename_suffix += "_SEP" + separator_threshold_str;
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {

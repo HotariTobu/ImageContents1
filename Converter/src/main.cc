@@ -22,8 +22,10 @@ extern double ground_point_threshold;
 std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
-    ground_point_threshold = std::stod(option.at("ground_point_threshold"));
-    filename_suffix = "_GRO" + std::to_string(ground_point_threshold);
+    std::string ground_point_threshold_str = option.at("ground_point_threshold");
+    ground_point_threshold = std::stod(ground_point_threshold_str);
+
+    filename_suffix += "_GRO" + ground_point_threshold_str;
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
