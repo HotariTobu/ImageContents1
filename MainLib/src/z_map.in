@@ -17,7 +17,7 @@ ZMap<T>::ZMap(const std::map<Point2d, T>& data, const Rectangle& rectangle) {
     auto data_end = data.end();
     for (int x = 1; x <= width; ++x) {
         for (int y = 1; y <= height; ++y) {
-            auto ite = data.find({(double)x, (double)y});
+            auto ite = data.find({(double)(x + rectangle.min_x - 1), (double)(y + rectangle.min_y - 1)});
             int index = x + y * stride;
 
             if (ite == data_end) {
