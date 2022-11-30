@@ -94,15 +94,20 @@ Shape {
     appearance Appearance {
         material Material {}
     }
-    geometry IndexedFaceSet {
-        colorPerVertex TRUE
+    geometry PointSet {
         color Color {
             color [
 )";
 
     for (int y = 1; y <= height; y++) {
         for (int x = 1; x <= width; x++) {
-            auto attr = data.at(z_map.GetPoint(z_map.GetIndex(x, y)));
+            int index = z_map.GetIndex(x, y);
+            Point2d point = z_map.GetPoint(index);
+            auto ite = data.find(point);
+            if (ite == data.end()) {
+                continue;
+            }
+            auto attr = ite->second;
             std::string color;
             switch (attr.type) {
             case PointType::GROUND:
@@ -127,31 +132,19 @@ Shape {
 
     for (int y = 1; y <= height; y++) {
         for (int x = 1; x <= width; x++) {
-            auto attr = data.at(z_map.GetPoint(z_map.GetIndex(x, y)));
+            int index = z_map.GetIndex(x, y);
+            Point2d point = z_map.GetPoint(index);
+            auto ite = data.find(point);
+            if (ite == data.end()) {
+                continue;
+            }
+            auto attr = ite->second;
             ofs << x << ' ' << y << ' ' << attr.z << ',' << std::endl;
         }
     }
 
     ofs << R"(            ]
         }
-        coordIndex [
-)";
-
-    for (int y = 1; y < height; y++) {
-        for (int x = 1; x < width; x++) {
-            int index = x + y * width;
-            ofs << index << ',';
-            index--;
-            ofs << index << ',';
-            index -= width;
-            ofs << index << ',';
-            index++;
-            ofs << index << ',';
-            ofs << "-1" << std::endl;
-        }
-    }
-
-    ofs << R"(        ]
     }
 })";
 
