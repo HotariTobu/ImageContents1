@@ -10,16 +10,21 @@ template<typename T>
 std::pair<std::map<Point2d, T>, Rectangle> ReadDAT(const std::string& path) {
     std::ifstream ifs(path);
 
-    std::map<Point2d, T> data;
-    Rectangle rectangle;
-
     std::string line;
+    double x, y;
+    T t;
+
+    std::getline(ifs, line);
+    std::istringstream iss(line);
+    iss >> x >> y >> t;
+
+    std::map<Point2d, T> data;
+    Rectangle rectangle(x, y, x, y);
+
+    data.insert({{x, y}, t});
+
     while (std::getline(ifs, line)) {
         std::istringstream iss(line);
-        
-        double x, y;
-        T t;
-
         iss >> x >> y >> t;
 
         data.insert({{x, y}, t});
