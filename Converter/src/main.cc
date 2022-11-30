@@ -139,7 +139,7 @@ Shape {
                 continue;
             }
             auto attr = ite->second;
-            ofs << x << ' ' << y << ' ' << attr.z << ',' << std::endl;
+            ofs << x << ' ' << attr.z << ' ' << -y << ',' << std::endl;
         }
     }
 
