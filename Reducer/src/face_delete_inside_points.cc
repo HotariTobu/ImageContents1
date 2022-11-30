@@ -58,6 +58,10 @@ std::list<Point2d> Face::DeleteInsidePoints() {
         auto next = &iterator[current->first];
         auto next_next = &iterator[next->first];
 
+        if (current == next_next) { 
+            break;
+        }
+
         if (IsDent(current->second->first, next->second->first, next_next->second->first)) {
             deleted_points.push_back(next->second->first);
 
@@ -80,6 +84,7 @@ std::list<Point2d> Face::DeleteInsidePoints() {
 
     std::list<std::pair<Point2d, double *>> new_points;
 
+    bottom_index = current->first;
     do {
         new_points.push_back(*current->second);
         current = &iterator[current->first];
