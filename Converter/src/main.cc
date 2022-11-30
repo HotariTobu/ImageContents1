@@ -37,7 +37,7 @@ void process_file(const std::string source_file_path, const std::string destinat
     std::string destination_file_path = destination_base_path + filename_suffix + ".wrl";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
-/*
+
     auto&& [data, _] = ReadDAT<Attribute>(source_file_path);
 
     int data_size = data.size();
@@ -76,78 +76,20 @@ void process_file(const std::string source_file_path, const std::string destinat
 
     points.clear();
 
-    auto&& [additional_points, additional_index_set_list] = AddGroundPoints(data, leaf_point_set_list);
-
-    WriteWRL(destination_file_path, data, leaf_point_set_list, additional_points, additional_index_set_list);
-*/
-    auto&& [data, rectangle] = ReadDAT<Attribute>(source_file_path);
-    ZMap z_map(data, rectangle);
-
-    int width = z_map.width;
-    int height = z_map.height;
-
-    std::ofstream ofs(destination_file_path);
-
-    ofs << R"(#VRML V2.0 utf8
-
-Shape {
-    appearance Appearance {
-        material Material {}
-    }
-    geometry PointSet {
-        color Color {
-            color [
-)";
-
-    for (int y = 1; y <= height; y++) {
-        for (int x = 1; x <= width; x++) {
-            int index = z_map.GetIndex(x, y);
-            Point2d point = z_map.GetPoint(index);
-            auto ite = data.find(point);
-            if (ite == data.end()) {
-                continue;
-            }
-            auto attr = ite->second;
-            std::string color;
-            switch (attr.type) {
-            case PointType::GROUND:
-                color = "0 1 0";
-                break;
-            case PointType::BUILDING:
-                color = "1 0 0";
-                break;
-            default:
-                color = "1 1 1";
-            }
-
-            ofs << color << ',' << std::endl;
+    for (auto ite = leaf_point_set_list.begin(); ite != leaf_point_set_list.end();) {
+        auto&& point_set = *ite;
+        if (point_set[0].index < 0 || point_set[1].index < 0 || point_set[2].index < 0) {
+            ite = leaf_point_set_list.erase(ite);
+        }
+        else {
+            ++ite;
         }
     }
 
-    ofs << R"(            ]
-        }
-        coord Coordinate {
-            point [
-)";
+    // auto [additional_points, additional_index_set_list] = AddGroundPoints(data, leaf_point_set_list);
 
-    for (int y = 1; y <= height; y++) {
-        for (int x = 1; x <= width; x++) {
-            int index = z_map.GetIndex(x, y);
-            Point2d point = z_map.GetPoint(index);
-            auto ite = data.find(point);
-            if (ite == data.end()) {
-                continue;
-            }
-            auto attr = ite->second;
-            ofs << x << ' ' << y << ' ' << attr.z << ',' << std::endl;
-        }
-    }
-
-    ofs << R"(            ]
-        }
-    }
-})";
-
+    // WriteWRL(destination_file_path, data, leaf_point_set_list, additional_points, additional_index_set_list);
+    WriteWRL(destination_file_path, data, leaf_point_set_list);
 }
 
 int main(int argc, const char* argv[]) {
