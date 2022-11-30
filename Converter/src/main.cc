@@ -17,6 +17,11 @@
 #include "../include/triangle.h"
 #include "../include/wrl_writer.h"
 
+
+#include <fstream>
+#include "z_map.h"
+
+
 extern double ground_point_threshold;
 
 std::string filename_suffix;
@@ -32,8 +37,8 @@ void process_file(const std::string source_file_path, const std::string destinat
     std::string destination_file_path = destination_base_path + filename_suffix + ".wrl";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
-
-    auto [data, _] = ReadDAT<Attribute>(source_file_path);
+/*
+    auto&& [data, _] = ReadDAT<Attribute>(source_file_path);
 
     int data_size = data.size();
     if (data_size == 0) {
@@ -53,12 +58,12 @@ void process_file(const std::string source_file_path, const std::string destinat
 
     Randomize(points);
 
-    auto [p0, p1, p2] = MakeBigTriangle(points);
+    auto&& [p0, p1, p2] = MakeBigTriangle(points);
     IndexedPoint2d b0 = {-1, &p0};
     IndexedPoint2d b1 = {-2, &p1};
     IndexedPoint2d b2 = {-3, &p2};
     
-    auto [root_triangle, dummy_triangle] = MakeRoot(&b0, &b1, &b2);
+    auto&& [root_triangle, dummy_triangle] = MakeRoot(&b0, &b1, &b2);
 
     for (auto&& point : points) {
         root_triangle->Divide(&point);
@@ -71,14 +76,87 @@ void process_file(const std::string source_file_path, const std::string destinat
 
     points.clear();
 
-    auto [additional_points, additional_index_set_list] = AddGroundPoints(data, leaf_point_set_list);
+    auto&& [additional_points, additional_index_set_list] = AddGroundPoints(data, leaf_point_set_list);
 
     WriteWRL(destination_file_path, data, leaf_point_set_list, additional_points, additional_index_set_list);
+*/
+    auto&& [data, rectangle] = ReadDAT<Attribute>(source_file_path);
+    ZMap z_map(data, rectangle);
+
+    int width = z_map.width;
+    int height = z_map.height;
+
+    std::ofstream ofs(destination_file_path);
+
+    ofs << R"(#VRML V2.0 utf8
+
+Shape {
+    appearance Appearance {
+        material Material {}
+    }
+    geometry IndexedFaceSet {
+        colorPerVertex TRUE
+        color Color {
+            color [
+)";
+
+    for (int y = 1; y <= height; y++) {
+        for (int x = 1; x <= width; x++) {
+            auto attr = data.at(z_map.GetPoint(z_map.GetIndex(x, y)));
+            std::string color;
+            switch (attr.type) {
+            case PointType::GROUND:
+                color = "0 1 0";
+                break;
+            case PointType::BUILDING:
+                color = "1 0 0";
+                break;
+            default:
+                color = "1 1 1";
+            }
+
+            ofs << color << ',' << std::endl;
+        }
+    }
+
+    ofs << R"(            ]
+        }
+        coord Coordinate {
+            point [
+)";
+
+    for (int y = 1; y <= height; y++) {
+        for (int x = 1; x <= width; x++) {
+            auto attr = data.at(z_map.GetPoint(z_map.GetIndex(x, y)));
+            ofs << x << ' ' << y << ' ' << attr.z << ',' << std::endl;
+        }
+    }
+
+    ofs << R"(            ]
+        }
+        coordIndex [
+)";
+
+    for (int y = 1; y < height; y++) {
+        for (int x = 1; x < width; x++) {
+            int index = x + y * width;
+            ofs << index << ',';
+            index--;
+            ofs << index << ',';
+            index -= width;
+            ofs << index << ',';
+            index++;
+            ofs << index << ',';
+            ofs << "-1" << std::endl;
+        }
+    }
+
+    ofs << R"(        ]
+    }
+})";
+
 }
 
-/*
-Read 2 .csv file.
-*/
 int main(int argc, const char* argv[]) {
     HelpMain(argc, argv, "ConverterOption.txt", {
         {"source_directory_path", "intermediate_data_Reducer"},
