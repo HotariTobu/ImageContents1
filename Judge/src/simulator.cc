@@ -8,17 +8,12 @@
 double simulator_threshold;
 
 std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor<Attribute> neighbor) {
-    std::array<std::array<double, 3>, 3> simulated_neighbor;
-    simulated_neighbor[1][1] = 0;
+    std::array<std::array<double, 3>, 3> simulated_neighbor = {0};
 
 #ifdef __4_NEIGHBOR
 // Uniform 4-neighbor code is hear...
     std::vector<std::pair<int, int>> points{{1, 2}, {2, 1}, {1, 0}, {0, 1}};
     const int edge_num = 4;
-    simulated_neighbor[0][0] = 0;
-    simulated_neighbor[2][0] = 0;
-    simulated_neighbor[0][2] = 0;
-    simulated_neighbor[2][2] = 0;
 
 #elif __8_NEIGHBOR
 // Uniform 8-neighbor code is hear...
@@ -47,6 +42,11 @@ std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor<Attribute> 
             simulated_neighbor[points[i].second][points[i].first] = value;
             cnt++;
         }
+    }
+
+    if (cnt == 0) {
+        simulated_neighbor[1][1] = value;
+        return simulated_neighbor;
     }
 
     for (int i = 0; i < edge_num; ++i){
