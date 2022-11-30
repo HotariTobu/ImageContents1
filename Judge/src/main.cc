@@ -59,6 +59,8 @@ void process_file(const std::string source_file_path, const std::string destinat
     auto ease_of_stay_data_1 = std::make_unique<double[]>(z_map.size);
     auto ease_of_stay_data_2 = std::make_unique<double[]>(z_map.size);
 
+    std::fill(ease_of_stay_data_1.get(), ease_of_stay_data_1.get() + z_map.size, 1);
+
     std::unique_ptr<double[]>* ease_of_stay_data_source = nullptr;
     std::unique_ptr<double[]>* ease_of_stay_data_destination = nullptr;
 
@@ -87,12 +89,12 @@ void process_file(const std::string source_file_path, const std::string destinat
 // 4-neighbor _heightscode is hear...
 
                 for (int i = 0; i < 4; ++i) {
-                    int x = (-1 + i) % 2;
-                    int y = (-2 + i) % 2;
+                    int offset_x = (-1 + i) % 2;
+                    int offset_y = (-2 + i) % 2;
 
-                    int offset = z_map.GetIndex(x, y);
+                    int offset = z_map.GetIndex(offset_x, offset_y);
 
-                    (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[x + 1][y + 1];
+                    (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[offset_x + 1][offset_y + 1];
                 }
 
                 (*ease_of_stay_data_destination)[index] += ease_of_stay_values[1][1];
@@ -100,11 +102,11 @@ void process_file(const std::string source_file_path, const std::string destinat
 #elif __8_NEIGHBOR
 // 8-neighbor code is hear...
 
-                for (int x = -1; x <= 1; ++x) {
-                    for (int y = -1; y <= 1; ++y) {
-                        int offset = z_map.GetIndex(x, y);
+                for (int offset_x = -1; offset_x <= 1; ++offset_x) {
+                    for (int offset_y = -1; offset_y <= 1; ++offset_y) {
+                        int offset = z_map.GetIndex(offset_x, offset_y);
 
-                        (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[x + 1][y + 1];
+                        (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[offset_x + 1][offset_y + 1];
                     }
                 }
                 
