@@ -40,6 +40,7 @@ void init(std::map<std::string, std::string> option) {
     filename_suffix += FILENAME_SUFFIX;
     filename_suffix += "_SIM" + simulator_threshold_str;
     filename_suffix += "_SEP" + separator_threshold_str;
+    filename_suffix += "_TRY" + trials_number;
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
