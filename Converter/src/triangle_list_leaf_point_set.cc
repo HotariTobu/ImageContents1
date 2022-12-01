@@ -17,16 +17,22 @@ std::list<IndexedPoint2dSet> Triangle::ListLeafPointSet() const {
         if (triangle->HasBeenScanned) {
             continue;
         }
+        triangle->HasBeenScanned = true;
+
+        bool hasChild = false;
 
         for (int i = 0; i < 3; ++i) {
             auto&& child = triangle->children[i];
             if (child != nullptr) {
                 triangle_stack.push(child);
-                continue;
+                hasChild = true;
             }
         }
 
-        triangle->HasBeenScanned = true;
+        if (hasChild) {
+            continue;
+        }
+
         leaf_point_set_list.push_back({
             *const_cast<IndexedPoint2d*>(triangle->points[0]),
             *const_cast<IndexedPoint2d*>(triangle->points[1]),
