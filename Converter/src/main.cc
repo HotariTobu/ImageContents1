@@ -76,9 +76,9 @@ void process_file(const std::string source_file_path, const std::string destinat
     root_triangle.reset();
     dummy_triangle.reset();
 
-    points.clear();
-
     // auto&& bottom_index_set_list = RemoveBottomPointSet(leaf_point_set_list);
+
+    points.clear();
 
     auto&& [additional_points, additional_index_set_list] = AddGroundPoints(data, leaf_point_set_list);
 
