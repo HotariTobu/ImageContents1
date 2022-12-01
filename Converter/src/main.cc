@@ -86,10 +86,9 @@ void process_file(const std::string source_file_path, const std::string destinat
         }
     }
 
-    // auto [additional_points, additional_index_set_list] = AddGroundPoints(data, leaf_point_set_list);
+    auto [additional_points, additional_index_set_list] = AddGroundPoints(data, leaf_point_set_list);
 
-    // WriteWRL(destination_file_path, data, leaf_point_set_list, additional_points, additional_index_set_list);
-    WriteWRL(destination_file_path, data, leaf_point_set_list);
+    WriteWRL(destination_file_path, data, leaf_point_set_list, additional_points, additional_index_set_list);
 }
 
 int main(int argc, const char* argv[]) {
