@@ -1,16 +1,13 @@
 // Created by HotariTobu
 
-#include <cmath>
 #include <iostream>
-#include <limits>
-#include <list>
-#include <memory>
 #include <string>
 
 #include "dat.h"
 #include "main_helper.h"
 #include "z_map.h"
 #include "../include/calculator.h"
+#include "../include/missing_value_remover.h"
 
 #ifdef __4_NEIGHBOR
     #define FILENAME_SUFFIX_1 "_F_4N"
@@ -43,6 +40,7 @@ void process_file(const std::string source_file_path, const std::string destinat
     
 
     auto&& [data, rectangle] = ReadDAT<double>(source_file_path);
+    RemoveMissingValue(data);
     ZMap z_map(data, rectangle);
     
     Neighbor<double> neighbor(z_map.stride);

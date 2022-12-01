@@ -20,8 +20,8 @@ bool Neighbor<T>::At(int x, int y, T* v) const {
 
 template<typename T>
 bool Neighbor<T>::IsAllNull() const {
-    for (int x = 0; x < 3; ++x) {
-        for (int y = 0; y < 3; ++y) {
+    for (int x = -1; x <= 1; ++x) {
+        for (int y = -1; y <= 1; ++y) {
             if (head[x + y * stride] != nullptr) {
                 return false;
             }

@@ -22,14 +22,27 @@ double CalculateSimilarity(const Vector3d& vec1, const Vector3d& vec2){
 void FloodFill(const ZMap<ReducerAttribute>& z_map, std::vector<std::vector<int>>& group_map, const int x, const int y){
     std::queue<std::pair<int, int>> q;
     q.push({x, y});
+
+#ifdef __4_NEIGHBOR
+// Uniform 4-neighbor code is hear...
+
     std::vector<std::pair<int, int>> points{{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
+    const int edge_num = 4;
+
+#elif __8_NEIGHBOR
+// Uniform 8-neighbor code is hear...
+
+    std::vector<std::pair<int, int>> points{{-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
+    const int edge_num = 8;
+    
+#endif
 
     while(!q.empty()){
         int node_x = q.front().first;
         int node_y = q.front().second;
         q.pop();
 
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < edge_num; i++){
             if (!IsSafe(node_x + points[i].second, node_y + points[i].first, z_map.width, z_map.height)){
                 continue;
             }
