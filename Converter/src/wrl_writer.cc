@@ -34,9 +34,20 @@ Shape {
         ofs << color << ',' << std::endl;
     }
 
+    auto data_end = data.end();
     for (auto e : additional_points) {
+        PointType type;
+
+        auto ite = data.find(e.first);
+        if (ite == data_end) {
+            type = PointType::NONE;
+        }
+        else {
+            type = ite->second.type;
+        }
+
         std::string color;
-        switch (data.at(e.first).type) {
+        switch (type) {
         case PointType::GROUND:
             color = "0 1 0";
             break;
