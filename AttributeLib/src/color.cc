@@ -9,19 +9,16 @@ Color::Color() {
 }
 
 Color::Color(double h, double s, double v) {
-    h = h < 1 ? h : 0;
-
     double max = v;
     double range = s * max;
     double min = max - range;
 
-    int hd = (int)(h * 6.0) % 6;
-    int hdd = (int)(h * 3.0) % 3;
+    int hd = h * 6;
 
     double rgb[] = { 0.0, 0.0, 0.0 };
-    rgb[hdd] = max;
-    rgb[((hd + 1) / 2 + 1) % 3] = min;
-    rgb[(5 - hd) % 3] = (hd % 2 == 0 ? -1.0 : 1.0) * (h * 6.0 - (double)(hdd) * 2.0 - 1.0) * range + min;
+    rgb[(int)((hd + 1) / 2) % 3] = max;
+    rgb[(int)((hd + 4) / 2) % 3] = min;
+    rgb[(7 - hd) % 3] = ((hd % 2 == 0 ? 1 : -1) * (h * 6 - hd - 0.5) + 0.5) * range + min;
 
     r = rgb[0];
     g = rgb[1];
