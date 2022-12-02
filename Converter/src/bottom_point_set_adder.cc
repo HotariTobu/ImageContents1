@@ -11,9 +11,9 @@ void AddBottomPointSet(const std::map<Point2d, Attribute>& data, std::list<std::
             min_z = attribute.z;
         }
     }
-    min_z -= 1;
+    min_z -= 0.1;
 
-    auto&& [first_border_point, first_border_index] = border_indexed_points.front();
+    auto [first_border_point, first_border_index] = border_indexed_points.front();
     border_indexed_points.pop_front();
 
     int first_bottom_index = data.size() + additional_points.size();
