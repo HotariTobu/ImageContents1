@@ -5,14 +5,14 @@
 
 #include <iostream>
 
-#include "point_type.h"
+#include "color.h"
 
 struct Attribute {
     double z;
-    PointType type;
+    Color color;
 
     Attribute();
-    Attribute(double z, PointType type);
+    Attribute(double z, Color color);
 };
 
 std::istream& operator>>(std::istream& is, Attribute& attribute);

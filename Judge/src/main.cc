@@ -120,9 +120,12 @@ void process_file(const std::string source_file_path, const std::string destinat
 
     for (int i = 0; i < z_map.size; ++i) {
         if (z_map.z_values[i] != nullptr) {
+            const Color ground_color(0.33, 1, 1);
+            const Color building_color(0, 1, 1);
+            
             double ease_of_stay_value = (*ease_of_stay_data_destination)[i];
-            PointType&& point_type = ease_of_stay_value > separator_threshold ? PointType::GROUND : PointType::BUILDING;
-            const_cast<Attribute*>(z_map.z_values[i])->type = point_type;
+            Color color = ease_of_stay_value > separator_threshold ? ground_color : building_color;
+            const_cast<Attribute*>(z_map.z_values[i])->color = color;
         }
     }
     

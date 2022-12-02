@@ -138,7 +138,7 @@ std::pair<std::list<std::pair<Point2d, double>>, std::list<IndexSet>> AddGroundP
 
     int i = 0;
     int ground_point_index = points_count;
-    for (auto&& [base_point, attribute] : data) {
+    for (auto&& [base_point, _] : data) {
         auto point_label = points_label[i];
         double base_z = data.at(base_point).z;
 
