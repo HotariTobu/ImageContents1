@@ -6,6 +6,7 @@
 #include "../include/attribute.h"
 
 int main() {
-    Attribute attribute(3.14, PointType::GROUND);
+    Color color(1, 1, 1);
+    Attribute attribute(3.14, color);
     std::cout << ' ' << attribute << std::endl;
 }

@@ -87,10 +87,10 @@ Shape {
     }
 })",
         {
-            {{0, 1}, {3, PointType::GROUND}},
-            {{1, 0}, {6, PointType::BUILDING}},
-            {{1, 2}, {7, PointType::NONE}},
-            {{2, 2}, {9, PointType::GROUND}},
+            {{0, 1}, {3, Color(0.33, 1, 1)}},
+            {{1, 0}, {6, Color(0, 1, 1)}},
+            {{1, 2}, {7, Color()}},
+            {{2, 2}, {9, Color(0.33, 1, 1)}},
         },
         {
             {0, 1, 2},

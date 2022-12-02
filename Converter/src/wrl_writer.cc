@@ -20,44 +20,12 @@ Shape {
 )";
 
     for (auto e : data) {
-        std::string color;
-        switch (e.second.type) {
-        case PointType::GROUND:
-            color = "0 1 0";
-            break;
-        case PointType::BUILDING:
-            color = "1 0 0";
-            break;
-        default:
-            color = "1 1 1";
-        }
-        ofs << color << ',' << std::endl;
+        ofs << e.second.color << ',' << std::endl;
     }
 
     auto data_end = data.end();
     for (auto e : additional_points) {
-        PointType type;
-
-        auto ite = data.find(e.first);
-        if (ite == data_end) {
-            type = PointType::NONE;
-        }
-        else {
-            type = ite->second.type;
-        }
-
-        std::string color;
-        switch (type) {
-        case PointType::GROUND:
-            color = "0 1 0";
-            break;
-        case PointType::BUILDING:
-            color = "1 0 0";
-            break;
-        default:
-            color = "1 1 1";
-        }
-        ofs << color << ',' << std::endl;
+        ofs << data.at(e.first).color << ',' << std::endl;
     }
 
     ofs << R"(            ]

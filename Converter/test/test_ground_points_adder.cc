@@ -49,7 +49,6 @@ bool CanPass(const std::vector<Point3d>& points_3d, const std::vector<IndexSet>&
         };
 
         Attribute attribute;
-        attribute.type = PointType::NONE;
         attribute.z = point_3d.z;
 
         data.insert({point_2d, attribute});

@@ -6,7 +6,7 @@ foreach(FLAG1 IN LISTS FLAG1S)
     target_link_libraries(Reducer_${FLAG1} DatLib)
     # target_link_libraries(Reducer_${FLAG1} MapLib)
     target_link_libraries(Reducer_${FLAG1} MainLib)
-    target_link_libraries(Reducer_${FLAG1} PointTypeLib)
+    target_link_libraries(Reducer_${FLAG1} AttributeLib)
     
     target_link_libraries(TEST_face_constructor_${FLAG1} GeometryLib)
     target_link_libraries(TEST_face_delete_inside_points_${FLAG1} GeometryLib)
@@ -15,11 +15,11 @@ foreach(FLAG1 IN LISTS FLAG1S)
     target_link_libraries(TEST_searcher_${FLAG1} GeometryLib)
     
     target_link_libraries(TEST_normal_vector_getter_${FLAG1} DatLib)
-    target_link_libraries(TEST_normal_vector_getter_${FLAG1} PointTypeLib)
+    target_link_libraries(TEST_normal_vector_getter_${FLAG1} AttributeLib)
 
     target_link_libraries(TEST_searcher_${FLAG1} DatLib)
     target_link_libraries(TEST_searcher_${FLAG1} MainLib)
-    target_link_libraries(TEST_searcher_${FLAG1} PointTypeLib)
+    target_link_libraries(TEST_searcher_${FLAG1} AttributeLib)
 
     target_sources(TEST_face_constructor_${FLAG1} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/face_getter.cc)
     target_sources(TEST_face_delete_inside_points_${FLAG1} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/face_getter.cc)

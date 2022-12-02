@@ -7,13 +7,13 @@ foreach(FLAG1 IN LISTS FLAG1S)
         target_link_libraries(Judge_${FLAG1}_${FLAG2} DatLib)
         target_link_libraries(Judge_${FLAG1}_${FLAG2} MapLib)
         target_link_libraries(Judge_${FLAG1}_${FLAG2} MainLib)
-        target_link_libraries(Judge_${FLAG1}_${FLAG2} PointTypeLib)
+        target_link_libraries(Judge_${FLAG1}_${FLAG2} AttributeLib)
         
         target_link_libraries(TEST_separator_${FLAG1}_${FLAG2} MapLib)
         # target_link_libraries(TEST_simulator_${FLAG1}_${FLAG2} MapLib)
 
         target_link_libraries(TEST_simulator_${FLAG1}_${FLAG2} DatLib)
         
-        target_link_libraries(TEST_simulator_${FLAG1}_${FLAG2} PointTypeLib)
+        target_link_libraries(TEST_simulator_${FLAG1}_${FLAG2} AttributeLib)
     endforeach() 
 endforeach()
