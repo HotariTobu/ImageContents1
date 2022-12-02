@@ -18,8 +18,8 @@ add_subdirectory(DatLib)
 add_subdirectory(MapLib)
 
 add_subdirectory(RandomLib)
-add_subdirectory(MainLib)
 add_subdirectory(AttributeLib)
+add_subdirectory(MainLib)
 
 add_subdirectory(Converter)
 add_subdirectory(Filler)
