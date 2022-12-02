@@ -11,18 +11,19 @@ void AddBottomPointSet(const std::map<Point2d, Attribute>& data, std::list<std::
             min_z = attribute.z;
         }
     }
+    min_z -= 1;
 
     auto&& [first_border_point, first_border_index] = border_indexed_points.front();
     border_indexed_points.pop_front();
 
-    additional_points.push_back({first_border_point, min_z});
     int first_bottom_index = data.size() + additional_points.size();
     int bottom_index = first_bottom_index;
+    additional_points.push_back({first_border_point, min_z});
 
     int last_border_index = first_border_index;
     for (auto&& [border_point, border_index] : border_indexed_points) {
-        additional_points.push_back({border_point, min_z});
         ++bottom_index;
+        additional_points.push_back({border_point, min_z});
 
         IndexSet upper_index_set = {
             last_border_index,
@@ -42,6 +43,8 @@ void AddBottomPointSet(const std::map<Point2d, Attribute>& data, std::list<std::
             bottom_index - 1,
         };
 
+        last_border_index = border_index;
+
         additional_index_set_list.push_back(upper_index_set);
         additional_index_set_list.push_back(lower_index_set);
         additional_index_set_list.push_back(bottom_index_set);
@@ -55,7 +58,7 @@ void AddBottomPointSet(const std::map<Point2d, Attribute>& data, std::list<std::
 
     IndexSet first_lower_index_set = {
         last_border_index,
-        bottom_index - 1,
+        bottom_index,
         first_bottom_index
     };
 

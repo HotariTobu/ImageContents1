@@ -2,40 +2,56 @@
 
 #include "../include/bottom_point_set_remover.h"
 
+#include <cmath>
+#include <map>
 #include <vector>
 
-std::list<std::pair<IndexSet, int>> RemoveBottomPointSet(std::list<IndexedPoint2dSet>& leaf_point_set_list) {
-    std::list<std::pair<IndexSet, int>> bottom_index_set_list;
+#include "vector2d.h"
+
+std::list<std::pair<Point2d, int>> RemoveBottomPointSet(std::list<IndexedPoint2dSet>& leaf_point_set_list, const Rectangle& rectangle) {
+    std::map<std::pair<double, double>, std::pair<Point2d, int>> sorted_border_indexed_points;
+
+    Point2d center_point_2d = {
+        (rectangle.min_x + rectangle.max_x) / 2,
+        (rectangle.min_y + rectangle.max_y) / 2
+    };
 
     for (auto ite = leaf_point_set_list.cbegin(); ite != leaf_point_set_list.cend();) {
         auto&& point_set = *ite;
 
-        std::vector<int> minus_index_indices;
+        std::vector<int> positive_point_indices;
         for (int i = 0; i < 3; ++i) {
-            if (point_set[i].index < 0) {
-                minus_index_indices.push_back(i);
+            if (point_set[i].index >= 0) {
+                positive_point_indices.push_back(i);
             }
         }
-        int minus_indices_count = minus_index_indices.size();
+        int positive_points_count = positive_point_indices.size();
         
-        if (minus_indices_count > 0) {
-            if (minus_indices_count == 1) {
-                bottom_index_set_list.push_back({
-                    {
-                        point_set[0].index,
-                        point_set[1].index,
-                        point_set[2].index,
-                    },
-                    minus_index_indices[0]
-                });
-            }
-
-            ite = leaf_point_set_list.erase(ite);
-        }
-        else {
+        if (positive_points_count == 3) {
             ++ite;
+            continue;
         }
+
+        if (positive_points_count == 2) {
+            for (int point_index : positive_point_indices) {
+                IndexedPoint2d point = point_set[point_index];
+                Vector2d vector_2d = *point.point - center_point_2d;
+
+                double angle = std::atan2(vector_2d.y, vector_2d.x);
+                double length = vector_2d.Length();
+
+                sorted_border_indexed_points.insert({{angle, length}, {*point.point, point.index}});
+            }
+        }
+
+        ite = leaf_point_set_list.erase(ite);
     }
 
-    return bottom_index_set_list;
+    std::list<std::pair<Point2d, int>> border_indexed_points;
+
+    for (auto&& [_, indexed_point] : sorted_border_indexed_points) {
+        border_indexed_points.push_back(indexed_point);
+    }
+
+    return border_indexed_points;
 }
