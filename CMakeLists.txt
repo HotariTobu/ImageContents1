@@ -29,3 +29,5 @@ add_subdirectory(Splitter)
 
 add_subdirectory(options)
 add_subdirectory(scripts)
+
+file(MAKE_DIRECTORY ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/source_data)
