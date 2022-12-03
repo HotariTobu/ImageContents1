@@ -1,0 +1,5 @@
+destination_directory_path = intermediate_data_Judge
+separator_threshold = 2
+simulator_threshold = 2
+source_directory_path = intermediate_data_Filler
+trials_number = 10

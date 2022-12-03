@@ -1,0 +1,3 @@
+destination_directory_path = intermediate_data_Reducer
+searcher_threshold = 0.5
+source_directory_path = intermediate_data_Judge
