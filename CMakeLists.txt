@@ -26,3 +26,5 @@ add_subdirectory(Filler)
 add_subdirectory(Judge)
 add_subdirectory(Reducer)
 add_subdirectory(Splitter)
+
+add_subdirectory(scripts)
