@@ -1,14 +1,13 @@
 // Created by HotariTobu
 
-#include <cmath>
 #include <iostream>
-#include <limits>
 #include <string>
 
 #include "dat.h"
 #include "main_helper.h"
 #include "vector3d.h"
 #include "z_map.h"
+#include "../include/dumper.h"
 #include "../include/face.h"
 #include "../include/normal_vector_getter.h"
 #include "../include/reducer_attribute.h"
@@ -22,19 +21,22 @@
 
 extern double searcher_threshold;
 
+static bool enable_dump;
+
 std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
     std::string searcher_threshold_str = option.at("searcher_threshold");
+    std::string enable_dump_str = option.at("enable_dump");
+    
     searcher_threshold = std::stod(searcher_threshold_str);
+    enable_dump = enable_dump_str == "true";
     
     filename_suffix += FILENAME_SUFFIX;
     filename_suffix += "_SER" + searcher_threshold_str;
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
-    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
-
     std::string destination_file_path = destination_base_path + filename_suffix + ".dat";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
@@ -53,6 +55,11 @@ void process_file(const std::string source_file_path, const std::string destinat
 
 
     auto indices_list = SearchPointGroups(z_map);
+
+    if (enable_dump) {
+        Dumper dumper(destination_file_path, &data, &z_map);
+        dumper.Dump(indices_list);
+    }
 
     for (auto&& indices : indices_list) {
         std::list<std::pair<std::pair<Point2d, double*>, const Vector3d*>> point_vector_list;
@@ -85,5 +92,6 @@ int main(int argc, const char* argv[]) {
         {"source_directory_path", "intermediate_data_Judge"},
         {"destination_directory_path", "intermediate_data_Reducer"},
         {"searcher_threshold", "0.5"},
+        {"enable_dump", "true"},
     }, init, process_file);
 }
