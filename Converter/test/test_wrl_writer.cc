@@ -63,11 +63,11 @@ Shape {
         colorPerVertex TRUE
         color Color {
             color [
-0 1 0,
+0.02 1 0,
 1 0 0,
-1 1 1,
-0 1 0,
-0 1 0,
+0 0 0,
+0.02 1 0,
+0.02 1 0,
             ]
         }
         coord Coordinate {
