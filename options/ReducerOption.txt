@@ -1,3 +1,4 @@
 destination_directory_path = intermediate_data_Reducer
-searcher_threshold = 0.5
+enable_dump = true
+searcher_threshold = 0.9
 source_directory_path = intermediate_data_Judge

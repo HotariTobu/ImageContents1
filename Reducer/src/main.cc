@@ -91,7 +91,7 @@ int main(int argc, const char* argv[]) {
     HelpMain(argc, argv, "ReducerOption.txt", {
         {"source_directory_path", "intermediate_data_Judge"},
         {"destination_directory_path", "intermediate_data_Reducer"},
-        {"searcher_threshold", "0.5"},
+        {"searcher_threshold", "0.9"},
         {"enable_dump", "true"},
     }, init, process_file);
 }
