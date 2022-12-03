@@ -5,4 +5,4 @@ del /q .\destination_data\
 Converter.exe
 cd destination_data
 for %%i in (*.wrl) do set x="%%i"
-"..\view3dscene.exe.lnk" %x%
+%x%
