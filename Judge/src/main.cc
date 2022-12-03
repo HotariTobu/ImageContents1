@@ -1,15 +1,15 @@
 // Created by HotariTobu
 
 #include <array>
-#include <cmath>
 #include <iostream>
-#include <limits>
+#include <memory>
 #include <string>
 
 #include "attribute.h"
 #include "dat.h"
 #include "main_helper.h"
 #include "z_map.h"
+#include "../include/dumper.h"
 #include "../include/simulator.h"
 #include "../include/separator.h"
 
@@ -23,6 +23,7 @@ extern double simulator_threshold;
 extern double separator_threshold;
 
 static int trials_number;
+static bool enable_dump;
 
 std::string filename_suffix;
 
@@ -30,9 +31,12 @@ void init(std::map<std::string, std::string> option) {
     std::string simulator_threshold_str = option.at("simulator_threshold");
     std::string separator_threshold_str = option.at("separator_threshold");
     std::string trials_number_str = option.at("trials_number");
+    std::string enable_dump_str = option.at("enable_dump");
+
     simulator_threshold = std::stod(simulator_threshold_str);
     separator_threshold = std::stod(separator_threshold_str);
     trials_number = std::stoi(trials_number_str);
+    enable_dump = enable_dump_str == "true";
 
     if (trials_number <= 0) {
         throw std::runtime_error("`trials_number` must be more than 0.");
@@ -56,6 +60,11 @@ void process_file(const std::string source_file_path, const std::string destinat
 
     if (!z_map.nan_point_indices.empty()) {
         std::cout << "Warning: NaN points exist" << std::endl;
+    }
+
+    std::unique_ptr<Dumper> dumper;
+    if (enable_dump) {
+        dumper = std::make_unique<Dumper>(destination_file_path, &data, &z_map);
     }
 
     auto ease_of_stay_data_1 = std::make_unique<double[]>(z_map.size);
@@ -116,6 +125,10 @@ void process_file(const std::string source_file_path, const std::string destinat
 
             }
         }
+
+        if (enable_dump) {
+            dumper->Dump(*ease_of_stay_data_destination);
+        }
     }
 
     for (int i = 0; i < z_map.size; ++i) {
@@ -139,5 +152,6 @@ int main(int argc, const char* argv[]) {
         {"simulator_threshold", "2"},
         {"separator_threshold", "2"},
         {"trials_number", "10"},
+        {"enable_dump", "true"},
     }, init, process_file);
 }

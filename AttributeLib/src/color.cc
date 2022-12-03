@@ -18,7 +18,7 @@ Color::Color(double h, double s, double v) {
     double rgb[] = { 0.0, 0.0, 0.0 };
     rgb[(int)((hd + 1) / 2) % 3] = max;
     rgb[(int)((hd + 4) / 2) % 3] = min;
-    rgb[(7 - hd) % 3] = ((hd % 2 == 0 ? 1 : -1) * (h * 6 - hd - 0.5) + 0.5) * range + min;
+    rgb[(7 - hd) % 3] = ((hd % 2 * -2 + 1) * (h * 6 - hd - 0.5) + 0.5) * range + min;
 
     r = rgb[0];
     g = rgb[1];
