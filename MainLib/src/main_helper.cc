@@ -36,7 +36,15 @@ void HelpMain(int argc, const char* argv[], const std::string& option_file_path,
 
     if (argc > 1) {
         for (int i = 1; i < argc; i++) {
-            file_paths.push_back(fs::path(argv[i]));
+            fs::path arg_path(argv[i]);
+            if (fs::is_directory(arg_path)) {
+                for (auto&& file : fs::directory_iterator(arg_path)) {
+                    file_paths.push_back(file.path());
+                }
+            }
+            else if (fs::is_regular_file(arg_path)) {
+                file_paths.push_back(arg_path);
+            }
         }
     }
     else {
