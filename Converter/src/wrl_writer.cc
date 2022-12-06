@@ -14,7 +14,6 @@ Shape {
         material Material {}
     }
     geometry IndexedFaceSet {
-        colorPerVertex TRUE
         color Color {
             color [
 )";

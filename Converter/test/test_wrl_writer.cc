@@ -60,7 +60,6 @@ Shape {
         material Material {}
     }
     geometry IndexedFaceSet {
-        colorPerVertex TRUE
         color Color {
             color [
 0.02 1 0,
