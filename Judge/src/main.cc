@@ -13,10 +13,16 @@
 #include "../include/simulator.h"
 #include "../include/separator.h"
 
+#ifdef __UNIFORM
+    #define FILENAME_SUFFIX_1 "_UNI"
+#elif __FLEXIBLE
+    #define FILENAME_SUFFIX_1 "_FLE"
+#endif
+
 #ifdef __4_NEIGHBOR
-    #define FILENAME_SUFFIX "_J_4N"
+    #define FILENAME_SUFFIX_2 "_4N"
 #elif __8_NEIGHBOR
-    #define FILENAME_SUFFIX "_J_8N"
+    #define FILENAME_SUFFIX_2 "_8N"
 #endif
 
 extern double simulator_threshold;
@@ -42,7 +48,9 @@ void init(std::map<std::string, std::string> option) {
         throw std::runtime_error("`trials_number` must be more than 0.");
     }
 
-    filename_suffix += FILENAME_SUFFIX;
+    filename_suffix += "_J";
+    filename_suffix += FILENAME_SUFFIX_1;
+    filename_suffix += FILENAME_SUFFIX_2;
     filename_suffix += "_SIM" + simulator_threshold_str;
     filename_suffix += "_SEP" + separator_threshold_str;
     filename_suffix += "_TRY" + trials_number_str;
