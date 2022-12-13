@@ -16,7 +16,7 @@ bool Near(const T& c1, const T& c2) {
     return true;
 }
 
-bool CanPass(const std::list<std::pair<Point3d, Vector3d>>& point_vector_list, std::list<Point3d> answer) {
+bool CanPass(const std::list<std::pair<Point3d, Vector3d>>& point_vector_list, std::set<Point3d> answer) {
     std::list<std::pair<std::pair<Point2d, double*>, const Vector3d*>> point_vector_list_ref;
     for (auto&& [point, vector] : point_vector_list) {
         point_vector_list_ref.push_back({
@@ -36,9 +36,9 @@ bool CanPass(const std::list<std::pair<Point3d, Vector3d>>& point_vector_list, s
 
     auto points = face.points();
 
-    std::list<Point3d> result;
+    std::set<Point3d> result;
     for (auto&& point : points) {
-        result.push_back({
+        result.insert({
             point.first.x,
             point.first.y,
             *point.second
