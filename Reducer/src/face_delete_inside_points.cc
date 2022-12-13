@@ -6,11 +6,15 @@
 #include <map>
 #include <vector>
 
+double corner_threshold;
+
 bool IsDent(Point2d p0, Point2d p1, Point2d p2) {
     Vector2d&& v1 = p1 - p0;
     Vector2d&& v2 = p2 - p0;
+    v1.Normalize();
+    v2.Normalize();
     double&& cross_product = v1.Cross(v2);
-    return cross_product <= 0;
+    return cross_product < corner_threshold;
 }
 
 std::list<Point2d> Face::DeleteInsidePoints() {

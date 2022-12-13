@@ -20,6 +20,7 @@
 #endif
 
 extern double searcher_threshold;
+extern double corner_threshold;
 
 static bool enable_dump;
 
@@ -27,13 +28,16 @@ std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
     std::string searcher_threshold_str = option.at("searcher_threshold");
+    std::string corner_threshold_str = option.at("corner_threshold");
     std::string enable_dump_str = option.at("enable_dump");
-    
+
     searcher_threshold = std::stod(searcher_threshold_str);
+    corner_threshold = std::stod(corner_threshold_str);
     enable_dump = enable_dump_str == "true";
-    
+
     filename_suffix += FILENAME_SUFFIX;
     filename_suffix += "_SER" + searcher_threshold_str;
+    filename_suffix += "_COR" + corner_threshold_str;
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
@@ -92,6 +96,7 @@ int main(int argc, const char* argv[]) {
         {"source_directory_path", "intermediate_data_Judge"},
         {"destination_directory_path", "intermediate_data_Reducer"},
         {"searcher_threshold", "0.9"},
+        {"corner_threshold", "-0.7"},
         {"enable_dump", "true"},
     }, init, process_file);
 }
