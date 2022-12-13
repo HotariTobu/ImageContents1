@@ -77,8 +77,7 @@ void process_file(const std::string source_file_path, const std::string destinat
 
         auto deleted_points = face.DeleteInsidePoints();
         for (auto&& deleted_point : deleted_points) {
-            auto ite = data.find(deleted_point);
-            data.erase(ite);
+            data.erase(deleted_point);
         }
 
         face.ProjectPoints();

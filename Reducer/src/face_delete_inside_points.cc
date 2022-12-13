@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 
+/*
 bool IsDent(Point2d p0, Point2d p1, Point2d p2) {
     Vector2d&& v1 = p1 - p0;
     Vector2d&& v2 = p2 - p0;
@@ -91,6 +92,46 @@ std::list<Point2d> Face::DeleteInsidePoints() {
     } while (current->first != bottom_index);
 
     _points = new_points;
+    return deleted_points;
+}
+*/
+
+std::list<Point2d> Face::DeleteInsidePoints() {
+    int points_count = _points.size();
+    if (points_count <= 5) {
+        return {};
+    }
+
+    std::list<Point2d> deleted_points;
+    
+    auto end = _points.end();
+    for (auto&& [point, _] : _points) {
+        bool is_removed = true;
+ 
+        static const std::pair<int, int> offsets[] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+        for (auto offset : offsets) {
+            auto ite = _points.find({point.first + offset.first, point.second + offset.second});
+            if (ite == end) {
+                is_removed = false;
+                break;
+            }
+        }
+
+        if (is_removed) {
+            deleted_points.push_back({
+                (double)point.first,
+                (double)point.second
+            });
+        }
+    }
+
+    for (Point2d point : deleted_points) {
+        _points.erase({
+            (int)point.x,
+            (int)point.y
+        });
+    }
+
     return deleted_points;
 }
 

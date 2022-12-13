@@ -4,6 +4,8 @@
 #define __FACE_H__
 
 #include <list>
+#include <map>
+#include <set>
 
 #include "point2d.h"
 #include "point3d.h"
@@ -19,7 +21,7 @@ private:
 
 
     // Points that consist the face.
-    std::list<std::pair<Point2d, double*>> _points;
+    std::map<std::pair<int, int>, double*> _points;
 
 public:
     // Getter for `_origin`.
@@ -29,7 +31,7 @@ public:
     Vector3d normal();
 
     // Getter for `_points`.
-    std::list<std::pair<Point2d, double*>> points();
+    std::set<std::pair<Point2d, double*>> points();
 
     /*
     Initialize all private members.
