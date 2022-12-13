@@ -96,14 +96,22 @@ std::list<Point2d> Face::DeleteInsidePoints() {
 }
 */
 
-std::list<Point2d> Face::DeleteInsidePoints() {
-    int points_count = _points.size();
-    if (points_count <= 5) {
-        return {};
-    }
+int lowest_points_count;
 
+std::list<Point2d> Face::DeleteInsidePoints() {
     std::list<Point2d> deleted_points;
     
+    int points_count = _points.size();
+    if (points_count < lowest_points_count) {
+        for (auto&& [point, _] : _points) {
+            deleted_points.push_back({
+                (double)point.first,
+                (double)point.second
+            });
+        }
+        return deleted_points;
+    }
+
     auto end = _points.end();
     for (auto&& [point, _] : _points) {
         bool is_removed = true;
