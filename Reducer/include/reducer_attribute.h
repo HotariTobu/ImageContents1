@@ -8,6 +8,7 @@
 
 struct ReducerAttribute : public Attribute {
     Vector3d normal_vector;
+    bool is_removed;
 };
 
 

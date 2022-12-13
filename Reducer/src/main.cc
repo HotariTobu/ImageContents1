@@ -20,6 +20,7 @@
 #endif
 
 extern double searcher_threshold;
+extern double corner_threshold;
 
 static bool enable_dump;
 
@@ -27,13 +28,16 @@ std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
     std::string searcher_threshold_str = option.at("searcher_threshold");
+    std::string corner_threshold_str = option.at("corner_threshold");
     std::string enable_dump_str = option.at("enable_dump");
     
     searcher_threshold = std::stod(searcher_threshold_str);
+    corner_threshold = std::stod(corner_threshold_str);
     enable_dump = enable_dump_str == "true";
     
     filename_suffix += FILENAME_SUFFIX;
     filename_suffix += "_SER" + searcher_threshold_str;
+    filename_suffix += "_COR" + corner_threshold_str;
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
@@ -62,24 +66,30 @@ void process_file(const std::string source_file_path, const std::string destinat
     }
 
     for (auto&& indices : indices_list) {
-        std::list<std::pair<std::pair<Point2d, double*>, const Vector3d*>> point_vector_list;
+        std::map<Point2d, ReducerAttribute*> sub_data;
+        // std::list<std::pair<std::pair<Point2d, double*>, const Vector3d*>> point_vector_list;
         for (int index : indices) {
-            point_vector_list.push_back({
-                {
-                    z_map.GetPoint(index),
-                    const_cast<double*>(&z_map.z_values[index]->z)
-                },
-                &z_map.z_values[index]->normal_vector
+            sub_data.insert({
+                z_map.GetPoint(index),
+                const_cast<ReducerAttribute*>(z_map.z_values[index])
             });
+            // point_vector_list.push_back({
+            //     {
+            //         z_map.GetPoint(index),
+            //         const_cast<double*>(&z_map.z_values[index]->z)
+            //     },
+            //     &z_map.z_values[index]->normal_vector
+            // });
         }
 
-        Face face(point_vector_list);
+        // Face face(point_vector_list);
+        Face face(sub_data);
 
-        auto deleted_points = face.DeleteInsidePoints();
-        for (auto&& deleted_point : deleted_points) {
-            auto ite = data.find(deleted_point);
-            data.erase(ite);
-        }
+        // auto deleted_points = face.DeleteInsidePoints();
+        // for (auto&& deleted_point : deleted_points) {
+        //     auto ite = data.find(deleted_point);
+        //     data.erase(ite);
+        // }
 
         face.ProjectPoints();
     }
@@ -92,6 +102,7 @@ int main(int argc, const char* argv[]) {
         {"source_directory_path", "intermediate_data_Judge"},
         {"destination_directory_path", "intermediate_data_Reducer"},
         {"searcher_threshold", "0.9"},
+        {"corner_threshold", "0.9"},
         {"enable_dump", "true"},
     }, init, process_file);
 }

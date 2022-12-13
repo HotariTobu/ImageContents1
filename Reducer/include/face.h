@@ -4,9 +4,12 @@
 #define __FACE_H__
 
 #include <list>
+#include <map>
 
+#include "z_map.h"
 #include "point2d.h"
 #include "point3d.h"
+#include "../include/reducer_attribute.h"
 
 // Represent a face consisted from multiple points.
 class Face {
@@ -19,29 +22,36 @@ private:
 
 
     // Points that consist the face.
-    std::list<std::pair<Point2d, double*>> _points;
+    // std::list<std::pair<Point2d, double*>> _points;
+    
+    int _points_count;
+    ZMap<ReducerAttribute*> _z_map;
 
 public:
-    // Getter for `_origin`.
-    Point3d origin();
+    // // Getter for `_origin`.
+    // Point3d origin();
 
-    // Getter for `_normal`.
-    Vector3d normal();
+    // // Getter for `_normal`.
+    // Vector3d normal();
 
-    // Getter for `_points`.
-    std::list<std::pair<Point2d, double*>> points();
+    // // Getter for `_points`.
+    // std::list<std::pair<Point2d, double*>> points();
 
     /*
     Initialize all private members.
     [params]
     - set: set of pair of points and normal vectors
     */
-    Face(const std::list<std::pair<std::pair<Point2d, double*>, const Vector3d*>>& point_vector_list);
+    // Face(const std::list<std::pair<std::pair<Point2d, double*>, const Vector3d*>>& point_vector_list);
+    Face(const std::map<Point2d, ReducerAttribute*>& sub_data);
+
+    void MarkInsidePoints();
+    void MarkCornerPoints();
 
     /*
     Find outside points and delete the others from `_points`.
     */
-    std::list<Point2d> DeleteInsidePoints();
+    // std::list<Point2d> DeleteInsidePoints();
 
     /*
     Project points in `_points` to the face that is defined by `_origin` and `_normal`.

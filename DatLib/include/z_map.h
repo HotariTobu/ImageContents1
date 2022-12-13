@@ -23,6 +23,7 @@ struct ZMap {
     std::unique_ptr<const T*[]> z_values;
     std::list<int> nan_point_indices;
 
+    ZMap();
     ZMap(const std::map<Point2d, T>& data, const Rectangle& rectangle);
 
     Point2d GetPoint(int index) const;

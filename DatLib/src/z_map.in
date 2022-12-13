@@ -3,6 +3,11 @@
 #include "../include/z_map.h"
 
 template<typename T>
+ZMap<T>::ZMap() {
+
+}
+
+template<typename T>
 ZMap<T>::ZMap(const std::map<Point2d, T>& data, const Rectangle& rectangle) {
     this->rectangle = rectangle;
 
