@@ -20,20 +20,36 @@
 #endif
 
 extern double searcher_threshold;
+extern int lowest_points_count;
 
+static double normal_threshold;
+static double projection_threshold;
 static bool enable_dump;
 
 std::string filename_suffix;
 
 void init(std::map<std::string, std::string> option) {
     std::string searcher_threshold_str = option.at("searcher_threshold");
+    std::string normal_threshold_str = option.at("normal_threshold");
+    std::string projection_threshold_str = option.at("projection_threshold");
+    std::string lowest_points_count_str = option.at("lowest_points_count");
     std::string enable_dump_str = option.at("enable_dump");
     
     searcher_threshold = std::stod(searcher_threshold_str);
+    normal_threshold = std::stod(normal_threshold_str);
+    projection_threshold = std::stod(projection_threshold_str);
+    lowest_points_count = std::stoi(lowest_points_count_str);
     enable_dump = enable_dump_str == "true";
+
+    if (lowest_points_count <= 3) {
+        throw std::runtime_error("`lowest_points_count` must be more than 3.");
+    }
     
     filename_suffix += FILENAME_SUFFIX;
     filename_suffix += "_SER" + searcher_threshold_str;
+    filename_suffix += "_NOR" + normal_threshold_str;
+    filename_suffix += "_PRO" + projection_threshold_str;
+    filename_suffix += "_LOW" + lowest_points_count_str;
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
@@ -50,7 +66,23 @@ void process_file(const std::string source_file_path, const std::string destinat
             neighbor_z_values.head = &z_map.z_values[i];
             Vector3d&& normal_vector = GetNormalVectorIn(neighbor_z_values);
             const_cast<ReducerAttribute*>(z_map.z_values[i])->normal_vector = normal_vector;
+
+            if (normal_vector.z < normal_threshold) {
+                z_map.z_values[i] = nullptr;
+            }
         }
+    }
+
+    std::list<Point2d> normal_deleted_points;
+
+    for (auto&& [point, attribute] : data) {
+        if (attribute.normal_vector.z < normal_threshold) {
+            normal_deleted_points.push_back(point);
+        }
+    }
+
+    for (Point2d point : normal_deleted_points) {
+        data.erase(point);
     }
 
 
@@ -80,7 +112,9 @@ void process_file(const std::string source_file_path, const std::string destinat
             data.erase(deleted_point);
         }
 
-        face.ProjectPoints();
+        if (face.normal().z > projection_threshold) {
+            face.ProjectPoints();
+        }
     }
 
     WriteDAT(destination_file_path, data);
@@ -91,6 +125,9 @@ int main(int argc, const char* argv[]) {
         {"source_directory_path", "intermediate_data_Judge"},
         {"destination_directory_path", "intermediate_data_Reducer"},
         {"searcher_threshold", "0.9"},
+        {"normal_threshold", "0.7"},
+        {"projection_threshold", "0.999"},
+        {"lowest_points_count", "10"},
         {"enable_dump", "true"},
     }, init, process_file);
 }
