@@ -1,4 +1,7 @@
 destination_directory_path = intermediate_data_Reducer
-enable_dump = true
+enable_dump = false
+lowest_points_count = 10
+normal_threshold = 0.7
+projection_threshold = 1
 searcher_threshold = 0.9
 source_directory_path = intermediate_data_Judge

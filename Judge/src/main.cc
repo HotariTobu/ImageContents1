@@ -57,8 +57,6 @@ void init(std::map<std::string, std::string> option) {
 }
 
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
-    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
-
     std::string destination_file_path = destination_base_path + filename_suffix + ".dat";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
 
@@ -113,7 +111,7 @@ void process_file(const std::string source_file_path, const std::string destinat
 
                     int offset = z_map.GetIndex(offset_x, offset_y);
 
-                    (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[offset_x + 1][offset_y + 1];
+                    (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[offset_y + 1][offset_x + 1];
                 }
 
                 (*ease_of_stay_data_destination)[index] += ease_of_stay_values[1][1];
@@ -125,7 +123,7 @@ void process_file(const std::string source_file_path, const std::string destinat
                     for (int offset_y = -1; offset_y <= 1; ++offset_y) {
                         int offset = z_map.GetIndex(offset_x, offset_y);
 
-                        (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[offset_x + 1][offset_y + 1];
+                        (*ease_of_stay_data_destination)[index + offset] += ease_of_stay_values[offset_y + 1][offset_x + 1];
                     }
                 }
                 
@@ -157,9 +155,9 @@ int main(int argc, const char* argv[]) {
     HelpMain(argc, argv, "JudgeOption.txt", {
         {"source_directory_path", "intermediate_data_Filler"},
         {"destination_directory_path", "intermediate_data_Judge"},
-        {"simulator_threshold", "2"},
-        {"separator_threshold", "2"},
-        {"trials_number", "10"},
-        {"enable_dump", "true"},
+        {"simulator_threshold", "2.5"},
+        {"separator_threshold", "1.2"},
+        {"trials_number", "200"},
+        {"enable_dump", "false"},
     }, init, process_file);
 }

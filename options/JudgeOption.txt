@@ -1,6 +1,6 @@
 destination_directory_path = intermediate_data_Judge
-enable_dump = true
-separator_threshold = 2
-simulator_threshold = 2
+enable_dump = false
+separator_threshold = 1.2
+simulator_threshold = 2.5
 source_directory_path = intermediate_data_Filler
-trials_number = 10
+trials_number = 200
