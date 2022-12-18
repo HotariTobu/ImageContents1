@@ -84,7 +84,7 @@ void process_file(const std::string source_file_path, const std::string destinat
 
     AddBottomPointSet(data, additional_points, additional_index_set_list, border_indexed_points);
 
-    WriteWRL(destination_file_path, data, leaf_point_set_list, additional_points, additional_index_set_list);
+    WriteWRL(destination_file_path, data, rectangle, leaf_point_set_list, additional_points, additional_index_set_list);
 }
 
 int main(int argc, const char* argv[]) {

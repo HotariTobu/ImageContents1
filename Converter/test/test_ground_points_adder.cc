@@ -80,11 +80,12 @@ bool CanPass(const std::vector<Point3d>& points_3d, const std::vector<IndexSet>&
     points.clear();
 
 
-    WriteWRL("before.wrl", data, point_set_list);
+    Rectangle rectangle(0, 0, 0, 0);
+    WriteWRL("before.wrl", data, rectangle, point_set_list);
     
     auto [additional_points, additional_index_set_list] = AddGroundPoints(data, point_set_list);
 
-    WriteWRL("after.wrl", data, point_set_list, additional_points, additional_index_set_list);
+    WriteWRL("after.wrl", data, rectangle, point_set_list, additional_points, additional_index_set_list);
 
     std::filesystem::remove("before.wrl");
     std::filesystem::remove("after.wrl");

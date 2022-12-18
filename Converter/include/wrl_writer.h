@@ -11,6 +11,7 @@
 #include "attribute.h"
 #include "index_set.h"
 #include "indexed_point2d.h"
+#include "rectangle.h"
 
 /*
 Write data to .wrl file.
@@ -22,6 +23,6 @@ Ground point's color is #00FF00, building point's is #FF0000, and other's is #FF
 - indices: set of 3 indices that consist of a triangle
 - point_types: map of `PointType` that whether a point is on ground or on building
 */
-void WriteWRL(const std::string& path, const std::map<Point2d, Attribute>& data, const std::list<IndexedPoint2dSet>& point_set_list, const std::list<std::pair<Point2d, double>>& additional_points = {}, const std::list<IndexSet>& additional_index_set_list = {});
+void WriteWRL(const std::string& path, const std::map<Point2d, Attribute>& data, Rectangle rectangle, const std::list<IndexedPoint2dSet>& point_set_list, const std::list<std::pair<Point2d, double>>& additional_points = {}, const std::list<IndexSet>& additional_index_set_list = {});
 
 #endif // __WRL_WRITER_H__

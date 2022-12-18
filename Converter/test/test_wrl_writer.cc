@@ -35,7 +35,8 @@ bool CanPass(const char* answer, const std::map<Point2d, Attribute>& data, const
     }
     
 
-    WriteWRL(filename, data, point_set_list, additional_points, additional_index_set_list);
+    Rectangle rectangle(0, 0, 0, 0);
+    WriteWRL(filename, data, rectangle, point_set_list, additional_points, additional_index_set_list);
 
     std::ifstream ifs(filename);
     std::stringstream buffer;
@@ -54,6 +55,11 @@ int main() {
 
     assert(CanPass(
         R"(#VRML V2.0 utf8
+
+Viewpoint {
+position 0 0 -0
+orientation -0.7 0.9 0.3 0.875
+}
 
 Shape {
     appearance Appearance {

@@ -4,10 +4,33 @@
 
 #include <fstream>
 
-void WriteWRL(const std::string& path, const std::map<Point2d, Attribute>& data, const std::list<IndexedPoint2dSet>& point_set_list, const std::list<std::pair<Point2d, double>>& additional_points, const std::list<IndexSet>& additional_index_set_list) {
+void WriteWRL(const std::string& path, const std::map<Point2d, Attribute>& data, Rectangle rectangle, const std::list<IndexedPoint2dSet>& point_set_list, const std::list<std::pair<Point2d, double>>& additional_points, const std::list<IndexSet>& additional_index_set_list) {
     std::ofstream ofs(path);
 
     ofs << R"(#VRML V2.0 utf8
+
+Viewpoint {
+)";
+
+    double width = rectangle.max_x - rectangle.min_x;
+    double height = rectangle.max_y - rectangle.min_y;
+
+    Point2d center_point_2d = {
+        (rectangle.max_x + rectangle.min_x) / 2,
+        (rectangle.max_y + rectangle.min_y) / 2
+    };
+
+    Point2d camera_point_2d = {
+        center_point_2d.x + width,
+        center_point_2d.y - height
+    };
+
+    double camera_z = (camera_point_2d - center_point_2d).Length() * 0.8;
+
+    ofs << "position " << camera_point_2d.x << ' ' << camera_z << ' ' << -camera_point_2d.y << std::endl;
+    ofs << "orientation " << -0.7 << ' ' << 0.9 << ' ' << 0.3 << ' ' << 0.875 << std::endl;
+    
+    ofs << R"(}
 
 Shape {
     appearance Appearance {
