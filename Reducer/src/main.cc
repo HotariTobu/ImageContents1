@@ -52,6 +52,18 @@ void init(std::map<std::string, std::string> option) {
     filename_suffix += "_LOW" + lowest_points_count_str;
 }
 
+void RemovePoints(std::map<Point2d, ReducerAttribute>& data) {
+    auto ite = data.begin();
+    while (ite != data.end()) {
+        if (ite->second.is_removed) {
+            ite = data.erase(ite);
+        }
+        else {
+            ++ite;
+        }
+    }
+}
+
 void process_file(const std::string source_file_path, const std::string destination_base_path) {
     std::string destination_file_path = destination_base_path + filename_suffix + ".dat";
     std::cout << "Converting: " << source_file_path << " > " << destination_file_path << std::endl;
@@ -59,6 +71,11 @@ void process_file(const std::string source_file_path, const std::string destinat
 
     auto&& [data, rectangle] = ReadDAT<ReducerAttribute>(source_file_path);
     ZMap z_map(data, rectangle);
+
+    std::unique_ptr<Dumper> dumper;
+    if (enable_dump) {
+        dumper = std::make_unique<Dumper>(destination_file_path, rectangle);
+    }
 
     Neighbor<ReducerAttribute> neighbor_z_values(z_map.stride);
     for (int i = 0; i < z_map.size; ++i) {
@@ -89,8 +106,29 @@ void process_file(const std::string source_file_path, const std::string destinat
     auto indices_list = SearchPointGroups(z_map);
 
     if (enable_dump) {
-        Dumper dumper(destination_file_path, &data, &z_map);
-        dumper.Dump(indices_list);
+        const int offsets[] = {-z_map.stride, -1, 1, z_map.stride};
+
+        for (auto&& indices : indices_list) {
+            auto begin = indices.begin();
+            auto end = indices.end();
+
+            for (int index : indices) {
+                Point2d point = z_map.GetPoint(index);
+
+                bool is_removed = true;
+                
+                for (int offset : offsets) {
+                    auto ite = std::find(begin, end, index + offset);
+                    if (ite == end) {
+                        is_removed = false;
+                        break;
+                    }
+                }
+
+                const_cast<ReducerAttribute*>(z_map.z_values[index])->is_removed = is_removed;
+            }
+        }
+        dumper->Dump("groups.dat", data);
     }
 
     for (auto&& indices : indices_list) {
@@ -126,8 +164,8 @@ int main(int argc, const char* argv[]) {
         {"destination_directory_path", "intermediate_data_Reducer"},
         {"searcher_threshold", "0.9"},
         {"normal_threshold", "0.7"},
-        {"projection_threshold", "0.999"},
+        {"projection_threshold", "1"},
         {"lowest_points_count", "10"},
-        {"enable_dump", "true"},
+        {"enable_dump", "false"},
     }, init, process_file);
 }

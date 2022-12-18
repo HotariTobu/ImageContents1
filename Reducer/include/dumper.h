@@ -3,21 +3,23 @@
 #ifndef __DUMPER_H__
 #define __DUMPER_H__
 
+#include <filesystem>
+#include <map>
 #include <string>
 
-#include "z_map.h"
+#include "point2d.h"
+#include "rectangle.h"
 #include "../include/reducer_attribute.h"
 
 class Dumper {
 private:
-    std::string _directory_path;
-    std::map<Point2d, ReducerAttribute>* _data;
-    ZMap<ReducerAttribute>* _z_map;
+    std::filesystem::path _directory_path;
+    Rectangle _rectangle;
 
 public:
-    Dumper(const std::string& file_path, std::map<Point2d, ReducerAttribute>* data, ZMap<ReducerAttribute>* z_map);
+    Dumper(const std::filesystem::path& file_path, const Rectangle& rectangle);
     
-    void Dump(std::list<std::list<int>> indices_list);
+    void Dump(const std::string& filename, const std::map<Point2d, ReducerAttribute>& data);
 };
 
 #endif // __DUMPER_H__
