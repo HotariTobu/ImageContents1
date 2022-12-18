@@ -3,7 +3,6 @@
 #include "../include/simulator.h"
 
 #include <vector>
-#include <cmath>
 
 double simulator_threshold;
 
@@ -36,9 +35,7 @@ std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor<Attribute> 
             continue;
         }
 
-        if (z.z - center_z.z > simulator_threshold){
-            simulated_neighbor[points[i].second][points[i].first] = 0;
-        }else {
+        if (z.z - center_z.z < simulator_threshold){
             simulated_neighbor[points[i].second][points[i].first] = value;
             cnt++;
         }
@@ -63,29 +60,18 @@ std::array<std::array<double, 3>, 3> Simulate(double value, Neighbor<Attribute> 
         }
 
         double difference = z.z - center_z.z;
-        if (difference > simulator_threshold){
-            simulated_neighbor[points[i].second][points[i].first] = std::nan("");
-        }else {
-            double unsigned_difference = std::fabs(difference);
-            simulated_neighbor[points[i].second][points[i].first] = unsigned_difference;
-            sum_difference += unsigned_difference;
+        if (difference < simulator_threshold){
+            double value = 1 / (std::fabs(difference) + 1);
+            simulated_neighbor[points[i].second][points[i].first] = value;
+            sum_difference += value;
         }
     }
-    double sum_easy_of_stay = 0;
-    for (int i = 0; i < edge_num; ++i){
-        if (std::isnan(simulated_neighbor[points[i].second][points[i].first])){
-            continue;
-        }
-        double easy_of_stay = sum_difference - simulated_neighbor[points[i].second][points[i].first];;
-        simulated_neighbor[points[i].second][points[i].first] = easy_of_stay;
-        sum_easy_of_stay += easy_of_stay;
+    if (sum_difference == 0) { 
+        simulated_neighbor[1][1] = value;
+        return simulated_neighbor;
     }
     for (int i = 0; i < edge_num; ++i){
-        if (std::isnan(simulated_neighbor[points[i].second][points[i].first])){
-            simulated_neighbor[points[i].second][points[i].first] = 0;
-        }
-        simulated_neighbor[points[i].second][points[i].first] /= sum_easy_of_stay;
-        simulated_neighbor[points[i].second][points[i].first] *= value;
+        simulated_neighbor[points[i].second][points[i].first] *= value / sum_difference;
     }
 
 #endif
