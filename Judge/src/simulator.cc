@@ -2,6 +2,7 @@
 
 #include "../include/simulator.h"
 
+#include <cmath>
 #include <vector>
 
 double simulator_threshold;
