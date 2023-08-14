@@ -1,5 +1,7 @@
 # ImageContents1
 
+![](image.jpg)
+
 ## Members
 
 - HotariTobu
